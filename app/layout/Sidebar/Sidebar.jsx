@@ -1,20 +1,55 @@
-import React from "react";
+"use client";
+
+import { useState } from "react";
+import { adminRoutes, currentUserRole, Webname } from "@/app/config/admin.config";
+import SidebarLink from "@/common/SidebarLink";
 import Link from "next/link";
-import { Webname } from "@/app/config/admin.config";
 import Poligon from "@/common/Poligon";
 
 const Sidebar = () => {
+  const [activeIndex, setActiveIndex] = useState("");
+
+  const handleRouteChange = (slug) => {
+    setActiveIndex(slug);
+  };
+
+  // Filter routes based on role
+  const filteredRoutes = adminRoutes.filter(route =>
+    route.allowedRoles.includes(currentUserRole)
+  );
+
+  // Derive sections from only the filtered routes
+  const sections = [...new Set(filteredRoutes.map((r) => r.section))];
+
   return (
-    <div className="card overflow-y-auto min-h-full">
+    <div className="card overflow-y-auto h-full p-4">
       <Link href={"/"}>
         <div className="flex p-4 gap-3 items-center">
           <Poligon fill={"#000"} text={Webname.slice(0, 1)} />
           <h1 className="font-bold text-2xl">{Webname}</h1>
         </div>
       </Link>
-      <hr />
-      <div className="mt-4 p-4">
-        Routes
+
+      <div className="space-y-4 overflow-y-auto">
+        {sections.map((section) => (
+          <div key={section}>
+            <h2 className="text-lg font-semibold my-2 text-gray-700 uppercase tracking-wider">
+              {section}
+            </h2>
+            <div className="space-y-2">
+              {filteredRoutes
+                .filter((r) => r.section === section)
+                .map((route) => (
+                  <SidebarLink
+                    key={route.slug}
+                    {...route}
+                    isActive={activeIndex === route.slug}
+                    onClick={() => handleRouteChange(route.slug)}
+                  />
+                ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
