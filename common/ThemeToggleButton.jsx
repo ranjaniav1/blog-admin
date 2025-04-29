@@ -1,23 +1,52 @@
-'use client'
+"use client";
+import { useEffect, useState } from "react";
+import { VscColorMode } from "react-icons/vsc";
+import IconButton from "./IconButton";
 
 export default function ThemeToggleButton() {
-  const toggleTheme = () => {
-    const root = document.documentElement;
-    const currentBg = getComputedStyle(root)
-      .getPropertyValue("--background")
-      .trim();
-    const isDark = currentBg === "#0a0a0a";
+  const [theme, setTheme] = useState("light");
 
-    root.style.setProperty("--background", isDark ? "#ffffff" : "#0a0a0a");
-    root.style.setProperty("--foreground", isDark ? "#171717" : "#ededed");
+  const applyTheme = (theme) => {
+    const root = document.documentElement;
+
+    if (theme === "dark") {
+      root.style.setProperty("--background", "#202020e5");
+      root.style.setProperty("--primary", "#0a0a0a");
+      root.style.setProperty("--foreground", "#ededed");
+      root.style.setProperty("--border", "#27272a");
+      root.style.setProperty("--text-primary", "#ededed");
+      root.style.setProperty("--text-secondary", "#a1a1aa");
+    } else {
+      root.style.setProperty("--background", "#f1f6fa");
+      root.style.setProperty("--primary", "#fff");
+      root.style.setProperty("--foreground", "#171717");
+      root.style.setProperty("--border", "#e5e7eb");
+      root.style.setProperty("--text-primary", "#171717");
+      root.style.setProperty("--text-secondary", "#52525b");
+    }
+  };
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+    applyTheme(newTheme);
   };
 
   return (
-    <button
+    <IconButton
+      Icon={VscColorMode}
+      className="text-2xl"
       onClick={toggleTheme}
-      className="bg-background text-foreground px-4 py-2 rounded"
-    >
-      Toggle Theme
-    </button>
+      aria_label="Toggle Theme"
+      tooltip="Toggle Theme"
+      needBg
+    />
   );
 }
