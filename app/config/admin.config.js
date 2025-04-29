@@ -25,7 +25,7 @@ export const adminRoutes = [
     icon: FaUsers,
     section: "User Management",
     description: "Manage platform users, roles, and access.",
-    allowedRoles: ["superadmin"],
+    allowedRoles: ["superadmin", "admin"],
   },
   {
     title: "Subscribers",
@@ -59,7 +59,7 @@ export const adminRoutes = [
     icon: MdOutlineArticle,
     section: "News Management",
     description: "Publish, edit, and archive articles.",
-    allowedRoles: ["superadmin", "admin", "writer"],
+    allowedRoles: ["superadmin", "admin", "author"],
   },
   {
     title: "Categories",
@@ -83,7 +83,7 @@ export const adminRoutes = [
     icon: FaTags,
     section: "News Management",
     description: "Add and manage article tags.",
-    allowedRoles: ["superadmin", "admin", "writer"],
+    allowedRoles: ["superadmin", "admin", "author"],
   },
   {
     title: "Author Profiles",
@@ -91,7 +91,7 @@ export const adminRoutes = [
     icon: FaUserEdit,
     section: "News Management",
     description: "Enhance author bios and social links.",
-    allowedRoles: ["superadmin", "admin", "writer"],
+    allowedRoles: ["superadmin", "admin", "author"],
   },
 
   // --- Home Screen ---
@@ -119,7 +119,7 @@ export const adminRoutes = [
     icon: FaPhotoVideo,
     section: "Other",
     description: "Upload and manage images, videos, and audio.",
-    allowedRoles: ["superadmin", "admin", "writer"],
+    allowedRoles: ["superadmin", "admin", "author"],
   },
   {
     title: "RSS Feeds",
