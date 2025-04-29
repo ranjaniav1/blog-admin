@@ -25,8 +25,8 @@ export default function RootLayout({ children }) {
           {/* Sidebar for large screens */}
           <div
             className={`bg-white transition-all duration-300 ease-in-out z-40 
-              ${sidebarOpen ? "w-64" : "w-0"} 
-              overflow-hidden hidden md:block`}
+           ${sidebarOpen ? "w-64" : "w-0"} 
+           overflow-hidden hidden md:block h-screen`}
           >
             <Sidebar />
           </div>

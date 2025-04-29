@@ -1,0 +1,26 @@
+import Link from "next/link";
+
+const SidebarLink = ({ title, slug, icon: Icon, isActive, section }) => {
+  return (
+    <div
+      className={`group ${section === "ads" || section === "settings" ? "mt-6 border-b-2" : ""}`}
+    >
+      <Link href={slug}>
+        <div
+          className={`flex items-center gap-2 p-2 rounded-md transition-all duration-200 ${
+            isActive ? "bg-blue-500 text-white" : ""
+          } hover:bg-blue-500 hover:text-white`}
+        >
+          {Icon && <Icon className="text-lg" />}
+          <span>{title}</span>
+        </div>
+      </Link>
+      {(section === "ads" || section === "settings") && (
+        <hr className="border-t border-gray-300 mt-3" />
+      )}
+    </div>
+  );
+};
+
+
+export default SidebarLink;
