@@ -1,5 +1,5 @@
 import React from "react";
-import MostViewedNewsCard from "@/common/MostViewedNewsCard";
+import MostViewedNewsCard from "@/app/common/MostViewedNewsCard";
 
 const newsData = {
   imageUrl: "https://placehold.co/200x200",

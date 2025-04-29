@@ -1,11 +1,11 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from "react";
-import IconButton from "@/common/IconButton";
+import IconButton from "@/app/common/IconButton";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
-import ThemeToggleButton from "@/common/ThemeToggleButton";
-import InputField from "@/common/InputField";
+import ThemeToggleButton from "@/app/common/ThemeToggleButton";
+import InputField from "@/app/common/InputField";
 
 const Navbar = ({ onBurgerClick }) => {
   const [showSearch, setShowSearch] = useState(false);
