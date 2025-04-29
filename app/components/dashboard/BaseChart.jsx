@@ -1,66 +1,42 @@
-"use client";
-
+import React from "react";
 import dynamic from "next/dynamic";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-const BaseChart = ({
-  title = "Chart Title",
-  chartType = "bar",
-  series = [],
-  categories = [],
-  color,
-  height = 350,
-}) => {
-  const isPieChart = chartType === "pie";
+export default function BaseChart({ title, chartType, series, categories, color, colors }) {
+  const isSingleColor = !!color;
 
   const options = {
     chart: {
       type: chartType,
-      height,
-      toolbar: { show: false },
-    },
-    labels: isPieChart ? categories : undefined,
-    xaxis: !isPieChart
-      ? {
-          categories,
-          title: { text: "Day" },
-        }
-      : undefined,
-    yaxis: !isPieChart
-      ? {
-          title: { text: "Count" },
-        }
-      : undefined,
-    colors: isPieChart
-      ? color // use multi-colors array
-      : typeof color === "string"
-      ? [color] // wrap string in array
-      : "#3B82F6", // fallback to first or default
-    dataLabels: {
-      enabled: false, // disable labels for pie chart
-    },
-    tooltip: {
-      y: {
-        formatter: (val) => (isPieChart ? `${val}` : val) || "",
+      toolbar: {
+        show: false,
       },
     },
+    colors: isSingleColor ? [color] : colors,
+    xaxis: {
+      categories: categories || [],
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: chartType === "area" ? "smooth" : "straight",
+    },
     legend: {
-      position: "bottom",
+      show: chartType !== "bar",
     },
   };
 
   return (
-    <div className="card mx-2 p-6 rounded-2xl h-full">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+    <div className="card p-4 rounded-xl shadow h-full">
+      <h2 className="text-md font-semibold mb-2">{title}</h2>
       <Chart
         options={options}
         series={series}
         type={chartType}
-        height={height}
+        height={300}
       />
     </div>
   );
-};
-
-export default BaseChart;
+}
