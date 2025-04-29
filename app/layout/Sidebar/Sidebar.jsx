@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { adminRoutes, currentUserRole, Webname } from "@/app/config/admin.config";
-import SidebarLink from "@/common/SidebarLink";
+import SidebarLink from "@/app/common/SidebarLink";
 import Link from "next/link";
-import Poligon from "@/common/Poligon";
+import Poligon from "@/app/common/Poligon";
 
 const Sidebar = () => {
   const [activeIndex, setActiveIndex] = useState("");

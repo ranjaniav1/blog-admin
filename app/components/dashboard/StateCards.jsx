@@ -1,4 +1,4 @@
-import DashboardStatsCard from "@/common/DashboardStateCards";
+import DashboardStatsCard from "@/app/common/DashboardStateCards";
 import {
   FaUsers,
   FaDollarSign,
