@@ -10,7 +10,7 @@ export const httpAxios = axios.create({
 });
 
 httpAxios.interceptors.request.use((config) => {
-  const token = Cookies.get("accessToken");
+  const token = Cookies.get("access_token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
