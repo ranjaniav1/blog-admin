@@ -9,26 +9,31 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
-  // Load from cookie/localStorage on initial render
   useEffect(() => {
-    const userInfo = localStorage.getItem("user");
-    if (userInfo) {
-      setUser(JSON.parse(userInfo));
+    // Optional: You could fetch user from API if token exists (more secure)
+    const token = Cookies.get("access_token");
+    const userData = localStorage.getItem("user");
+    console.log("Token from AuthContext:", token);
+    console.log("User from AuthContext:", user);
+    if (!token && !userData) {
+      setUser(null);
     }
+    if (userData) {
+      setUser(JSON.parse(userData)); // Set user from local storage
+    }
+    // You can add API call here to fetch user data by token if needed
   }, []);
 
   const loginContext = (accessToken, userData) => {
-    // 1. Save access token to cookies
-    Cookies.set("access_token", accessToken, { expires: 1 }); // 1 day expiry
-
-    // 2. Save user info to localStorage and context
+    Cookies.set("access_token", accessToken, { expires: 1 });
+    setUser(userData); // Only store in memory (React context)
+    // Optionally, you can store user data in cookies or local storage if needed
     localStorage.setItem("user", JSON.stringify(userData));
-    setUser(userData);
   };
 
   const logout = () => {
     Cookies.remove("access_token");
-    localStorage.removeItem("user");
+    Cookies.remove("refresh_token");
     setUser(null);
     window.location.href = "/login";
   };
