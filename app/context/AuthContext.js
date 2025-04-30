@@ -13,8 +13,6 @@ export const AuthProvider = ({ children }) => {
     // Optional: You could fetch user from API if token exists (more secure)
     const token = Cookies.get("access_token");
     const userData = localStorage.getItem("user");
-    console.log("Token from AuthContext:", token);
-    console.log("User from AuthContext:", user);
     if (!token && !userData) {
       setUser(null);
     }

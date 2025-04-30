@@ -25,8 +25,6 @@ const Navbar = ({ onBurgerClick }) => {
 
   const { user } = useAuth();
 
-  console.log("User from Navbar:", user);
-
   return (
     <>
       <div className="relative">
