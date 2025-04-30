@@ -6,7 +6,7 @@ export async function loginUser(email, password) {
     const response = await loginService(email, password);
     if (response?.data) {
       const { accessToken, user } = response.data;
-      return { accessToken, user }; // let context handle storage
+      return { accessToken, user };
     }
     return null;
   } catch (error) {

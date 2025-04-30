@@ -1,24 +1,24 @@
 "use client";
 
-import { loginUser } from "@/app/utils/auth.util";
 import React, { useState } from "react";
+import { useAuthHook } from "@/app/hooks/useAuthHook";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("admin@gmail.com");
   const [password, setPassword] = useState("admin@123");
+  const { login, loading } = useAuthHook();
+
+  // submit form 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await loginUser(email, password);
-    if (result) {
-      // window.location.href = "/dashboard";
-    } else {
-      alert("Login failed");
+    const result = await login(email, password);
+    if (!result.success) {
+      alert(result.error || "Login failed");
     }
   };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
-      {/* Left: Login Form */}
       <div className="flex items-center justify-center bg-white px-6 py-10">
         <div className="w-full max-w-md">
           <p className="text-3xl font-bold text-center mb-6">
@@ -51,9 +51,10 @@ const LoginForm = () => {
             </div>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300"
+              className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 disabled:opacity-50"
+              disabled={loading}
             >
-              Sign In
+              {loading ? "Signing In..." : "Sign In"}
             </button>
             <div className="text-center text-sm mt-4 text-gray-600">
               Don’t have an account?{" "}
@@ -67,8 +68,6 @@ const LoginForm = () => {
           </form>
         </div>
       </div>
-
-      {/* Right: Background Image */}
       <div
         className="hidden md:block bg-cover bg-center"
         style={{

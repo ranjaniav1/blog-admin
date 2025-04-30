@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import IconButton from "@/app/common/IconButton";
@@ -6,6 +6,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
 import ThemeToggleButton from "@/app/common/ThemeToggleButton";
 import InputField from "@/app/common/InputField";
+import { useAuth } from "@/app/context/AuthContext";
 
 const Navbar = ({ onBurgerClick }) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -22,67 +23,75 @@ const Navbar = ({ onBurgerClick }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const { user } = useAuth();
+
+  console.log("User from Navbar:", user);
+
   return (
-    <div className="relative">
-      <div className="flex justify-between p-4 card">
-        <div className="flex items-center gap-2">
-          <IconButton
-            Icon={RxHamburgerMenu}
-            className="text-2xl"
-            aria_label="Menu"
-            tooltip="Menu"
-            onClick={onBurgerClick}
-          />
-          {/* Desktop search input */}
-          <div className="hidden sm:block">
-            <InputField type="search" name="" placeholder="search" />
-          </div>
-          {/* Mobile search icon */}
-          <div className="block sm:hidden">
+    <>
+      <div className="relative">
+        <div className="flex justify-between p-4 card">
+          <div className="flex items-center gap-2">
             <IconButton
-              Icon={IoMdSearch}
-              aria_label="Search"
-              tooltip="Search"
-              onClick={() => setShowSearch(!showSearch)}
+              Icon={RxHamburgerMenu}
+              className="text-2xl"
+              aria_label="Menu"
+              tooltip="Menu"
+              onClick={onBurgerClick}
             />
-          </div>
-        </div>
-
-        <div className="right-side-menu flex gap-2 items-center">
-          <div className="theme">
-            <ThemeToggleButton />
-          </div>
-
-          {/* Notification hidden on small */}
-          <div className="notification hidden sm:block">
-            <IconButton
-              Icon={IoIosNotificationsOutline}
-              aria_label="Notification"
-              tooltip="Notification"
-              needBg
-            />
-          </div>
-
-          <div className="user flex items-center gap-2">
-            <div className="user-image">
-              <img
-                src="https://thafd.bing.com/th/id/OIP.LJZkNMsFI9y96XbKcoOBQQHaHa?rs=1&pid=ImgDetMain"
-                alt="user"
-                className="w-9 h-9 rounded-full"
+            {/* Desktop search input */}
+            <div className="hidden sm:block">
+              <InputField type="search" name="" placeholder="search" />
+            </div>
+            {/* Mobile search icon */}
+            <div className="block sm:hidden">
+              <IconButton
+                Icon={IoMdSearch}
+                aria_label="Search"
+                tooltip="Search"
+                onClick={() => setShowSearch(!showSearch)}
               />
             </div>
-            <div className="user-name hidden sm:block">Admin</div>
+          </div>
+
+          <div className="right-side-menu flex gap-2 items-center">
+            <div className="theme">
+              <ThemeToggleButton />
+            </div>
+
+            {/* Notification hidden on small */}
+            <div className="notification hidden sm:block">
+              <IconButton
+                Icon={IoIosNotificationsOutline}
+                aria_label="Notification"
+                tooltip="Notification"
+                needBg
+              />
+            </div>
+
+            <div className="user flex items-center gap-2">
+              <div className="user-image">
+                <img
+                  src={user?.avatar_url || "https://thafd.bing.com/th/id/OIP.LJZkNMsFI9y96XbKcoOBQQHaHa?rs=1&pid=ImgDetMain"}
+                  alt="user"
+                  className="w-9 h-9 rounded-full"
+                />
+              </div>
+              <div className="user-name hidden sm:block">
+                {user?.fullname || "Admin12"}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile search dropdown */}
-      {showSearch && (
-        <div ref={searchRef} className="block sm:hidden p-2 w-full">
-          <InputField type="search" name="" placeholder="Search..." />
-        </div>
-      )}
-    </div>
+        {/* Mobile search dropdown */}
+        {showSearch && (
+          <div ref={searchRef} className="block sm:hidden p-2 w-full">
+            <InputField type="search" name="" placeholder="Search..." />
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

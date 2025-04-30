@@ -1,11 +1,11 @@
 "use client";
 
-import Navbar from "../layout/Navbar/Navbar";
-import Footer from "../layout/Fotter/Footer";
-import Sidebar from "../layout/Sidebar/Sidebar";
+import Navbar from "./layout/Navbar/Navbar";
+import Footer from "./layout/Fotter/Footer";
+import Sidebar from "./layout/Sidebar/Sidebar";
 import { useState } from "react";
 
-export default function Layout({ children }) {
+export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
