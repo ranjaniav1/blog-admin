@@ -10,7 +10,6 @@ export const useCategories = () => {
         try {
         const response = await getNewsCategories();
         if (response) {
-            console.log("response: ", response);
             setCategories(response.categories);
         } else {
             setError("Failed to fetch categories");

@@ -8,7 +8,6 @@ async function login(email, password) {
       email,
       password,
     });
-    console.log("usert okne", response);
     Cookies.set("access_token", response.data.data.accessToken, { expires: 1 });
     Cookies.set("refresh_token", response.data.data.refreshToken, {
       expires: 7,
