@@ -1,20 +1,34 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react';
+import { loginUser } from "@/app/utils/auth.util";
+import React, { useState } from "react";
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('superadmin@gmail.com');
-  const [password, setPassword] = useState('superadmin@123');
+  const [email, setEmail] = useState("admin@gmail.com");
+  const [password, setPassword] = useState("admin@123");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const result = await loginUser(email, password);
+    if (result) {
+      // window.location.href = "/dashboard";
+    } else {
+      alert("Login failed");
+    }
+  };
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
       {/* Left: Login Form */}
       <div className="flex items-center justify-center bg-white px-6 py-10">
         <div className="w-full max-w-md">
-          <p className="text-3xl font-bold text-center mb-6">Login to Your Account</p>
-          <form className="space-y-5">
+          <p className="text-3xl font-bold text-center mb-6">
+            Login to Your Account
+          </p>
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
@@ -24,7 +38,9 @@ const LoginForm = () => {
               />
             </div>
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+              <label className="block mb-1 text-sm font-medium text-gray-700">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
@@ -40,7 +56,13 @@ const LoginForm = () => {
               Sign In
             </button>
             <div className="text-center text-sm mt-4 text-gray-600">
-              Don’t have an account? <a href="/register" className="text-indigo-500 font-medium hover:underline">Register</a>
+              Don’t have an account?{" "}
+              <a
+                href="/register"
+                className="text-indigo-500 font-medium hover:underline"
+              >
+                Register
+              </a>
             </div>
           </form>
         </div>
