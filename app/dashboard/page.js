@@ -1,7 +1,7 @@
 "use client";
-import StateCards from "./components/dashboard/StateCards";
-import BaseChart from "./components/dashboard/BaseChart";
-import MostViewdNews from "./components/dashboard/MostViewdNews";
+import StateCards from "../components/dashboard/StateCards";
+import BaseChart from "../components/dashboard/BaseChart";
+import MostViewdNews from "../components/dashboard/MostViewdNews";
 
 export default function Home() {
   return (
