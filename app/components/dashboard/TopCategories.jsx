@@ -75,7 +75,7 @@ const TopCategories = () => {
           <div>
             <p>Are you sure you want to delete <strong>{selectedCategory?.name}</strong>?</p>
             <div className="flex justify-end gap-2 mt-4">
-              <button onClick={closeModal} className="px-4 py-2 bg-gray-200 rounded-md">Cancel</button>
+              <button onClick={closeModal} className="px-4 py-2 icon-bg rounded-md">Cancel</button>
               <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-md">Confirm Delete</button>
             </div>
           </div>
