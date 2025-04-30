@@ -1,7 +1,7 @@
 "use client";
 import StateCards from "../components/dashboard/StateCards";
 import BaseChart from "../components/dashboard/BaseChart";
-import MostViewdNews from "../components/dashboard/MostViewdNews";
+import TopCategories from "../components/dashboard/TopCategories";
 
 export default function Home() {
   return (
@@ -78,8 +78,8 @@ export default function Home() {
 
       {/* Weekly Article Uploads Bar Chart */}
       <div className="col-span-12 rounded-2xl p-6 md:col-span-6 card">
-        <h1 className="text-lg font-semibold mb-4">Most Viewd News</h1>
-        <MostViewdNews />
+        <h1 className="text-lg font-semibold mb-4">Top Categories</h1>
+        <TopCategories />
       </div>
     </div>
   );
