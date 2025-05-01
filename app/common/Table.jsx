@@ -55,7 +55,7 @@ const Table = ({
                 </td>
               ))}
               {renderActions && (
-                <td className="px-4 py-3 flex justify-center gap-2">
+                <td className="px-4 py-3 flex justify-center gap-2" >
                   {renderActions(item)}
                 </td>
               )}

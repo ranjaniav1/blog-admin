@@ -61,10 +61,16 @@ const TopCategories = ({
   }
 
   // Render actions for each row
-  const renderActions = (category) => (
+  const renderActions = (subCategory) => (
     <ActionButtons
-      onEdit={() => openModal(category, "edit")}
-      onDelete={() => openModal(category, "delete")}
+      onEdit={(e) => {
+        e.stopPropagation();
+        openModal(subCategory, "edit");
+      }}
+      onDelete={(e) => {
+        e.stopPropagation();
+        openModal(subCategory, "delete");
+      }}
     />
   );
 
@@ -72,7 +78,6 @@ const TopCategories = ({
   if (loading) {
     return <div className="text-center py-10">Loading...</div>;
   }
-  
 
   return (
     <>
