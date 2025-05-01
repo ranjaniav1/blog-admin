@@ -31,7 +31,7 @@ export const useCategories = () => {
   const deleteCategory = async (id) => {
     // Optimistic delete
     const previousCategories = [...categories];
-    setCategories((prev) => prev.filter((cat) => cat.id !== id));
+    setCategories((prev) => prev.filter((cat) => cat._id !== id));
 
     try {
       const response = await deleteNewsCategory(id);
@@ -71,7 +71,7 @@ export const useCategories = () => {
     // Optimistic update
     const previousCategories = [...categories];
     setCategories((prev) =>
-      prev.map((cat) => (cat.id === id ? { ...cat, ...updatedCategory } : cat))
+      prev.map((cat) => (cat._id === id ? { ...cat, ...updatedCategory } : cat))
     );
 
     try {

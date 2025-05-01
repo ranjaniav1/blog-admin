@@ -72,6 +72,7 @@ const TopCategories = ({
   if (loading) {
     return <div className="text-center py-10">Loading...</div>;
   }
+  
 
   return (
     <>
@@ -90,6 +91,7 @@ const TopCategories = ({
 
       <Table
         columns={columns}
+        linkUrl={`/admin/sub-categories`}
         data={categories}
         renderActions={renderActions}
         className={bgPrimary ? "card" : ""}
