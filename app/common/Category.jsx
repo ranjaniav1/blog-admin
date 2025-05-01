@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 import IconButton from '@/app/common/IconButton'
 
-const Category = ({ category, onEdit, onDelete }) => {
+const Category = ({ category, onEdit, onDelete, showUpdatedAt }) => {
   return (
     <tr
       key={category._id}
@@ -15,6 +15,9 @@ const Category = ({ category, onEdit, onDelete }) => {
       <td className="px-4 py-3">
         {format(new Date(category.created_at), "PPP")}
       </td>
+      {showUpdatedAt && <td className="px-4 py-3">
+        {format(new Date(category.updated_at), "PPP")}
+      </td>}
       <td className="px-4 py-3 flex gap-2 justify-center">
         <IconButton
           Icon={MdOutlineModeEditOutline}
