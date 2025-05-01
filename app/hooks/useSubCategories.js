@@ -4,9 +4,10 @@ import {
   deleteNewsSubcategory,
   addNewsSubcategory,
   editNewsSubcategory,
+  getNewsSubcategoriesById,
 } from "../utils/subcategory.util";
 
-export const useSubcategories = () => {
+export const useSubcategories = (requiredAllCategory) => {
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,9 +28,25 @@ export const useSubcategories = () => {
     }
   };
 
+  const fetchSubcategoriesByCategory = async (id) => {
+    setLoading(true);
+    try {
+      const response = await getNewsSubcategoriesById(id);
+      if (response && response.data.subcategories) {
+        setSubcategories(response.data.subcategories);
+      } else {
+        setError("Failed to fetch subcategories");
+      }
+    } catch (err) {
+      setError(err.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteSubcategory = async (id) => {
     const previous = [...subcategories];
-    setSubcategories((prev) => prev.filter((sub) => sub.id !== id));
+    setSubcategories((prev) => prev.filter((sub) => sub._id !== id));
     try {
       const res = await deleteNewsSubcategory(id);
       if (!res?.success) {
@@ -61,7 +78,7 @@ export const useSubcategories = () => {
   const updateSubcategory = async (id, updatedSub) => {
     const previous = [...subcategories];
     setSubcategories((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, ...updatedSub } : s))
+      prev.map((s) => (s._id === id ? { ...s, ...updatedSub } : s))
     );
     try {
       const res = await editNewsSubcategory(id, updatedSub);
@@ -77,8 +94,10 @@ export const useSubcategories = () => {
   };
 
   useEffect(() => {
-    fetchSubcategories();
-  }, []);
+    if (requiredAllCategory) {
+      fetchSubcategories();
+    }
+  }, [requiredAllCategory]);
 
   return {
     subcategories,
@@ -88,5 +107,6 @@ export const useSubcategories = () => {
     addSubcategory,
     updateSubcategory,
     refetch: fetchSubcategories,
+    fetchSubcategoriesByCategory,
   };
 };

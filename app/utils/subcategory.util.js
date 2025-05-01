@@ -1,3 +1,4 @@
+import { getCategoriesByCategoryId } from "../service/category.service";
 import {
     getSubcategories,
     deleteSubcategory,
@@ -8,6 +9,15 @@ import {
   export async function getNewsSubcategories() {
     try {
       return await getSubcategories();
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+      return null;
+    }
+  }
+  
+  export async function getNewsSubcategoriesById(id) {
+    try {
+      return await getCategoriesByCategoryId(id);
     } catch (error) {
       console.error("Error fetching subcategories:", error);
       return null;
