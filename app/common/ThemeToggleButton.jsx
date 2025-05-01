@@ -17,7 +17,7 @@ export default function ThemeToggleButton() {
       root.style.setProperty("--text-primary", "#ededed");
       root.style.setProperty("--text-secondary", "#a1a1aa");
     } else {
-      root.style.setProperty("--background", "#f1f6fa");
+      root.style.setProperty("--background", "#f7f7f7");
       root.style.setProperty("--primary", "#fff");
       root.style.setProperty("--foreground", "#171717");
       root.style.setProperty("--border", "#e5e7eb");
