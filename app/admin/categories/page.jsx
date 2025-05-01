@@ -11,7 +11,7 @@ const Page = () => {
           { label: "Category", href: "/admin/categories" }, // You can use dynamic routing too
         ]}
       />
-      <TopCategories showUpdatedAt bgPrimary />
+      <TopCategories showUpdatedAt bgPrimary showAddButton />
     </div>
   );
 };
