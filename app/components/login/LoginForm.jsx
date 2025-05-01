@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useAuthHook } from "@/app/hooks/useAuthHook";
+import Button from "@/app/common/Button";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("admin@gmail.com");
@@ -49,13 +50,14 @@ const LoginForm = () => {
                 required
               />
             </div>
-            <button
+            <Button
               type="submit"
+              variant="primary"
               className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-300 disabled:opacity-50"
               disabled={loading}
             >
               {loading ? "Signing In..." : "Sign In"}
-            </button>
+            </Button>
             <div className="text-center text-sm mt-4 text-gray-600">
               Don’t have an account?{" "}
               <a
