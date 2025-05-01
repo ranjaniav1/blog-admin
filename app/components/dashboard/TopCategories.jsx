@@ -1,26 +1,27 @@
 "use client";
-import React, { useState } from "react";
-import { useCategories } from "@/app/hooks/useCategories";
 import { format } from "date-fns";
 import Table from "@/app/common/Table";
 import Modal from "@/app/common/Modal";
-import EditCategory from "@/app/overlay/EditCategory";
-import IconButton from "@/app/common/IconButton";
-import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import React, { useState } from "react";
 import Button from "@/app/common/Button";
+import EditCategory from "@/app/overlay/EditCategory";
+import EditFormModal from "@/app/common/EditFormModal";
+import ActionButtons from "@/app/common/ActionButtons";
+import { useCategories } from "@/app/hooks/useCategories";
+import { categoryFields } from "@/app/config/admin.config";
+import DeleteModal from "@/app/common/DeleteModal";
 
-const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
-  const {
-    categories,
-    loading,
-    addCategory,
-    deleteCategory,
-    error,
-    refetch,
-    updateCategory,
-  } = useCategories();
+const TopCategories = ({
+  showUpdatedAt = false,
+  bgPrimary = false,
+  showAddButton,
+}) => {
+  const { categories, loading, addCategory, deleteCategory, updateCategory } =
+    useCategories();
+
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
+  const [showAddCategory, setShowAddCategory] = useState(false);
 
   const openModal = (category, type) => {
     setSelectedCategory(category);
@@ -40,7 +41,10 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
     {
       label: "Created At",
       accessor: "created_at",
-      render: (val) => format(new Date(val), "PPP"),
+      render: (val) => {
+        const date = new Date(val);
+        return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      },
     },
   ];
 
@@ -49,30 +53,19 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
     columns.push({
       label: "Updated At",
       accessor: "updated_at",
-      render: (val) => format(new Date(val), "PPP"),
+      render: (val) => {
+        const date = new Date(val);
+        return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      },
     });
   }
 
   // Render actions for each row
   const renderActions = (category) => (
-    <>
-      <IconButton
-        Icon={MdOutlineModeEditOutline}
-        onClick={() => openModal(category, "edit")}
-        aria_label="Edit Category"
-        variant="primary"
-        tooltip="Edit"
-        needBg={true}
-      />
-      <IconButton
-        Icon={MdOutlineDelete}
-        onClick={() => openModal(category, "delete")}
-        aria_label="Delete Category"
-        variant="danger"
-        tooltip="Delete"
-        needBg={true}
-      />
-    </>
+    <ActionButtons
+      onEdit={() => openModal(category, "edit")}
+      onDelete={() => openModal(category, "delete")}
+    />
   );
 
   // loading state
@@ -82,12 +75,40 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
 
   return (
     <>
+      <div className="flex justify-end items-center mb-4">
+        {showAddButton && (
+          <Button
+            variant="primary"
+            bgColorRequired
+            onClick={() => setShowAddCategory(!showAddCategory)}
+            className="px-4 py-2 rounded-md"
+          >
+            Add Category
+          </Button>
+        )}
+      </div>
+
       <Table
         columns={columns}
         data={categories}
         renderActions={renderActions}
         className={bgPrimary ? "card" : ""}
       />
+
+      {/* add category modal - seperate form edit and delete */}
+      {showAddCategory && (
+        <EditFormModal
+          isOpen={showAddCategory}
+          onClose={() => setShowAddCategory(false)}
+          title="Add New Category"
+          data={{}} // empty data for adding new
+          fields={categoryFields}
+          onSave={(newCategory) => {
+            addCategory(newCategory);
+            setShowAddCategory(false);
+          }}
+        />
+      )}
 
       <Modal
         isOpen={!!modalType}
@@ -106,35 +127,14 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
             }}
           />
         ) : (
-          <div>
-            <p>
-              Are you sure you want to delete{" "}
-              <strong>{selectedCategory?.name}</strong>?
-            </p>
-            <div className="flex justify-end gap-2 mt-4">
-              <Button
-                variant="outline"
-                type="button"
-                bgColorRequired
-                onClick={closeModal}
-                className="px-4 py-2 icon-bg rounded-md"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={() => {
-                  deleteCategory(selectedCategory?._id);
-                  closeModal();
-                }}
-                variant="danger"
-                type="button"
-                bgColorRequired
-                className="px-4 py-2  rounded-md"
-              >
-                Confirm Delete
-              </Button>
-            </div>
-          </div>
+          <DeleteModal
+            itemName={selectedCategory?.name}
+            onDelete={() => {
+              deleteCategory(selectedCategory?._id);
+              closeModal();
+            }}
+            onCancel={closeModal}
+          />
         )}
       </Modal>
     </>

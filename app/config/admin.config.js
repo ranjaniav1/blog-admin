@@ -170,3 +170,28 @@ export const adminRoutes = [
 export const Webname = "ENews";
 
 export const currentUserRole = "superadmin"; // This should be dynamically set based on the logged-in user
+
+// column feilds for the add/edit category modal
+export const categoryFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter category name",
+  },
+  {
+    name: "slug",
+    label: "Slug",
+    type: "text",
+    required: true,
+    placeholder: "Enter slug",
+  },
+  {
+    name: "description",
+    label: "Description",
+    type: "textarea",
+    required: true,
+    placeholder: "Enter description",
+  },
+];
