@@ -1,11 +1,23 @@
 "use client";
 import React from "react";
 
-const Table = ({ columns, data, renderActions, className = "" }) => {
+const Table = ({
+  columns,
+  data,
+  renderActions,
+  className = "",
+  showAddButton,
+  AddButton,
+}) => {
   return (
     <div
       className={`overflow-x-auto shadow-md rounded-xl border p-4 ${className}`}
     >
+      {showAddButton && (
+        <div className="flex justify-end">
+          <AddButton />
+        </div>
+      )}
       <table className="min-w-full table-auto text-sm text-left">
         <thead className="icon-bg uppercase text-xs">
           <tr>
