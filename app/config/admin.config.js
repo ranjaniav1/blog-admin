@@ -71,7 +71,7 @@ export const adminRoutes = [
   },
   {
     title: "Subcategories",
-    slug: "/admin/subcategories",
+    slug: "/admin/sub-categories",
     icon: MdSubtitles,
     section: "News Management",
     description: "Organize news under subcategories.",
@@ -193,5 +193,35 @@ export const categoryFields = [
     type: "textarea",
     required: true,
     placeholder: "Enter description",
+  },
+];
+
+export const subcategoryFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter subcategory name",
+  },
+  {
+    name: "slug",
+    label: "Slug",
+    type: "text",
+    required: true,
+    placeholder: "Enter slug",
+  },
+  {
+    name: "description",
+    label: "Description",
+    type: "textarea",
+    required: true,
+    placeholder: "Enter description",
+  },
+  {
+    name: "category_id",
+    label: "Category",
+    type: "select",
+    required: true,
   },
 ];

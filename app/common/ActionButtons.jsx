@@ -8,7 +8,7 @@ const ActionButtons = ({ onEdit, onDelete, tooltip = true }) => {
     <div className="flex gap-2">
       <IconButton
         Icon={MdOutlineModeEditOutline}
-        onClick={onEdit}
+        onClick={(e) => onEdit(e)}
         aria_label="Edit"
         variant="primary"
         tooltip={tooltip ? 'Edit' : ''}
@@ -16,7 +16,7 @@ const ActionButtons = ({ onEdit, onDelete, tooltip = true }) => {
       />
       <IconButton
         Icon={MdOutlineDelete}
-        onClick={onDelete}
+        onClick={(e) => onDelete(e)}
         aria_label="Delete"
         variant="danger"
         tooltip={tooltip ? 'Delete' : ''}

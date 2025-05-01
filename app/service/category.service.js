@@ -10,6 +10,16 @@ export async function getCategories() {
   }
 }
 
+export async function getCategoriesByCategoryId(id) {
+  try {
+    const response = await httpAxios.get(`/subcategory/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    return;
+  }
+}
+
 export async function addCategory(category) {
   try {
     const response = await httpAxios.post("/category/create_category", {
