@@ -1,15 +1,24 @@
 "use client";
 import React, { useState } from "react";
-import { useCategories } from "@/app/hooks/userCategories";
+import { useCategories } from "@/app/hooks/useCategories";
 import { format } from "date-fns";
 import Table from "@/app/common/Table";
 import Modal from "@/app/common/Modal";
 import EditCategory from "@/app/overlay/EditCategory";
 import IconButton from "@/app/common/IconButton";
 import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
+import Button from "@/app/common/Button";
 
 const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
-  const { categories, loading } = useCategories();
+  const {
+    categories,
+    loading,
+    addCategory,
+    deleteCategory,
+    error,
+    refetch,
+    updateCategory,
+  } = useCategories();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
 
@@ -21,16 +30,6 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
   const closeModal = () => {
     setSelectedCategory(null);
     setModalType("");
-  };
-
-  const handleDelete = () => {
-    console.log("Deleting:", selectedCategory._id);
-    closeModal();
-  };
-
-  const handleEdit = () => {
-    console.log("Editing:", selectedCategory.name);
-    closeModal();
   };
 
   // Define columns for the table
@@ -97,11 +96,12 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
       >
         {modalType === "edit" ? (
           <EditCategory
+            title={"Edit Category"}
             isOpen={modalType === "edit"}
             onClose={closeModal}
             category={selectedCategory}
             onSave={(updatedCategory) => {
-              console.log("Edited Category:", updatedCategory);
+              updateCategory(updatedCategory._id, updatedCategory);
               closeModal();
             }}
           />
@@ -112,18 +112,27 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
               <strong>{selectedCategory?.name}</strong>?
             </p>
             <div className="flex justify-end gap-2 mt-4">
-              <button
+              <Button
+                variant="outline"
+                type="button"
+                bgColorRequired
                 onClick={closeModal}
                 className="px-4 py-2 icon-bg rounded-md"
               >
                 Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded-md"
+              </Button>
+              <Button
+                onClick={() => {
+                  deleteCategory(selectedCategory?._id);
+                  closeModal();
+                }}
+                variant="danger"
+                type="button"
+                bgColorRequired
+                className="px-4 py-2  rounded-md"
               >
                 Confirm Delete
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -133,4 +142,3 @@ const TopCategories = ({ showUpdatedAt = false, bgPrimary = false }) => {
 };
 
 export default TopCategories;
-
