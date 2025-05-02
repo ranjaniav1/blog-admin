@@ -25,7 +25,7 @@ const BreadCrumb = ({ items = [] }) => {
                   {item.label}
                 </Link>
               ) : (
-                <span className="active px-2.5 py-1 rounded-md font-semibold">
+                <span className="active px-2.5 py-1 rounded-md font-semibold text-white">
                   {item.label}
                 </span>
               )}
