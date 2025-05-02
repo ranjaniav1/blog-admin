@@ -15,6 +15,8 @@ const Table = ({
   AddButton,
   linkUrl,
   pagination,
+  dynamicFields = [],
+  addFunction = () => {},
 }) => {
   const router = useRouter();
   const defaultVisible = columns.slice(0, 5).map((col) => col.accessor);
@@ -31,6 +33,8 @@ const Table = ({
           columns={columns}
           visibleColumns={visibleColumns}
           setVisibleColumns={setVisibleColumns}
+          dynamicFields={dynamicFields}
+          addFunction={addFunction}
         />
         {showAddButton && <AddButton />}
       </div>
