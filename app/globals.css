@@ -76,3 +76,7 @@ li {
 .active {
   background-color: var(--active);
 }
+
+.active-link {
+  color: var(--active);
+}

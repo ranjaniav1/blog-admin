@@ -5,14 +5,17 @@ import { FaAngleRight } from "react-icons/fa6";
 
 const BreadCrumb = ({ items = [] }) => {
   return (
-    <div className="card px-4 py-3 rounded-xl shadow-sm border border-gray-200 w-full">
-      <nav aria-label="Breadcrumb">
-        <ol className="flex items-center flex-wrap gap-1 text-sm">
+    <div className="card px-4 py-3 rounded-xl border-gray-200 w-full ">
+      <nav className="Breadcrumb flex items-center justify-between">
+        <div className="heading">
+          <h1 className="text-xl font-semibold active-link">
+            {items.length > 0 ? items[items.length - 1].label : "No Items"}
+          </h1>
+        </div>
+        <ol className="flex items-center flex-wrap gap-1 text-sm ">
           {items.map((item, index) => (
             <li key={index} className="flex items-center">
-              {index !== 0 && (
-                <FaAngleRight className="mx-2 w-3 h-3" />
-              )}
+              {index !== 0 && <FaAngleRight className="mx-2 w-3 h-3" />}
 
               {index !== items.length - 1 ? (
                 <Link
