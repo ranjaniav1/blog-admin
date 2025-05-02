@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import BreadCrumb from "@/app/common/BreadCrumb";
-import SubCategories from "@/app/components/sub-categories/SubCategories";
+import SubCategoryData from "@/app/components/sub-categories/SubCategoryData";
+
 
 const page = () => {
   return (
@@ -13,7 +14,7 @@ const page = () => {
           { label: "Sub Category", href: "/admin/sub-categories" }, // You can use dynamic routing too
         ]}
       />
-      <SubCategories bgPrimary showAddButton />
+      <SubCategoryData bgPrimary showAddButton />
     </div>
   );
 };
