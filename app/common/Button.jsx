@@ -42,7 +42,7 @@ const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`px-4 py-2 text-sm rounded-md focus:outline-none transition-colors ${baseStyle} ${className}`}
+      className={`text-sm rounded-md focus:outline-none transition-colors ${baseStyle} ${className}`}
     >
       {children}
     </button>
