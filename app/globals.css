@@ -68,6 +68,10 @@ li {
   background-color: var(--primary);
 }
 
+.secondary {
+  background-color: var(--foreground);
+}
+
 .icon-bg {
   background-color: var(--background);
 }
