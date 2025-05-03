@@ -91,7 +91,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
         columns={columns}
         data={subcategories?.subcategories || []}
         renderActions={renderActions}
-        className="card"
+        className="primary"
         dynamicFields={dynamicFields}
         addFunction={(newSubCategory) => addNewsSubcategory(newSubCategory)}
         pagination={{

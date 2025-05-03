@@ -74,7 +74,7 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
       </Button>
 
       {open && (
-        <div className="absolute card z-10 w-60 origin-top-right rounded-md shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
+        <div className="absolute primary z-10 w-60 origin-top-right rounded-md shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
           <div className="p-2">
             {columns.map((col) => (
               <label
