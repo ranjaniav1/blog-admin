@@ -1,23 +1,22 @@
 import { useEffect, useState } from "react";
 import {
-  getNewsCategories,
-  deleteNewsCategory,
-  addNewsCategory,
-  editNewsCategory,
-} from "../utils/category.util";
+  addCategory,
+  deleteCategory,
+  editCategory,
+  getCategories,
+} from "../service/category.service";
 
-export const useCategories = () => {
-  const [categories, setCategories] = useState([]);
+export const useCategories = (page = 1) => {
+  const [data, setData] = useState({ categories: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const fetchCategories = async () => {
     setLoading(true);
     try {
-      const response = await getNewsCategories();
-      console.log("Fetched categories:", response);
-      if (response && response.data.categories) {
-        setCategories(response.data.categories);
+      const response = await getCategories(page);
+      if (response && response.data) {
+        setData(response.data);
       } else {
         setError("Failed to fetch categories");
       }
@@ -28,78 +27,78 @@ export const useCategories = () => {
     }
   };
 
-  const deleteCategory = async (id) => {
-    // Optimistic delete
-    const previousCategories = [...categories];
-    setCategories((prev) => prev.filter((cat) => cat._id !== id));
+  const deleteNewsCategory = async (id) => {
+    const previousCategories = [...data.categories];
+    setData((prev) => ({
+      ...prev,
+      categories: prev.categories.filter((cat) => cat._id !== id),
+    }));
 
     try {
-      const response = await deleteNewsCategory(id);
+      const response = await deleteCategory(id);
       if (!response?.success) {
-        // If delete fails, revert the optimistic change
-        setCategories(previousCategories);
+        setData({ ...data, categories: previousCategories });
         setError("Failed to delete category");
       }
-      fetchCategories(); // Refetch categories after deletion
     } catch (err) {
-      // If error occurs, revert the optimistic change
-      setCategories(previousCategories);
+      setData({ ...data, categories: previousCategories });
       setError(err.message || "Something went wrong");
     }
   };
 
-  const addCategory = async (newCategory) => {
-    // Optimistic add
-    setCategories((prev) => [...prev, newCategory]);
-
+  const addNewsCategory = async (newCategory) => {
     try {
-      const response = await addNewsCategory(newCategory);
+      const response = await addCategory(newCategory);
       if (!response?.category) {
-        // If add fails, revert the optimistic change
-        setCategories((prev) => prev.filter((cat) => cat !== newCategory));
+        setData((prev) => ({
+          ...prev,
+          categories: prev.categories.filter((cat) => cat !== newCategory),
+        }));
         setError("Failed to add category");
       }
-      fetchCategories();
+      fetchCategories(); // Refetch categories after adding
     } catch (err) {
-      // If error occurs, revert the optimistic change
-      setCategories((prev) => prev.filter((cat) => cat !== newCategory));
+      setData((prev) => ({
+        ...prev,
+        categories: prev.categories.filter((cat) => cat !== newCategory),
+      }));
       setError(err.message || "Something went wrong");
     }
   };
 
-  const updateCategory = async (id, updatedCategory) => {
-    // Optimistic update
-    const previousCategories = [...categories];
-    setCategories((prev) =>
-      prev.map((cat) => (cat._id === id ? { ...cat, ...updatedCategory } : cat))
-    );
-
+  const updateNewsCategory = async (id, updatedCategory) => {
+    const previousCategories = [...data.categories];
     try {
-      const response = await editNewsCategory(id, updatedCategory);
-      if (!response?.category) {
-        // If update fails, revert the optimistic change
-        setCategories(previousCategories);
+      const response = await editCategory(id, updatedCategory);
+      if (response.data?.category) {
+        setData((prev) => ({
+          ...prev,
+          categories: previousCategories.map((c) =>
+            c._id === id ? response.data.category : c
+          ),
+        }));
         setError("Failed to update category");
       }
-      fetchCategories();
     } catch (err) {
-      // If error occurs, revert the optimistic change
-      setCategories(previousCategories);
+      setData((prev) => ({
+        ...prev,
+        categories: previousCategories,
+      }));
       setError(err.message || "Something went wrong");
     }
   };
 
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [page]);
 
   return {
-    categories,
+    data,
     loading,
     error,
-    deleteCategory,
-    addCategory,
-    updateCategory,
+    deleteNewsCategory,
+    addNewsCategory,
+    updateNewsCategory,
     refetch: fetchCategories,
   };
 };

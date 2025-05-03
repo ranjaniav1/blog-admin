@@ -16,12 +16,18 @@ const TopCategories = ({
   bgPrimary = false,
   showAddButton,
 }) => {
-  const { categories, loading, addCategory, deleteCategory, updateCategory } =
-    useCategories();
-
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
   const [showAddCategory, setShowAddCategory] = useState(false);
+
+  const {
+    data,
+    loading,
+    addNewsCategory,
+    deleteNewsCategory,
+    updateNewsCategory,
+  } = useCategories(currentPage);
 
   const openModal = (category, type) => {
     setSelectedCategory(category);
@@ -61,15 +67,15 @@ const TopCategories = ({
   }
 
   // Render actions for each row
-  const renderActions = (subCategory) => (
+  const renderActions = (Category) => (
     <ActionButtons
       onEdit={(e) => {
         e.stopPropagation();
-        openModal(subCategory, "edit");
+        openModal(Category, "edit");
       }}
       onDelete={(e) => {
         e.stopPropagation();
-        openModal(subCategory, "delete");
+        openModal(Category, "delete");
       }}
     />
   );
@@ -81,25 +87,20 @@ const TopCategories = ({
 
   return (
     <>
-      <div className="flex justify-end items-center mb-4">
-        {showAddButton && (
-          <Button
-            variant="primary"
-            bgColorRequired
-            onClick={() => setShowAddCategory(!showAddCategory)}
-            className="px-4 py-2 rounded-md"
-          >
-            Add Category
-          </Button>
-        )}
-      </div>
-
       <Table
         columns={columns}
         linkUrl={`/admin/sub-categories`}
-        data={categories}
+        data={data?.categories}
         renderActions={renderActions}
         className={bgPrimary ? "card" : ""}
+        pagination={{
+          totalPages: Number(data.totalPages),
+          currentPage: Number(data.page),
+          onPageChange: (newPage) => setCurrentPage(newPage),
+        }}
+        addFunction={(newCategory) => addNewsCategory(newCategory)}
+        dynamicFields={categoryFields}
+        buttonTitle={"Add Category"}
       />
 
       {/* add category modal - seperate form edit and delete */}
@@ -129,7 +130,7 @@ const TopCategories = ({
             onClose={closeModal}
             category={selectedCategory}
             onSave={(updatedCategory) => {
-              updateCategory(updatedCategory._id, updatedCategory);
+              updateNewsCategory(updatedCategory._id, updatedCategory);
               closeModal();
             }}
           />
@@ -137,7 +138,7 @@ const TopCategories = ({
           <DeleteModal
             itemName={selectedCategory?.name}
             onDelete={() => {
-              deleteCategory(selectedCategory?._id);
+              deleteNewsCategory(selectedCategory?._id);
               closeModal();
             }}
             onCancel={closeModal}

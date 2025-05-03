@@ -1,8 +1,8 @@
 import { httpAxios } from "../config/httpAxios";
 
-export async function getCategories() {
+export async function getCategories(page) {
   try {
-    const response = await httpAxios.get("/categories");
+    const response = await httpAxios.get(`/categories?page=${page}&offset=10`);
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);

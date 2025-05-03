@@ -16,6 +16,7 @@ const Table = ({
   linkUrl,
   pagination,
   dynamicFields = [],
+  buttonTitle,
   addFunction = () => {},
 }) => {
   const router = useRouter();
@@ -35,6 +36,7 @@ const Table = ({
           setVisibleColumns={setVisibleColumns}
           dynamicFields={dynamicFields}
           addFunction={addFunction}
+          buttonTitle={buttonTitle}
         />
         {showAddButton && <AddButton />}
       </div>
