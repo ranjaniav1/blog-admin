@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f7f7;
+  --background: #dadada;
   --primary: #fff;
   --foreground: #171717;
   --border: #e5e7eb; /* light gray border */
@@ -52,8 +52,7 @@ h2,
 h3,
 h4,
 h5,
-h6,
-span {
+h6{
   color: var(--text-primary);
   font-family: var(--font-sans), sans-serif;
 }
@@ -75,4 +74,8 @@ li {
 
 .active {
   background-color: var(--active);
+}
+
+.active-link {
+  color: var(--active);
 }

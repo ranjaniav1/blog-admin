@@ -11,13 +11,22 @@ import { subcategoryFields } from "@/app/config/admin.config";
 import DeleteModal from "@/app/common/DeleteModal";
 import { useCategories } from "@/app/hooks/useCategories";
 
-const SubCategoryData = ({ showAddButton, categoryId, requiredAllCategory }) => {
+const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
   const { categories } = useCategories();
-  console.log("Categories:", !categoryId);
 
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const {
+    addNewsSubcategory,
+    updateSubcategory,
+    deleteNewsSubcategory,
+    subcategories,
+    fetchSubcategoriesByCategory,
+    refetch,
+  } = useSubcategories(requiredAllCategory, currentPage);
 
   const openModal = (category, type) => {
     setSelectedCategory(category);
@@ -29,29 +38,19 @@ const SubCategoryData = ({ showAddButton, categoryId, requiredAllCategory }) => 
     setModalType("");
   };
 
-  const {
-    addSubcategory,
-    updateSubcategory,
-    deleteSubcategory,
-    subcategories,
-    fetchSubcategoriesByCategory,
-    refetch,
-  } = useSubcategories(requiredAllCategory);
-
-  // Fetch subcategories by category ID if provided
   useEffect(() => {
-    if (categoryId) {
-      fetchSubcategoriesByCategory(categoryId);
+    if (categorySlug) {
+      fetchSubcategoriesByCategory(categorySlug, currentPage);
     } else {
-      refetch(); // Fetch all subcategories if no category ID is provided
+      refetch(currentPage);
     }
-  }, [categoryId]);
+  }, [categorySlug, currentPage]);
 
   const columns = [
     { label: "Name", accessor: "name" },
     { label: "Slug", accessor: "slug" },
     { label: "Description", accessor: "description" },
-    { label: "category", accessor: "category_title" },
+    { label: "Category", accessor: "category_title" },
     {
       label: "Created At",
       accessor: "created_at",
@@ -76,52 +75,32 @@ const SubCategoryData = ({ showAddButton, categoryId, requiredAllCategory }) => 
       onDelete={() => openModal(subCategory, "delete")}
     />
   );
-  // Prepare dynamic category options
+
   const categoryOptions = categories.map((cat) => ({
     label: cat.name,
     value: cat._id,
   }));
 
-  // Inject dynamic options into config
   const dynamicFields = subcategoryFields.map((field) =>
     field.name === "category_id"
       ? { ...field, options: categoryOptions }
       : field
   );
+
   return (
     <div>
-      <div className="flex justify-end items-center mb-4">
-        {showAddButton && (
-          <Button
-            variant="primary"
-            bgColorRequired
-            onClick={() => setShowAddCategory(!showAddCategory)}
-            className="px-4 py-2 rounded-md"
-          >
-            Add Sub Category
-          </Button>
-        )}
-
-        {showAddCategory && (
-          <EditFormModal
-            isOpen={showAddCategory}
-            onClose={() => setShowAddCategory(false)}
-            title="Add New Sub Category"
-            data={{}}
-            fields={dynamicFields}
-            onSave={(newCategory) => {
-              console.log("New Category Data:", newCategory);
-              addSubcategory(newCategory);
-              setShowAddCategory(false);
-            }}
-          />
-        )}
-      </div>
       <Table
         columns={columns}
-        data={subcategories}
+        data={subcategories?.subcategories || []}
         renderActions={renderActions}
         className="card"
+        dynamicFields={dynamicFields}
+        addFunction={(newSubCategory) => addNewsSubcategory(newSubCategory)}
+        pagination={{
+          totalPages: Number(subcategories.totalPages),
+          currentPage: Number(subcategories.page),
+          onPageChange: (newPage) => setCurrentPage(newPage),
+        }}
       />
 
       <Modal
@@ -135,9 +114,8 @@ const SubCategoryData = ({ showAddButton, categoryId, requiredAllCategory }) => 
             onClose={closeModal}
             title="Edit Sub Category"
             data={selectedCategory}
-            fields={dynamicFields} // include the dropdown field with options
+            fields={dynamicFields}
             onSave={(updatedCategory) => {
-              console.log("Updated Category Data:", updatedCategory);
               updateSubcategory(updatedCategory._id, updatedCategory);
               closeModal();
             }}
@@ -146,7 +124,7 @@ const SubCategoryData = ({ showAddButton, categoryId, requiredAllCategory }) => 
           <DeleteModal
             itemName={selectedCategory?.name}
             onDelete={() => {
-              deleteSubcategory(selectedCategory?._id);
+              deleteNewsSubcategory(selectedCategory?._id);
               closeModal();
             }}
             onCancel={closeModal}

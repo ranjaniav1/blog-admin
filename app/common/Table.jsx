@@ -1,7 +1,10 @@
 "use client";
-import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import TableDropdown from "./TableDropdown";
+import TableHeader from "./TableHeader";
+import TableBody from "./TableBody";
+import Pagination from "./Pagination";
 
 const Table = ({
   columns,
@@ -11,58 +14,43 @@ const Table = ({
   showAddButton,
   AddButton,
   linkUrl,
+  pagination,
+  dynamicFields = [],
+  addFunction = () => {},
 }) => {
   const router = useRouter();
+  const defaultVisible = columns.slice(0, 5).map((col) => col.accessor);
+  const [visibleColumns, setVisibleColumns] = useState(defaultVisible);
+
+  const filteredColumns = columns.filter((col) =>
+    visibleColumns.includes(col.accessor)
+  );
 
   return (
-    <div
-      className={`overflow-x-auto shadow-md rounded-xl border p-4 ${className}`}
-    >
-      {showAddButton && (
-        <div className="flex justify-end">
-          <AddButton />
-        </div>
-      )}
+    <div className={`overflow-x-auto rounded-xl p-4 ${className}`}>
+      <div className="flex justify-between items-center mb-2">
+        <TableDropdown
+          columns={columns}
+          visibleColumns={visibleColumns}
+          setVisibleColumns={setVisibleColumns}
+          dynamicFields={dynamicFields}
+          addFunction={addFunction}
+        />
+        {showAddButton && <AddButton />}
+      </div>
+
       <table className="min-w-full table-auto text-sm text-left">
-        <thead className="icon-bg uppercase text-xs">
-          <tr>
-            {columns.map((col) => (
-              <th key={col.accessor || col.label} className="px-4 py-3">
-                {col.label}
-              </th>
-            ))}
-            {renderActions && (
-              <th className="px-4 py-3 text-center">Actions</th>
-            )}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((item) => (
-            <tr
-              key={item._id || item.slug}
-              className={`border-b transition-all duration-150 cursor-pointer ${
-                linkUrl ? "hover:bg-gray-100" : ""
-              }`}
-              onClick={() => {
-                if (linkUrl) router.push(`${linkUrl}/${item._id}/${item.slug}`);
-              }}
-            >
-              {columns.map((col) => (
-                <td key={col.accessor || col.label} className="px-4 py-3">
-                  {col.render
-                    ? col.render(item[col.accessor], item)
-                    : item[col.accessor]}
-                </td>
-              ))}
-              {renderActions && (
-                <td className="px-4 py-3 flex justify-center gap-2" >
-                  {renderActions(item)}
-                </td>
-              )}
-            </tr>
-          ))}
-        </tbody>
+        <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
+        <TableBody
+          data={data}
+          columns={filteredColumns}
+          renderActions={renderActions}
+          linkUrl={linkUrl}
+          router={router}
+        />
       </table>
+
+      {pagination?.totalPages > 1 && <Pagination pagination={pagination} />}
     </div>
   );
 };
