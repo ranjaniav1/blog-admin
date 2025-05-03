@@ -84,13 +84,11 @@ export const useSubcategories = (requiredAllCategory, page) => {
     const previous = [...subcategories.subcategories];
     try {
       const res = await editSubcategory(id, updatedSub);
-      if (res?.data?.subcategories) {
-        // Use the actual updated object returned from the API
+      const updated = res?.data?.subcategories; // this is the updated single object
+      if (updated) {
         setSubcategories((prev) => ({
           ...prev,
-          subcategories: previous.map((s) =>
-            s._id === id ? res.data.subcategory : s
-          ),
+          subcategories: previous.map((s) => (s._id === id ? updated : s)),
         }));
       } else {
         setSubcategories(previous);
