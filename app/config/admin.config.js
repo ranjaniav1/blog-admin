@@ -17,6 +17,9 @@ import {
 } from "react-icons/fa";
 import { MdSubtitles, MdOutlineArticle } from "react-icons/md";
 
+// ------------------------ Admin Routes ------------------------
+// This file contains the configuration for the admin routes, including their titles, slugs, icons, sections, descriptions, and allowed roles.
+
 export const adminRoutes = [
   // --- User Management ---
   {
@@ -171,7 +174,7 @@ export const Webname = "ENews";
 
 export const currentUserRole = "superadmin"; // This should be dynamically set based on the logged-in user
 
-// column feilds for the add/edit category modal
+// ------------------------ Category Fields ------------------------  
 export const categoryFields = [
   {
     name: "name",
@@ -196,6 +199,7 @@ export const categoryFields = [
   },
 ];
 
+// ------------------------ Subcategory Fields ------------------------
 export const subcategoryFields = [
   {
     name: "name",
@@ -242,3 +246,92 @@ export const tagFields = [
     placeholder: "Enter slug",
   },
 ]
+
+// ------------------------ Article Fields ------------------------ 
+
+export const articleFields = [
+  {
+    name: "title",
+    label: "Title",
+    type: "text",
+    required: true,
+    placeholder: "Enter article title",
+  },
+  {
+    name: "slug",
+    label: "Slug",
+    type: "text",
+    required: true,
+    placeholder: "Enter unique slug",
+  },
+  {
+    name: "excerpt",
+    label: "Excerpt",
+    type: "textarea",
+    required: true,
+    placeholder: "Enter a short summary",
+  },
+  {
+    name: "content",
+    label: "Content",
+    type: "richtext", // or textarea if not using a rich editor
+    required: true,
+    placeholder: "Write the full content here...",
+  },
+  {
+    name: "read_time",
+    label: "Read Time (mins)",
+    type: "number",
+    required: true,
+    placeholder: "e.g. 3",
+  },
+  {
+    name: "image_url",
+    label: "Image URL",
+    type: "file",
+    required: false,
+    placeholder: "Paste image URL or use uploader",
+  },
+  {
+    name: "video_url",
+    label: "Video URL",
+    type: "file",
+    required: false,
+    placeholder: "Optional video URL",
+  },
+  {
+    name: "status",
+    label: "Status",
+    type: "select",
+    required: true,
+    options: [
+      { label: "Draft", value: "draft" },
+      { label: "Published", value: "published" },
+      { label: "Pending", value: "pending" },
+    ],
+  },
+  {
+    name: "is_featured",
+    label: "Featured Article?",
+    type: "checkbox",
+    required: false,
+  },
+  {
+    name: "is_breaking_news",
+    label: "Breaking News?",
+    type: "checkbox",
+    required: false,
+  },
+  {
+    name: "tags",
+    label: "Tags",
+    type: "multiselect", // assuming you allow multiple tag selection
+    required: false,
+  },
+  {
+    name: "author_id",
+    label: "Author",
+    type: "select", // populated with list of authors
+    required: true,
+  },
+];
