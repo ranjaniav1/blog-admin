@@ -8,9 +8,7 @@ const Pagination = ({ pagination }) => {
   return (
     <div className="flex justify-end items-center mt-4 gap-2">
       <button
-        onClick={() =>
-          handlePageChange(Math.max(1, pagination.currentPage - 1))
-        }
+        onClick={() => handlePageChange(Math.max(1, pagination.currentPage - 1))}
         disabled={pagination.currentPage === 1}
         className="btn btn-sm btn-outline"
       >
