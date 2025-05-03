@@ -64,7 +64,7 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
-.primary {
+.primary, option {
   background-color: var(--primary);
 }
 

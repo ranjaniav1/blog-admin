@@ -84,7 +84,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
   }));
 
   const dynamicFields = subcategoryFields.map((field) =>
-    field.name === "category"
+    field?.name === "category_id"
       ? { ...field, options: categoryOptions }
       : field
   );
