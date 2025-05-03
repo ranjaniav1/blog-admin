@@ -5,7 +5,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 import EditFormModal from "./EditFormModal";
 import React, { useState, useRef, useEffect } from "react";
 
-const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction }) => {
+const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction, buttonTitle }) => {
   const [open, setOpen] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const dropdownRef = useRef();
@@ -43,14 +43,14 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
         className="p-2 rounded-md h-max flex items-center gap-2"
       >
         <GoPlus />
-        Add Sub Category
+        {buttonTitle || "Add "}
       </Button>
 
       {showAddCategory && (
         <EditFormModal
           isOpen={showAddCategory}
           onClose={() => setShowAddCategory(false)}
-          title="Add New Sub Category"
+          title={buttonTitle}
           data={{}}
           fields={dynamicFields}
           onSave={(newCategory) => {

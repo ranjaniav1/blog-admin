@@ -12,9 +12,7 @@ import DeleteModal from "@/app/common/DeleteModal";
 import { useCategories } from "@/app/hooks/useCategories";
 
 const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
-  const { categories } = useCategories();
-
-  const [showAddCategory, setShowAddCategory] = useState(false);
+  const { data } = useCategories();
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -76,7 +74,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
     />
   );
 
-  const categoryOptions = categories.map((cat) => ({
+  const categoryOptions = data?.categories.map((cat) => ({
     label: cat.name,
     value: cat._id,
   }));
@@ -101,6 +99,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
           currentPage: Number(subcategories.page),
           onPageChange: (newPage) => setCurrentPage(newPage),
         }}
+        buttonTitle={'Add Sub Category'}
       />
 
       <Modal
