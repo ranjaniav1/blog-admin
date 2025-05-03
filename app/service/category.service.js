@@ -2,17 +2,7 @@ import { httpAxios } from "../config/httpAxios";
 
 export async function getCategories() {
   try {
-    const response = await httpAxios.get("/category");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return;
-  }
-}
-
-export async function getCategoriesByCategoryId(id) {
-  try {
-    const response = await httpAxios.get(`/subcategory/${id}`);
+    const response = await httpAxios.get("/categories");
     return response.data;
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -22,7 +12,7 @@ export async function getCategoriesByCategoryId(id) {
 
 export async function addCategory(category) {
   try {
-    const response = await httpAxios.post("/category/create_category", {
+    const response = await httpAxios.post("/categories", {
       name: category.name,
       description: category.description,
       slug: category.slug,
@@ -36,7 +26,7 @@ export async function addCategory(category) {
 
 export async function deleteCategory(id) {
   try {
-    const response = await httpAxios.delete(`/category/${id}`);
+    const response = await httpAxios.delete(`/categories/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error editing category:", error);
@@ -46,7 +36,7 @@ export async function deleteCategory(id) {
 
 export async function editCategory(id, category) {
   try {
-    const response = await httpAxios.put(`/category/update`, {
+    const response = await httpAxios.put(`/categories`, {
       category_id: id,
       name: category.name,
       description: category.description,
