@@ -1,23 +1,24 @@
 import { useEffect, useState } from "react";
 import {
-  getNewsSubcategories,
-  deleteNewsSubcategory,
-  addNewsSubcategory,
-  editNewsSubcategory,
-  getNewsSubcategoriesById,
-} from "../utils/subcategory.util";
+  getSubcategories,
+  getSubcategoriesByCatSlug,
+  addSubcategory,
+  deleteSubcategory,
+  editSubcategory,
+} from "../service/subcategory.service";
 
-export const useSubcategories = (requiredAllCategory) => {
+export const useSubcategories = (requiredAllCategory, page) => {
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchSubcategories = async () => {
+  const fetchSubcategories = async (page) => {
     setLoading(true);
     try {
-      const response = await getNewsSubcategories();
-      if (response && response.data.subcategories) {
-        setSubcategories(response.data.subcategories);
+      const response = await getSubcategories(page);
+      console.log("Subcategories Response:", response);
+      if (response && response.data) {
+        setSubcategories(response.data);
       } else {
         setError("Failed to fetch subcategories");
       }
@@ -28,12 +29,12 @@ export const useSubcategories = (requiredAllCategory) => {
     }
   };
 
-  const fetchSubcategoriesByCategory = async (id) => {
+  const fetchSubcategoriesByCategory = async (slug) => {
     setLoading(true);
     try {
-      const response = await getNewsSubcategoriesById(id);
-      if (response && response.data.subcategories) {
-        setSubcategories(response.data.subcategories);
+      const response = await getSubcategoriesByCatSlug(slug);
+      if (response && response.data) {
+        setSubcategories(response.data);
       } else {
         setError("Failed to fetch subcategories");
       }
@@ -44,11 +45,15 @@ export const useSubcategories = (requiredAllCategory) => {
     }
   };
 
-  const deleteSubcategory = async (id) => {
-    const previous = [...subcategories];
-    setSubcategories((prev) => prev.filter((sub) => sub._id !== id));
+  const deleteNewsSubcategory = async (id) => {
+    const previous = [...subcategories.subcategories];
+    setSubcategories((prev) => ({
+      ...prev,
+      subcategories: prev.subcategories.filter((sub) => sub._id !== id),
+    }));
+
     try {
-      const res = await deleteNewsSubcategory(id);
+      const res = await deleteSubcategory(id);
       if (!res?.success) {
         setSubcategories(previous);
         setError("Failed to delete subcategory");
@@ -60,10 +65,10 @@ export const useSubcategories = (requiredAllCategory) => {
     }
   };
 
-  const addSubcategory = async (newSub) => {
-    setSubcategories((prev) => [...prev, newSub]);
+  const addNewsSubcategory = async (newSub) => {
+    setSubcategories((prev) => [...prev.subcategories, newSub]);
     try {
-      const res = await addNewsSubcategory(newSub);
+      const res = await addSubcategory(newSub);
       if (!res?.sub_category) {
         setSubcategories((prev) => prev.filter((s) => s !== newSub));
         setError("Failed to add subcategory");
@@ -76,17 +81,21 @@ export const useSubcategories = (requiredAllCategory) => {
   };
 
   const updateSubcategory = async (id, updatedSub) => {
-    const previous = [...subcategories];
-    setSubcategories((prev) =>
-      prev.map((s) => (s._id === id ? { ...s, ...updatedSub } : s))
-    );
+    const previous = [...subcategories.subcategories];
     try {
-      const res = await editNewsSubcategory(id, updatedSub);
-      if (!res?.sub_category) {
+      const res = await editSubcategory(id, updatedSub);
+      if (res?.data?.subcategory) {
+        // Use the actual updated object returned from the API
+        setSubcategories((prev) => ({
+          ...prev,
+          subcategories: previous.map((s) =>
+            s._id === id ? res.data.subcategory : s
+          ),
+        }));
+      } else {
         setSubcategories(previous);
         setError("Failed to update subcategory");
       }
-      fetchSubcategories();
     } catch (err) {
       setSubcategories(previous);
       setError(err.message || "Something went wrong");
@@ -95,16 +104,16 @@ export const useSubcategories = (requiredAllCategory) => {
 
   useEffect(() => {
     if (requiredAllCategory) {
-      fetchSubcategories();
+      fetchSubcategories(page);
     }
-  }, [requiredAllCategory]);
+  }, [requiredAllCategory, page]);
 
   return {
     subcategories,
     loading,
     error,
-    deleteSubcategory,
-    addSubcategory,
+    deleteNewsSubcategory,
+    addNewsSubcategory,
     updateSubcategory,
     refetch: fetchSubcategories,
     fetchSubcategoriesByCategory,
