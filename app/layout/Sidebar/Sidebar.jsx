@@ -22,7 +22,7 @@ const Sidebar = () => {
   const sections = [...new Set(filteredRoutes.map((r) => r.section))];
 
   return (
-    <div className="card overflow-y-auto h-full p-4">
+    <div className="primary overflow-y-auto h-full p-4">
       <Link href={"/"}>
         <div className="flex p-4 gap-3 items-center">
           <Poligon fill={"#000"} text={Webname.slice(0, 1)} />

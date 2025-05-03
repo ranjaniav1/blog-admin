@@ -28,7 +28,7 @@ const Navbar = ({ onBurgerClick }) => {
   return (
     <>
       <div className="relative">
-        <div className="flex justify-between p-4 card">
+        <div className="flex justify-between p-4 primary">
           <div className="flex items-center gap-2">
             <IconButton
               Icon={RxHamburgerMenu}
