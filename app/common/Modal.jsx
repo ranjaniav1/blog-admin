@@ -51,7 +51,7 @@ const Modal = ({
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className={`card rounded-2xl shadow-2xl w-full ${width} relative`}
+            className={`primary rounded-2xl shadow-2xl w-full ${width} relative`}
           >
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <h2 className="text-lg font-semibold">{title}</h2>

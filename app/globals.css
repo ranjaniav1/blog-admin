@@ -64,8 +64,12 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
-.card {
+.primary {
   background-color: var(--primary);
+}
+
+.secondary {
+  background-color: var(--foreground);
 }
 
 .icon-bg {

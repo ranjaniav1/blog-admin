@@ -5,7 +5,7 @@ import { FaAngleRight } from "react-icons/fa6";
 
 const BreadCrumb = ({ items = [] }) => {
   return (
-    <div className="card px-4 py-3 rounded-xl border-gray-200 w-full ">
+    <div className="primary px-4 py-3 rounded-xl border-gray-200 w-full ">
       <nav className="Breadcrumb flex items-center justify-between">
         <div className="heading">
           <h1 className="text-xl font-semibold active-link">

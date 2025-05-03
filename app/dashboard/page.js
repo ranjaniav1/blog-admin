@@ -77,9 +77,9 @@ export default function Home() {
       </div>
 
       {/* Weekly Article Uploads Bar Chart */}
-      <div className="col-span-12 rounded-2xl p-6 md:col-span-6 card">
+      <div className="col-span-12 rounded-2xl p-6 md:col-span-6 primary">
         <h1 className="text-lg font-semibold mb-4">Top Categories</h1>
-        <TopCategories />
+        <TopCategories isDashboard/>
       </div>
     </div>
   );

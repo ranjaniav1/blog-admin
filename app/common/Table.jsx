@@ -18,6 +18,7 @@ const Table = ({
   dynamicFields = [],
   buttonTitle,
   addFunction = () => {},
+  isDashboard = false,
 }) => {
   const router = useRouter();
   const defaultVisible = columns.slice(0, 5).map((col) => col.accessor);
@@ -29,18 +30,19 @@ const Table = ({
 
   return (
     <div className={`overflow-x-auto rounded-xl p-4 ${className}`}>
-      <div className="flex justify-between items-center mb-2">
-        <TableDropdown
-          columns={columns}
-          visibleColumns={visibleColumns}
-          setVisibleColumns={setVisibleColumns}
-          dynamicFields={dynamicFields}
-          addFunction={addFunction}
-          buttonTitle={buttonTitle}
-        />
-        {showAddButton && <AddButton />}
-      </div>
-
+      {!isDashboard && (
+        <div className="flex justify-between items-center mb-2">
+          <TableDropdown
+            columns={columns}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            dynamicFields={dynamicFields}
+            addFunction={addFunction}
+            buttonTitle={buttonTitle}
+          />
+          {showAddButton && <AddButton />}
+        </div>
+      )}
       <table className="min-w-full table-auto text-sm text-left">
         <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
         <TableBody

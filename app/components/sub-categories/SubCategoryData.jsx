@@ -48,7 +48,11 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
     { label: "Name", accessor: "name" },
     { label: "Slug", accessor: "slug" },
     { label: "Description", accessor: "description" },
-    { label: "Category", accessor: "category_title" },
+    {
+      label: "Category",
+      accessor: "category.slug", // or "category.name" if available
+      render: (val, row) => row.category?.slug || "N/A",
+    },
     {
       label: "Created At",
       accessor: "created_at",
@@ -80,7 +84,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
   }));
 
   const dynamicFields = subcategoryFields.map((field) =>
-    field.name === "category_id"
+    field.name === "category"
       ? { ...field, options: categoryOptions }
       : field
   );
@@ -91,7 +95,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
         columns={columns}
         data={subcategories?.subcategories || []}
         renderActions={renderActions}
-        className="card"
+        className="primary"
         dynamicFields={dynamicFields}
         addFunction={(newSubCategory) => addNewsSubcategory(newSubCategory)}
         pagination={{
@@ -99,7 +103,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
           currentPage: Number(subcategories.page),
           onPageChange: (newPage) => setCurrentPage(newPage),
         }}
-        buttonTitle={'Add Sub Category'}
+        buttonTitle={"Add Sub Category"}
       />
 
       <Modal

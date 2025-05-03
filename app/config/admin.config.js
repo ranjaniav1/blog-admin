@@ -225,3 +225,20 @@ export const subcategoryFields = [
     required: true,
   },
 ];
+
+export const tagFields = [
+  {
+    name: "name",
+    label: "Name",
+    type: "text",
+    required: true,
+    placeholder: "Enter tag name",
+  },
+  {
+    name: "slug",
+    label: "Slug",
+    type: "text",
+    required: true,
+    placeholder: "Enter slug",
+  },
+]

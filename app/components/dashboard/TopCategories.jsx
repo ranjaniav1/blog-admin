@@ -3,7 +3,6 @@ import { format } from "date-fns";
 import Table from "@/app/common/Table";
 import Modal from "@/app/common/Modal";
 import React, { useState } from "react";
-import Button from "@/app/common/Button";
 import EditCategory from "@/app/overlay/EditCategory";
 import EditFormModal from "@/app/common/EditFormModal";
 import ActionButtons from "@/app/common/ActionButtons";
@@ -14,7 +13,7 @@ import DeleteModal from "@/app/common/DeleteModal";
 const TopCategories = ({
   showUpdatedAt = false,
   bgPrimary = false,
-  showAddButton,
+  isDashboard = false,
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -90,17 +89,20 @@ const TopCategories = ({
       <Table
         columns={columns}
         linkUrl={`/admin/sub-categories`}
-        data={data?.categories}
+        data={isDashboard ? data.categories.slice(0, 3) : data?.categories}
         renderActions={renderActions}
-        className={bgPrimary ? "card" : ""}
-        pagination={{
-          totalPages: Number(data.totalPages),
-          currentPage: Number(data.page),
-          onPageChange: (newPage) => setCurrentPage(newPage),
-        }}
+        className={bgPrimary ? "primary" : ""}
+        pagination={
+          !isDashboard && {
+            totalPages: Number(data.totalPages),
+            currentPage: Number(data.page),
+            onPageChange: (newPage) => setCurrentPage(newPage),
+          }
+        }
         addFunction={(newCategory) => addNewsCategory(newCategory)}
         dynamicFields={categoryFields}
         buttonTitle={"Add Category"}
+        isDashboard={isDashboard}
       />
 
       {/* add category modal - seperate form edit and delete */}

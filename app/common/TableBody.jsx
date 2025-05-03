@@ -4,7 +4,7 @@ const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
       <tr
         key={item._id || item.slug}
         className={`border-b transition-all duration-150 cursor-pointer ${
-          linkUrl ? "hover:bg-gray-100" : ""
+          linkUrl ? "hover:text-pink-700" : ""
         }`}
         onClick={() => {
           if (linkUrl) router.push(`${linkUrl}/${item._id}/${item.slug}`);

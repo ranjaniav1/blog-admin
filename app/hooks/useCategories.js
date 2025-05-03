@@ -70,11 +70,11 @@ export const useCategories = (page = 1) => {
     const previousCategories = [...data.categories];
     try {
       const response = await editCategory(id, updatedCategory);
-      if (response.data?.category) {
+      if (response.data?.categories) {
         setData((prev) => ({
           ...prev,
           categories: previousCategories.map((c) =>
-            c._id === id ? response.data.category : c
+            c._id === id ? response.data.categories : c
           ),
         }));
         setError("Failed to update category");
