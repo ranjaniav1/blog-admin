@@ -17,6 +17,9 @@ import {
 } from "react-icons/fa";
 import { MdSubtitles, MdOutlineArticle } from "react-icons/md";
 
+// ------------------------ Admin Routes ------------------------
+// This file contains the configuration for the admin routes, including their titles, slugs, icons, sections, descriptions, and allowed roles.
+
 export const adminRoutes = [
   // --- User Management ---
   {
@@ -171,7 +174,7 @@ export const Webname = "ENews";
 
 export const currentUserRole = "superadmin"; // This should be dynamically set based on the logged-in user
 
-// column feilds for the add/edit category modal
+// ------------------------ Category Fields ------------------------  
 export const categoryFields = [
   {
     name: "name",
@@ -196,6 +199,7 @@ export const categoryFields = [
   },
 ];
 
+// ------------------------ Subcategory Fields ------------------------
 export const subcategoryFields = [
   {
     name: "name",

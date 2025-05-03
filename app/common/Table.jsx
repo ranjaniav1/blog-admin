@@ -46,7 +46,7 @@ const Table = ({
       <table className="min-w-full table-auto text-sm text-left">
         <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
         <TableBody
-          data={data}
+          data={Array.isArray(data) ? data : [data]}
           columns={filteredColumns}
           renderActions={renderActions}
           linkUrl={linkUrl}
