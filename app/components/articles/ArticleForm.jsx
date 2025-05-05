@@ -8,23 +8,15 @@ import { useSubcategories } from "@/app/hooks/useSubCategories";
 import { useTags } from "@/app/hooks/useTags";
 import { useCreateArticle } from "@/app/hooks/useArticles"; // Import the custom hook
 
-const ArticleForm = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    slug: "",
-    content: "",
-    category: "",
-    subCategory: "",
-    tags: [],
-    image: null,
-    video: null,
-  });
+const ArticleForm = ({ formData, setFormData, isUpdate }) => {
+  console.log("ArticleForm data:", formData);
 
   const { data: categories } = useCategories();
   const { subcategories } = useSubcategories(true, 1);
   const { data: tags } = useTags();
 
-  const { loading, error, success, addArticle } = useCreateArticle(); // Using the custom hook
+  const { loading, error, success, addArticle, editArticle } =
+    useCreateArticle(); // Using the custom hook
 
   const handleChange = (e, name) => {
     setFormData({ ...formData, [name]: e.target.value });
@@ -43,7 +35,7 @@ const ArticleForm = () => {
   };
 
   const handleSubCategoryChange = (id) => {
-    setFormData({ ...formData, subCategory: id });
+    setFormData({ ...formData, subcategory: id });
   };
 
   const handleTagChange = (e) => {
@@ -51,7 +43,7 @@ const ArticleForm = () => {
       e.target.selectedOptions,
       (option) => option.value
     );
-    setFormData({ ...formData, tags: selectedTags });
+    setFormData({ ...formData, tag_id: selectedTags });
   };
 
   const handleSubmit = (e) => {
@@ -67,9 +59,9 @@ const ArticleForm = () => {
     form.append("title", formData.title);
     form.append("slug", formData.slug);
     form.append("content", formData.content);
-    form.append("category_id", formData.category);
-    form.append("subCategory_id", formData.subCategory);
-    form.append("tag_id", JSON.stringify(formData.tags));
+    form.append("category", formData.category);
+    form.append("subcategory", formData.subcategory);
+    form.append("tag_id", JSON.stringify(formData.tag_id));
 
     form.append("image", formData.image); // Append the image file
 
@@ -79,14 +71,14 @@ const ArticleForm = () => {
     }
 
     // Now call the addArticle function with the FormData
-    addArticle(form); // Use FormData instead of JSON
+    isUpdate ? editArticle(formData) : addArticle(formData); // Use FormData instead of JSON
     setFormData({
       title: "",
       slug: "",
       content: "",
       category: "",
-      subCategory: "",
-      tags: [],
+      subcategory: "",
+      tag_id: [],
       image: null,
       video: null,
     });
@@ -97,10 +89,6 @@ const ArticleForm = () => {
       onSubmit={handleSubmit}
       className="primary p-6 max-w-full shadow-md rounded-xl grid grid-cols-1 md:grid-cols-2 gap-6"
     >
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 col-span-full">
-        Create Article
-      </h2>
-
       {/* Title */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Title</label>
@@ -141,7 +129,7 @@ const ArticleForm = () => {
         <label className="mb-1 font-semibold text-gray-700">Category</label>
         <select
           name="category"
-          value={formData.category}
+          value={formData?.category || ""}
           onChange={(e) => handleCategoryChange(e.target.value)}
           className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
@@ -160,15 +148,15 @@ const ArticleForm = () => {
         <label className="mb-1 font-semibold text-gray-700">Sub Category</label>
         <select
           name="subCategory"
-          value={formData.subCategory}
+          value={formData?.subcategory || ""}
           onChange={(e) => handleSubCategoryChange(e.target.value)}
           className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         >
           <option value="">Select Sub Category</option>
-          {subcategories?.subcategories?.map((subCategory) => (
-            <option key={subCategory?._id} value={subCategory._id}>
-              {subCategory.name}
+          {subcategories?.subcategories?.map((subcategory) => (
+            <option key={subcategory?._id} value={subcategory._id}>
+              {subcategory.name}
             </option>
           ))}
         </select>
@@ -179,7 +167,7 @@ const ArticleForm = () => {
         <label className="mb-1 font-semibold text-gray-700">Tags</label>
         <select
           multiple
-          value={formData.tags}
+          value={formData?.tags}
           onChange={handleTagChange}
           className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
@@ -195,6 +183,9 @@ const ArticleForm = () => {
       {/* Image File Input */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Image</label>
+        {isUpdate && (
+          <img src={formData.image} alt="" className="h-[200px] w-full" />
+        )}
         <input
           type="file"
           accept="image/*"
@@ -222,7 +213,13 @@ const ArticleForm = () => {
           bgColorRequired
           className="text-white px-6 py-2 rounded transition"
         >
-          {loading ? "Submitting..." : "Submit Article"}
+          {isUpdate
+            ? loading
+              ? "Updating..."
+              : "Update Article"
+            : loading
+            ? "Submitting..."
+            : "Submit Article"}
         </Button>
       </div>
 
