@@ -4,26 +4,44 @@ import React from "react";
 import { useParams } from "next/navigation";
 import BreadCrumb from "@/app/common/BreadCrumb";
 import { useCreateArticle } from "@/app/hooks/useArticles";
+import ArticleForm from "@/app/components/articles/ArticleForm";
 
-const page = ({ article }) => {
+const page = () => {
   const { id } = useParams();
 
   const [page, setPage] = React.useState(1);
-  const {} = useCreateArticle(page);
+  const { data, getArticleById } = useCreateArticle(page, id);
+  console.log("Fetched article data:", data.articles);
 
   const [formData, setFormData] = React.useState({
-    title: article.title,
-    slug: article.slug,
-    content: article.content,
-    category: article.category._id,
-    subCategory: article.subCategory._id,
-    tags: article.tags.map((tag) => tag._id),
+    title: "",
+    slug: "",
+    content: "",
+    category: "",
+    subcategory: "",
+    tag_id: [],
     image: null,
     video: null,
   });
 
+  React.useEffect(() => {
+    if (data?.articles) {
+      setFormData({
+        article_id: id || "",
+        title: data.articles.title || "",
+        slug: data.articles.slug || "",
+        content: data.articles.content || "",
+        category: data.articles.category?._id || "",
+        subcategory: data.articles.subcategory?._id || "",
+        tag_id: data.articles.tags?.map((tag) => tag._id) || [],
+        image: data.articles.image_url || null,
+        video: null,
+      });
+    }
+  }, [data]);
+
   return (
-    <div>
+    <div className="flex flex-col gap-4 p-4">
       <BreadCrumb
         items={[
           { label: "Home", href: "/dashboard" },
@@ -31,7 +49,11 @@ const page = ({ article }) => {
           { label: "Edit Articles", href: `/admin/articles/${id}` },
         ]}
       />
-      <ArticleForm article={formData} setFormData={setFormData} />
+      <ArticleForm
+        formData={formData}
+        setFormData={setFormData}
+        isUpdate
+      />
     </div>
   );
 };
