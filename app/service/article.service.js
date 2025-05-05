@@ -25,3 +25,37 @@ export async function createArticle(articleData) {
     return;
   }
 }
+
+export async function updateArticle(articleData) {
+  try {
+    const response = await httpAxios.put(`/articles`, articleData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Important for file uploads
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating article:", error);
+    return;
+  }
+}
+
+export async function deleteArticle(articleId) {
+  try {
+    const response = await httpAxios.delete(`/articles/${articleId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error deleting article:", error);
+    return;
+  }
+}
+
+export async function fetchArticleById(articleId) {
+  try {
+    const response = await httpAxios.get(`/articles/${articleId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching article by ID:", error);
+    return;
+  }
+}
