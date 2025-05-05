@@ -29,7 +29,7 @@ const Table = ({
   );
 
   return (
-    <div className={`overflow-x-auto rounded-xl p-4 ${className}`}>
+    <div className={`overflow-x-auto my-rounded p-4 ${className}`}>
       {!isDashboard && (
         <div className="flex justify-between items-center mb-2">
           <TableDropdown

@@ -15,7 +15,7 @@ const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
           <td key={col.accessor} className="px-4 py-3">
             {col.render
               ? col.render(item[col.accessor], item)
-              : item[col.accessor]}
+              : item[col?.accessor]}
           </td>
         ))}
         {/* action button render here and on that click, stopPropogation() called to prevent push to another route */}

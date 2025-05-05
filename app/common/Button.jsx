@@ -42,7 +42,7 @@ const Button = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`text-sm rounded-md focus:outline-none transition-colors ${baseStyle} ${className}`}
+      className={`text-sm my-rounded focus:outline-none transition-colors ${baseStyle} ${className}`}
     >
       {children}
     </button>

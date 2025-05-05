@@ -53,7 +53,7 @@ const Articles = () => {
         <img
           src={url}
           alt="Thumbnail"
-          className="h-12 w-12 object-cover rounded"
+          className="h-12 w-12 object-cover my-rounded"
         />
       ),
     },
@@ -61,7 +61,7 @@ const Articles = () => {
       label: "Video",
       accessor: "video_url",
       render: (url) => (
-        <video src={url} controls className="h-12 w-20 object-cover rounded" />
+        <video src={url} controls className="h-12 w-20 object-cover my-rounded" />
       ),
     },
   ];

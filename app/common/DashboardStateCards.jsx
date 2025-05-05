@@ -2,7 +2,7 @@ import Poligon from "./Poligon";
 
 const DashboardStatsCard = ({ title, value, icon: Icon, color }) => {
   return (
-    <div className="primary p-5 rounded-2xl shadow-sm flex items-center gap-4">
+    <div className="primary p-5 my-rounded shadow-sm flex items-center gap-4">
       <Poligon Icon={Icon} fill={color} />
       <div>
         <p className="text-sm text-gray-500">{title}</p>

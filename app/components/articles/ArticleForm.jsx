@@ -87,7 +87,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="primary p-6 max-w-full shadow-md rounded-xl grid grid-cols-1 md:grid-cols-2 gap-6"
+      className="primary p-6 max-w-full shadow-md my-rounded grid grid-cols-1 md:grid-cols-2 gap-6"
     >
       {/* Title */}
       <div className="flex flex-col">
@@ -97,7 +97,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="title"
           value={formData.title}
           onChange={(e) => handleChange(e, "title")}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
       </div>
@@ -110,7 +110,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="slug"
           value={formData.slug}
           onChange={(e) => handleChange(e, "slug")}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
       </div>
@@ -131,7 +131,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="category"
           value={formData?.category || ""}
           onChange={(e) => handleCategoryChange(e.target.value)}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         >
           <option value="">Select Category</option>
@@ -150,7 +150,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="subCategory"
           value={formData?.subcategory || ""}
           onChange={(e) => handleSubCategoryChange(e.target.value)}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         >
           <option value="">Select Sub Category</option>
@@ -169,7 +169,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           multiple
           value={formData?.tags}
           onChange={handleTagChange}
-          className="border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         >
           {tags?.tags?.map((tag) => (
@@ -190,7 +190,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           type="file"
           accept="image/*"
           onChange={(e) => handleFileChange(e, "image")}
-          className="border-dashed border-2 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border-dashed border-2 my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
 
@@ -201,7 +201,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           type="file"
           accept="video/*"
           onChange={(e) => handleFileChange(e, "video")}
-          className="border-dashed border-2 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border-dashed border-2 my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
 
@@ -211,7 +211,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           type="submit"
           variant="success"
           bgColorRequired
-          className="text-white px-6 py-2 rounded transition"
+          className="text-white px-6 py-2 my-rounded transition"
         >
           {isUpdate
             ? loading

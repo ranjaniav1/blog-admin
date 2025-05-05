@@ -29,7 +29,7 @@ export default function BaseChart({ title, chartType, series, categories, color,
   };
 
   return (
-    <div className="primary p-4 rounded-xl shadow h-full">
+    <div className="primary p-4 my-rounded shadow h-full">
       <h2 className="text-md font-semibold mb-2">{title}</h2>
       <Chart
         options={options}

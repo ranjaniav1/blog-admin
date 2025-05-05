@@ -14,7 +14,7 @@ const DeleteModal = ({ itemName = 'item', onCancel, onDelete }) => {
           type="button"
           bgColorRequired
           onClick={onCancel}
-          className="px-4 py-2 icon-bg rounded-md"
+          className="px-4 py-2 icon-bg my-rounded"
         >
           Cancel
         </Button>
@@ -23,7 +23,7 @@ const DeleteModal = ({ itemName = 'item', onCancel, onDelete }) => {
           variant="danger"
           type="button"
           bgColorRequired
-          className="px-4 py-2 rounded-md"
+          className="px-4 py-2 my-rounded"
         >
           Confirm Delete
         </Button>

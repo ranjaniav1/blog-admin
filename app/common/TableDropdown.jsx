@@ -40,7 +40,7 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
         variant="outline"
         bgColorRequired
         onClick={() => setShowAddCategory(!showAddCategory)}
-        className="p-2 rounded-md h-max flex items-center gap-2"
+        className="p-2 my-rounded h-max flex items-center gap-2"
       >
         <GoPlus />
         {buttonTitle || "Add "}
@@ -67,19 +67,19 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
         variant="outline"
         bgColorRequired
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md hover:bg-base-200 focus:outline-none my-2"
+        className="flex items-center gap-2 px-4 py-2 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2"
       >
         <SlOptionsVertical />
         Show/Hide Columns
       </Button>
 
       {open && (
-        <div className="absolute primary z-10 w-60 origin-top-right rounded-md shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
+        <div className="absolute primary z-10 w-60 origin-top-right my-rounded shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
           <div className="p-2">
             {columns.map((col) => (
               <label
                 key={col.accessor}
-                className="flex items-center gap-2 cursor-pointer px-2 py-1 hover:bg-base-200 rounded"
+                className="flex items-center gap-2 cursor-pointer px-2 py-1 hover:bg-base-200 my-rounded"
               >
                 <input
                   type="checkbox"
