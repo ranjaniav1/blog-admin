@@ -11,6 +11,7 @@
   --font-size-sm: 14px;
   --font-size-lg: 18px;
   --active: #c21858;
+  --rounded: 12px;
 }
 
 @theme inline {
@@ -41,10 +42,14 @@ body {
 }
 
 body {
-  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   font-size: var(--font-size-base);
+  background-color: var(--primary);
+}
+
+main{
+  border-radius: var(--rounded);
 }
 
 h1,
@@ -52,7 +57,7 @@ h2,
 h3,
 h4,
 h5,
-h6{
+h6 {
   color: var(--text-primary);
   font-family: var(--font-sans), sans-serif;
 }
@@ -64,7 +69,8 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
-.primary, option {
+.primary,
+option {
   background-color: var(--primary);
 }
 
@@ -82,4 +88,28 @@ li {
 
 .active-link {
   color: var(--active);
+}
+
+.background {
+  background-color: var(--background);
+}
+
+.my-rounded {
+  border-radius: var(--rounded);
+}
+
+/* Hide scrollbar by default */
+.scrollbar-hide::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Show scrollbar only on hover */
+.scrollbar-hover:hover::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollbar-hover:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.4);
+  border-radius: 4px;
 }
