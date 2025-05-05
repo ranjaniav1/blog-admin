@@ -35,6 +35,7 @@ const TinyEditor = ({ handleEditorChange, formData }) => {
         tinycomments_mode: "embedded",
       }}
       onEditorChange={handleEditorChange}
+      value={formData?.content}
     />
   );
 };
