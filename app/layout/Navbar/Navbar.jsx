@@ -7,6 +7,7 @@ import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
 import ThemeToggleButton from "@/app/common/ThemeToggleButton";
 import InputField from "@/app/common/InputField";
 import { useAuth } from "@/app/context/AuthContext";
+import { useToast } from "@/app/context/ToastContext";
 
 const Navbar = ({ onBurgerClick }) => {
   const [showSearch, setShowSearch] = useState(false);
@@ -24,59 +25,56 @@ const Navbar = ({ onBurgerClick }) => {
   }, []);
 
   const { user } = useAuth();
+  const { showToast } = useToast();
 
   return (
     <>
       <div className="relative">
-        <div className="flex justify-between p-4 primary">
-          <div className="flex items-center gap-2">
-            <IconButton
-              Icon={RxHamburgerMenu}
-              className="text-2xl"
-              aria_label="Menu"
-              tooltip="Menu"
-              onClick={onBurgerClick}
-            />
-            {/* Desktop search input */}
-            <div className="hidden sm:block">
-              <InputField type="search" name="" placeholder="search" />
-            </div>
-            {/* Mobile search icon */}
-            <div className="block sm:hidden">
+        <div className="py-6 pr-4 primary">
+          <div className="background flex justify-between p-5 my-rounded">
+            <div className="flex items-center gap-2">
               <IconButton
-                Icon={IoMdSearch}
-                aria_label="Search"
-                tooltip="Search"
-                onClick={() => setShowSearch(!showSearch)}
+                Icon={RxHamburgerMenu}
+                className="text-2xl"
+                aria_label="Menu"
+                tooltip="Menu"
+                onClick={onBurgerClick}
               />
-            </div>
-          </div>
-
-          <div className="right-side-menu flex gap-2 items-center">
-            <div className="theme">
-              <ThemeToggleButton />
+              {/* Desktop search input */}
             </div>
 
-            {/* Notification hidden on small */}
-            <div className="notification hidden sm:block">
-              <IconButton
-                Icon={IoIosNotificationsOutline}
-                aria_label="Notification"
-                tooltip="Notification"
-                needBg
-              />
-            </div>
+            <div className="right-side-menu flex gap-2 items-center">
+              <div className="theme">
+                <ThemeToggleButton />
+              </div>
 
-            <div className="user flex items-center gap-2">
-              <div className="user-image">
-                <img
-                  src={user?.avatar_url || "https://thafd.bing.com/th/id/OIP.LJZkNMsFI9y96XbKcoOBQQHaHa?rs=1&pid=ImgDetMain"}
-                  alt="user"
-                  className="w-9 h-9 rounded-full"
+              {/* Notification hidden on small */}
+              <div className="notification hidden sm:block">
+                <IconButton
+                  Icon={IoIosNotificationsOutline}
+                  aria_label="Notification"
+                  tooltip="Notification"
+                  needBg
+                  onClick={() =>
+                    showToast("success", "Sample Success message!")
+                  }
                 />
               </div>
-              <div className="user-name hidden sm:block">
-                {user?.fullname || "Admin12"}
+
+              <div className="user flex items-center gap-2">
+                <div className="user-image">
+                  <img
+                    src={
+                      user?.avatar_url ||
+                      "https://thafd.bing.com/th/id/OIP.LJZkNMsFI9y96XbKcoOBQQHaHa?rs=1&pid=ImgDetMain"
+                    }
+                    alt="user"
+                    className="w-9 h-9 rounded-full"
+                  />
+                </div>
+                <div className="user-name hidden sm:block">
+                  {user?.fullname || "Admin12"}
+                </div>
               </div>
             </div>
           </div>
