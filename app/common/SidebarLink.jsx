@@ -7,9 +7,9 @@ const SidebarLink = ({ title, slug, icon: Icon, isActive, section }) => {
     >
       <Link href={slug}>
         <div
-          className={`flex items-center gap-2 p-2 my-rounded transition-all duration-200 ${
-            isActive ? "bg-blue-500 text-white" : ""
-          } hover:bg-blue-500 hover:text-white`}
+          className={`flex items-center gap-2 p-4 my-rounded transition-all duration-200 ${
+            isActive ? "active text-white" : ""
+          } hover:bg-pink-600 hover:text-white`}
         >
           {Icon && <Icon className="text-lg" />}
           <span>{title}</span>

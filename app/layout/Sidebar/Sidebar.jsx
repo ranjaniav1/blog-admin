@@ -9,13 +9,10 @@ import {
 import SidebarLink from "@/app/common/SidebarLink";
 import Link from "next/link";
 import Poligon from "@/app/common/Poligon";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState("");
-
-  const handleRouteChange = (slug) => {
-    setActiveIndex(slug);
-  };
+  const pathname = usePathname(); // ✅
 
   // Filter routes based on role
   const filteredRoutes = adminRoutes.filter((route) =>
@@ -47,8 +44,7 @@ const Sidebar = () => {
                   <SidebarLink
                     key={route.slug}
                     {...route}
-                    isActive={activeIndex === route.slug}
-                    onClick={() => handleRouteChange(route.slug)}
+                    isActive={pathname.includes(route.slug)} // ✅ URL-based active state
                   />
                 ))}
             </div>
