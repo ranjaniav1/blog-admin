@@ -30,7 +30,7 @@ const Navbar = ({ onBurgerClick }) => {
   return (
     <>
       <div className="relative">
-        <div className="py-6 pr-4 primary">
+        <div className="py-6 primary">
           <div className="background flex justify-between p-5 my-rounded">
             <div className="flex items-center gap-2">
               <IconButton
@@ -56,7 +56,7 @@ const Navbar = ({ onBurgerClick }) => {
                   tooltip="Notification"
                   needBg
                   onClick={() =>
-                    showToast("success", "Sample Success message!")
+                    showToast("loading", "Sample Success message!")
                   }
                 />
               </div>
