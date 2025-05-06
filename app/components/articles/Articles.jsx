@@ -28,6 +28,12 @@ const Articles = () => {
     { label: "is Featured", accessor: "is_featured" },
     { label: "is Breaking", accessor: "is_breaking" },
     { label: "Total Reads", accessor: "total_reads" },
+    {
+      label: "Expire Date",
+      accessor: "expiry_date",
+      render: (date) =>
+        date ? new Date(date).toISOString().split("T")[0] : "N/A",
+    },
     { label: "Total Shares", accessor: "total_shares" },
     { label: "Total Comments", accessor: "total_comments" },
     {
@@ -61,7 +67,11 @@ const Articles = () => {
       label: "Video",
       accessor: "video_url",
       render: (url) => (
-        <video src={url} controls className="h-12 w-20 object-cover my-rounded" />
+        <video
+          src={url}
+          controls
+          className="h-12 w-20 object-cover my-rounded"
+        />
       ),
     },
   ];

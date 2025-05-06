@@ -35,6 +35,8 @@ const page = () => {
         subcategory: data.articles.subcategory?._id || "",
         tag_id: data.articles.tags?.map((tag) => tag._id) || [],
         image: data.articles.image_url || null,
+        video: data.articles.video_url || null,
+        expiry_date: data.articles.expiry_date || null,
         video: null,
       });
     }
