@@ -25,19 +25,19 @@ const Sidebar = () => {
   return (
     <div className="primary h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
       <Link href={"/"}>
-        <div className="flex p-4 gap-3 items-center">
+        <div className="flex p-4 gap-3 items-center mt-6">
           <Poligon fill={"#000"} text={Webname.slice(0, 1)} />
           <h1 className="font-bold text-2xl">{Webname}</h1>
         </div>
       </Link>
 
-      <div className="space-y-4 overflow-y-auto">
+      <div className="space-y-4 overflow-y-auto mt-4">
         {sections.map((section) => (
           <div key={section}>
-            <h2 className="text-lg font-semibold my-2 text-gray-700 uppercase tracking-wider">
+            <h2 className="text-lg font-semibold my-2 text-gray-700 tracking-wider">
               {section}
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-2 ml-2">
               {filteredRoutes
                 .filter((r) => r.section === section)
                 .map((route) => (

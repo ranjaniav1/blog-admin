@@ -144,5 +144,6 @@ export const useCreateArticle = (page = 1, id) => {
     editArticle,
     removeArticle,
     getArticleById,
+    setData
   };
 };
