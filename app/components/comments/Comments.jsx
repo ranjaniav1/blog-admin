@@ -5,6 +5,8 @@ import Table from "@/app/common/Table";
 import ActionButtons from "@/app/common/ActionButtons";
 import { useToast } from "@/app/context/ToastContext";
 import { useComment } from "@/app/hooks/useComments";
+import DeleteModal from "@/app/common/DeleteModal";
+import Modal from "@/app/common/Modal";
 
 function formatDate(dateString) {
   const date = new Date(dateString);
@@ -18,9 +20,35 @@ function formatDate(dateString) {
 }
 
 const Comments = () => {
-  const [currentPage, setCurrentPage] = useState(1); // reserved for future pagination
+  const [currentPage, setCurrentPage] = useState(1);
   const { showToast } = useToast();
   const { loading, commentsData, removeComment } = useComment();
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedComment, setSelectedComment] = useState(null);
+
+  const openDeleteModal = (comment) => {
+    setSelectedComment(comment);
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedComment(null);
+    setModalOpen(false);
+  };
+
+  const confirmDelete = async () => {
+    if (selectedComment) {
+      const res = await removeComment(selectedComment._id);
+      if (res?.success) {
+        showToast("success", "Comment deleted successfully!");
+      } else {
+        showToast("error", "Failed to delete comment.");
+      }
+      closeModal();
+    }
+  };
 
   const columns = [
     {
@@ -67,16 +95,7 @@ const Comments = () => {
   ];
 
   const renderActions = (row) => (
-    <ActionButtons
-      onDelete={async () => {
-        const res = await removeComment(row._id);
-        if (res?.success) {
-          showToast("success", "Comment deleted successfully!");
-        } else {
-          showToast("error", "Failed to delete comment.");
-        }
-      }}
-    />
+    <ActionButtons onDelete={() => openDeleteModal(row)} />
   );
 
   if (loading) {
@@ -91,8 +110,17 @@ const Comments = () => {
         data={commentsData.comments || []}
         className="primary"
         renderActions={renderActions}
-        pagination={false} // You can add pagination here if needed
+        pagination={false}
       />
+
+      {/* Delete Confirmation Modal */}
+      <Modal isOpen={modalOpen} onClose={closeModal} title="Delete Comment">
+        <DeleteModal
+          itemName={selectedComment?.user?.fullname || "comment"}
+          onDelete={confirmDelete}
+          onCancel={closeModal}
+        />
+      </Modal>
     </div>
   );
 };
