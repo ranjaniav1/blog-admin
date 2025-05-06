@@ -31,9 +31,7 @@ const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const dataToValidate = isJsonMode
-      ? JSON.parse(jsonText || "{}")
-      : formData;
+    const dataToValidate = isJsonMode ? JSON.parse(jsonText || "{}") : formData;
 
     const requiredFieldsValid = fields
       .filter((f) => f.required)
@@ -67,6 +65,28 @@ const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
             required={field.required}
           />
         );
+      case "checkbox":
+        return (
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              // name={field.name}
+              checked={!!formData[field.name]}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  [field.name]: e.target.checked,
+                }))
+              }
+              className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+              required={field.required}
+            />
+            <span className="ml-2 text-sm text-gray-700">
+              {field.message || field.label}
+            </span>
+          </label>
+        );
+
       case "select":
         return (
           <select

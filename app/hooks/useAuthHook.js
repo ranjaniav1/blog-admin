@@ -9,7 +9,7 @@ import { getAllUsers, manageUserRole } from "../service/auth.service";
 
 export const useAuthHook = (allUserNeeded = false, page = 1) => {
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState({ users: [], totalPages: 1, page: 1 });
   const { loginContext } = useAuth();
   const router = useRouter();
 
@@ -51,12 +51,18 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
     setLoading(true);
     try {
       const result = await manageUserRole(userId, role);
-      if (result) {
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user._id === userId ? { ...user, role } : user
-          )
-        );
+      if (result?.data?.user) {
+        const updatedUser = result.data.user;
+
+        // Update the nested user inside users.users array
+        setUsers((prevUsers) => ({
+          ...prevUsers,
+          users: prevUsers.users.map((user) =>
+            user._id === userId ? updatedUser : user
+          ),
+        }));
+
+        return { success: true, message: result.message };
       } else {
         return { success: false, error: "Failed to update user role" };
       }
