@@ -46,14 +46,6 @@ export const adminRoutes = [
     description: "Moderate article comments.",
     allowedRoles: ["superadmin", "admin"],
   },
-  {
-    title: "Bookmarks",
-    slug: "/admin/bookmarks",
-    icon: FaBookmark,
-    section: "User Management",
-    description: "View saved articles by users.",
-    allowedRoles: ["superadmin", "admin"],
-  },
 
   // --- News Management ---
   {
@@ -88,76 +80,16 @@ export const adminRoutes = [
     description: "Add and manage article tags.",
     allowedRoles: ["superadmin", "admin", "author"],
   },
-  // {
-  //   title: "Author Profiles",
-  //   slug: "/admin/authors",
-  //   icon: FaUserEdit,
-  //   section: "News Management",
-  //   description: "Enhance author bios and social links.",
-  //   allowedRoles: ["superadmin", "admin", "author"],
-  // },
 
-  // --- Home Screen ---
-  {
-    title: "Breaking News",
-    slug: "/admin/breaking-news",
-    icon: FaFire,
-    section: "Home Screen",
-    description: "Manage urgent headlines.",
-    allowedRoles: ["superadmin", "admin"],
-  },
-  {
-    title: "Recommendations",
-    slug: "/admin/recommendations",
-    icon: FaStar,
-    section: "Home Screen",
-    description: "AI/user-based recommended content.",
-    allowedRoles: ["superadmin", "admin"],
-  },
-
-  // // --- Other ---
+  // // --- Home Screen ---
   // {
-  //   title: "Media Library",
-  //   slug: "/admin/media",
-  //   icon: FaPhotoVideo,
-  //   section: "Other",
-  //   description: "Upload and manage images, videos, and audio.",
-  //   allowedRoles: ["superadmin", "admin", "author"],
-  // },
-  // {
-  //   title: "RSS Feeds",
-  //   slug: "/admin/rss",
-  //   icon: FaRss,
-  //   section: "Other",
-  //   description: "Configure RSS feed sources.",
-  //   allowedRoles: ["superadmin"],
-  // },
-  // {
-  //   title: "Notifications",
-  //   slug: "/admin/notifications",
-  //   icon: FaBell,
-  //   section: "Other",
-  //   description: "Send and manage system notifications.",
+  //   title: "Breaking News",
+  //   slug: "/admin/breaking-news",
+  //   icon: FaFire,
+  //   section: "Home Screen",
+  //   description: "Manage urgent headlines.",
   //   allowedRoles: ["superadmin", "admin"],
   // },
-  // {
-  //   title: "Analytics",
-  //   slug: "/admin/analytics",
-  //   icon: FaChartBar,
-  //   section: "Other",
-  //   description: "Track views, reads, and shares per article.",
-  //   allowedRoles: ["superadmin", "admin"],
-  // },
-
-  // --- Ads ---
-  {
-    title: "Sponsored Ads",
-    slug: "/admin/ads",
-    icon: FaBullhorn,
-    section: "Ads",
-    description: "Manage sponsor ads and campaigns.",
-    allowedRoles: ["superadmin", "admin"],
-  },
 
   // --- Settings ---
   {

@@ -104,7 +104,6 @@ const Comments = () => {
 
   return (
     <div className="primary my-rounded shadow-md bg-white p-4">
-      <h2 className="text-xl font-bold mb-4 text-gray-800">Manage Comments</h2>
       <Table
         columns={columns}
         data={commentsData.comments || []}

@@ -23,10 +23,14 @@ const Articles = () => {
     { label: "Slug", accessor: "slug" },
     { label: "Excerpt", accessor: "excerpt" },
     { label: "Content", accessor: "content" },
-    { label: "Status", accessor: "status" },
+    { label: "Status", accessor: "status", filterable: true },
     { label: "Read Time", accessor: "read_time" },
     { label: "is Featured", accessor: "is_featured" },
-    { label: "is Breaking", accessor: "is_breaking" },
+    {
+      label: "is Breaking",
+      accessor: "is_breaking_news",
+      render: (isBreaking) => (isBreaking ? "Yes" : "No"),
+    },
     { label: "Total Reads", accessor: "total_reads" },
     {
       label: "Expire Date",
@@ -41,16 +45,24 @@ const Articles = () => {
       accessor: "createdBy", // optional, only needed if your table needs it
       render: (createdBy) => createdBy?.fullname || "N/A",
     },
+    
     {
       label: "Category",
-      accessor: "category_id", // optional
+      accessor: "category", // optional
       render: (category) => category?.name || "N/A",
+      filterable: true
     },
-
+    {
+      label: "Sub Category",
+      accessor: "subcategory", // optional
+      render: (subcategory) => subcategory?.name || "N/A",
+      filterable: true
+    },
     {
       label: "Tags",
       accessor: "tags",
       render: (tags) => tags.map((t) => t.name).join(", "),
+      filterable: true
     },
     {
       label: "Image",
