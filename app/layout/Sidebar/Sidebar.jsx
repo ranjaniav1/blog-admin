@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { adminRoutes, currentUserRole, Webname } from "@/app/config/admin.config";
+import {
+  adminRoutes,
+  currentUserRole,
+  Webname,
+} from "@/app/config/admin.config";
 import SidebarLink from "@/app/common/SidebarLink";
 import Link from "next/link";
 import Poligon from "@/app/common/Poligon";
+import { usePathname } from "next/navigation";
 
 const Sidebar = () => {
-  const [activeIndex, setActiveIndex] = useState("");
-
-  const handleRouteChange = (slug) => {
-    setActiveIndex(slug);
-  };
+  const pathname = usePathname(); // ✅
 
   // Filter routes based on role
-  const filteredRoutes = adminRoutes.filter(route =>
+  const filteredRoutes = adminRoutes.filter((route) =>
     route.allowedRoles.includes(currentUserRole)
   );
 
@@ -22,7 +23,7 @@ const Sidebar = () => {
   const sections = [...new Set(filteredRoutes.map((r) => r.section))];
 
   return (
-    <div className="primary overflow-y-auto h-full p-4">
+    <div className="primary h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
       <Link href={"/"}>
         <div className="flex p-4 gap-3 items-center">
           <Poligon fill={"#000"} text={Webname.slice(0, 1)} />
@@ -43,8 +44,7 @@ const Sidebar = () => {
                   <SidebarLink
                     key={route.slug}
                     {...route}
-                    isActive={activeIndex === route.slug}
-                    onClick={() => handleRouteChange(route.slug)}
+                    isActive={pathname.includes(route.slug)} // ✅ URL-based active state
                   />
                 ))}
             </div>

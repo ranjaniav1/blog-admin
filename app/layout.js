@@ -1,6 +1,7 @@
 "use client";
 
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 import DashboardLayout from "./Dashboardlayout";
 import "./globals.css";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -21,9 +22,17 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-full`}
       >
-        <AuthProvider>
-          {isLogin ? children : <DashboardLayout>{children}</DashboardLayout>}
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            {isLogin ? (
+              children
+            ) : (
+              <DashboardLayout>
+                <div className="my-rounded">{children}</div>
+              </DashboardLayout>
+            )}
+          </AuthProvider>
+        </ToastProvider>
       </body>
     </html>
   );

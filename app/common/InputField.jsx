@@ -38,7 +38,7 @@ const InputField = ({
       name={name}
       aria-label={aria_label}
       required={required}
-      className={`block w-full rounded-md border ${sizeClasses[size]} ${variantClasses[variant]} ${className} disabled:opacity-50 disabled:cursor-not-allowed`}
+      className={`block w-full my-rounded border ${sizeClasses[size]} ${variantClasses[variant]} ${className} disabled:opacity-50 disabled:cursor-not-allowed`}
     />
   );
 };
