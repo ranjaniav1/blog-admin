@@ -6,14 +6,17 @@ import {
   deleteSubcategory,
   editSubcategory,
 } from "../service/subcategory.service";
+import { useToast } from "../context/ToastContext";
 
 export const useSubcategories = (requiredAllCategory, page) => {
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { showToast, dismissToast } = useToast();
 
   const fetchSubcategories = async (page) => {
     setLoading(true);
+    // const toastId = showToast("loading", "Loading subcategories...");
     try {
       const response = await getSubcategories(page);
       console.log("Subcategories Response:", response);
@@ -26,11 +29,16 @@ export const useSubcategories = (requiredAllCategory, page) => {
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
+      // dismissToast(toastId);
     }
   };
 
   const fetchSubcategoriesByCategory = async (slug) => {
     setLoading(true);
+    // const toastId = showToast(
+    //   "loading",
+    //   "Loading subcategories by category..."
+    // );
     try {
       const response = await getSubcategoriesByCatSlug(slug);
       if (response && response.data) {
@@ -42,10 +50,12 @@ export const useSubcategories = (requiredAllCategory, page) => {
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
+      // dismissToast(toastId);
     }
   };
 
   const deleteNewsSubcategory = async (id) => {
+    const toastId = showToast("loading", "Deleting subcategory...");
     const previous = [...subcategories.subcategories];
     setSubcategories((prev) => ({
       ...prev,
@@ -58,14 +68,18 @@ export const useSubcategories = (requiredAllCategory, page) => {
         setSubcategories(previous);
         setError("Failed to delete subcategory");
       }
+      showToast("success", res.message || "Subcategory deleted successfully");
       fetchSubcategories();
     } catch (err) {
       setSubcategories(previous);
       setError(err.message || "Something went wrong");
+    } finally {
+      dismissToast(toastId);
     }
   };
 
   const addNewsSubcategory = async (newSub) => {
+    const toastId = showToast("loading", "Adding subcategory...");
     setSubcategories((prev) => [...prev.subcategories, newSub]);
     try {
       const res = await addSubcategory(newSub);
@@ -73,15 +87,19 @@ export const useSubcategories = (requiredAllCategory, page) => {
         setSubcategories((prev) => prev.filter((s) => s !== newSub));
         setError("Failed to add subcategory");
       }
+      showToast("success", res.message || "Subcategory added successfully");
       fetchSubcategories();
     } catch (err) {
       setSubcategories((prev) => prev.filter((s) => s !== newSub));
       setError(err.message || "Something went wrong");
+    } finally {
+      dismissToast(toastId);
     }
   };
 
   const updateSubcategory = async (id, updatedSub) => {
     const previous = [...subcategories.subcategories];
+    const toastId = showToast("loading", "Updating subcategory...");
     try {
       const res = await editSubcategory(id, updatedSub);
       const updated = res?.data?.subcategories; // this is the updated single object
@@ -90,6 +108,7 @@ export const useSubcategories = (requiredAllCategory, page) => {
           ...prev,
           subcategories: previous.map((s) => (s._id === id ? updated : s)),
         }));
+        showToast("success", res.message || "Subcategory updated successfully");
       } else {
         setSubcategories(previous);
         setError("Failed to update subcategory");
@@ -97,6 +116,8 @@ export const useSubcategories = (requiredAllCategory, page) => {
     } catch (err) {
       setSubcategories(previous);
       setError(err.message || "Something went wrong");
+    } finally {
+      dismissToast(toastId);
     }
   };
 

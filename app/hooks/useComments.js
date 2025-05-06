@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllComments, deleteComment } from "../service/comment.service";
+import { useToast } from "../context/ToastContext";
 
 export const useComment = () => {
   const [commentsData, setCommentsData] = useState({
@@ -11,6 +12,7 @@ export const useComment = () => {
     totalCount: 0,
   });
   const [loading, setLoading] = useState(false);
+  const { showToast, dismissToast } = useToast();
 
   const fetchComments = async (page = 1) => {
     setLoading(true);
@@ -27,6 +29,7 @@ export const useComment = () => {
   };
 
   const removeComment = async (commentId) => {
+    const toastId = showToast("loading", "Deleting comment...");
     try {
       const result = await deleteComment(commentId);
       if (result?.success && result.data?.commentId) {
@@ -38,9 +41,12 @@ export const useComment = () => {
           totalCount: prev.totalCount - 1,
         }));
       }
+      showToast("success", result.message || "Comment deleted successfully");
       return result;
     } catch (error) {
       console.error("Failed to delete comment:", error);
+    } finally {
+      dismissToast(toastId);
     }
   };
 

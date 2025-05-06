@@ -1,38 +1,45 @@
-// context/ToastContext.tsx
-import React, { createContext, useContext, useState } from "react";
+// context/ToastContext.jsx or .tsx
+import { createContext, useContext, useState } from "react";
 import Toast from "../common/Toast";
 
-const ToastContext = createContext(null);
-let toastId = 0;
+const ToastContext = createContext();
 
-export const useToast = () => useContext(ToastContext);
+let toastIdCounter = 0;
 
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const showToast = (type, message, duration = 2000) => {
-    const id = toastId++;
-    const toast = { id, type, message };
-    setToasts((prev) => [...prev, toast]);
+    const id = `toast-${Date.now()}-${toastIdCounter++}`;
 
-    // Auto-remove after duration
-    setTimeout(() => {
-      removeToast(id);
-    }, duration);
+    setToasts((prev) => [...prev, { id, type, message }]);
+
+    if (type !== "loading") {
+      setTimeout(() => dismissToast(id), duration);
+    }
+
+    return id;
   };
 
-  const removeToast = (id) => {
+  const dismissToast = (id) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={{ showToast, dismissToast }}>
       {children}
-      <div className="fixed bottom-6 right-6 space-y-3 z-50 max-w-sm w-full">
+      <div className="fixed top-4 right-4 z-50 space-y-2">
         {toasts.map((toast) => (
-          <Toast key={toast.id} {...toast} onClose={() => removeToast(toast.id)} />
+          <Toast
+            key={toast.id}
+            type={toast.type}
+            message={toast.message}
+            onClose={() => dismissToast(toast.id)}
+          />
         ))}
       </div>
     </ToastContext.Provider>
   );
 };
+
+export const useToast = () => useContext(ToastContext);
