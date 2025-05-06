@@ -32,7 +32,7 @@
     --border: #27272a; /* darker border for dark mode */
     --text-primary: #ededed;
     --text-secondary: #a1a1aa;
-    --active: var(--background);
+    --active: #c21858;
   }
 }
 
@@ -115,5 +115,9 @@ option {
 }
 
 .link:hover {
+  background-color: var(--background);
+}
+
+.link-active {
   background-color: var(--background);
 }
