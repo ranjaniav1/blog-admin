@@ -1,0 +1,100 @@
+"use client";
+
+import React, { useState } from "react";
+import Table from "@/app/common/Table";
+import ActionButtons from "@/app/common/ActionButtons";
+import { useToast } from "@/app/context/ToastContext";
+import { useComment } from "@/app/hooks/useComments";
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+const Comments = () => {
+  const [currentPage, setCurrentPage] = useState(1); // reserved for future pagination
+  const { showToast } = useToast();
+  const { loading, commentsData, removeComment } = useComment();
+
+  const columns = [
+    {
+      label: "User",
+      accessor: "user.fullname",
+      render: (_, row) => (
+        <span className="font-medium text-gray-700">{row.user.fullname}</span>
+      ),
+    },
+    {
+      label: "Article Title",
+      accessor: "article.title",
+      render: (_, row) => (
+        <span className="text-blue-600 font-semibold">{row.article.title}</span>
+      ),
+    },
+    {
+      label: "Content",
+      accessor: "content",
+      render: (val) => (
+        <div className="text-gray-600 max-w-xs line-clamp-2">{val}</div>
+      ),
+    },
+    {
+      label: "Flagged",
+      accessor: "is_flagged",
+      render: (val) =>
+        val ? (
+          <span className="text-red-500 font-semibold">Yes</span>
+        ) : (
+          <span className="text-green-500 font-medium">No</span>
+        ),
+    },
+    {
+      label: "Created At",
+      accessor: "created_at",
+      render: (val) => <span className="text-sm">{formatDate(val)}</span>,
+    },
+    {
+      label: "Updated At",
+      accessor: "updated_at",
+      render: (val) => <span className="text-sm">{formatDate(val)}</span>,
+    },
+  ];
+
+  const renderActions = (row) => (
+    <ActionButtons
+      onDelete={async () => {
+        const res = await removeComment(row._id);
+        if (res?.success) {
+          showToast("success", "Comment deleted successfully!");
+        } else {
+          showToast("error", "Failed to delete comment.");
+        }
+      }}
+    />
+  );
+
+  if (loading) {
+    return <div className="text-center py-10">Loading comments...</div>;
+  }
+
+  return (
+    <div className="primary my-rounded shadow-md bg-white p-4">
+      <h2 className="text-xl font-bold mb-4 text-gray-800">Manage Comments</h2>
+      <Table
+        columns={columns}
+        data={commentsData.comments || []}
+        className="primary"
+        renderActions={renderActions}
+        pagination={false} // You can add pagination here if needed
+      />
+    </div>
+  );
+};
+
+export default Comments;
