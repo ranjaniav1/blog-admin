@@ -1,16 +1,16 @@
-'use client';
-import TableBody from './TableBody';
-import Pagination from './Pagination';
-import TableHeader from './TableHeader';
-import { useRouter } from 'next/navigation';
-import TableDropdown from './TableDropdown';
-import React, { useState, useMemo } from 'react';
+"use client";
+import TableBody from "./TableBody";
+import Pagination from "./Pagination";
+import TableHeader from "./TableHeader";
+import { useRouter } from "next/navigation";
+import TableDropdown from "./TableDropdown";
+import React, { useState, useMemo } from "react";
 
 const Table = ({
   columns,
   data,
   renderActions,
-  className = '',
+  className = "",
   showAddButton,
   AddButton,
   linkUrl,
@@ -21,6 +21,7 @@ const Table = ({
   isDashboard = false,
 }) => {
   const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
   const defaultVisible = columns.slice(0, 5).map((col) => col.accessor);
   const [visibleColumns, setVisibleColumns] = useState(defaultVisible);
   const [filters, setFilters] = useState({});
@@ -40,7 +41,7 @@ const Table = ({
         const value = item[col.accessor];
         if (Array.isArray(value)) {
           value.forEach((v) => set.add(v?.name));
-        } else if (typeof value === 'object') {
+        } else if (typeof value === "object") {
           set.add(value?.name);
         } else {
           set.add(value);
@@ -54,23 +55,32 @@ const Table = ({
   // ✅ Filtered data based on dynamic filters
   const filteredData = useMemo(() => {
     return data.filter((item) => {
-      return Object.entries(filters).every(([accessor, value]) => {
-        if (value === 'all') return true;
-
-        const itemValue = item[accessor];
-
-        if (Array.isArray(itemValue)) {
-          return itemValue.some((v) => v?.name === value);
+      const matchesFilters = Object.entries(filters).every(
+        ([accessor, value]) => {
+          if (value === "all") return true;
+          const itemValue = item[accessor];
+          if (Array.isArray(itemValue))
+            return itemValue.some((v) => v?.name === value);
+          if (typeof itemValue === "object") return itemValue?.name === value;
+          return itemValue === value;
         }
+      );
 
-        if (typeof itemValue === 'object') {
-          return itemValue?.name === value;
-        }
+      const matchesSearch =
+        searchQuery.trim() === "" ||
+        Object.values(item).some((val) => {
+          if (typeof val === "string") {
+            return val.toLowerCase().includes(searchQuery.toLowerCase());
+          }
+          if (typeof val === "object" && val?.name) {
+            return val.name.toLowerCase().includes(searchQuery.toLowerCase());
+          }
+          return false;
+        });
 
-        return itemValue === value;
-      });
+      return matchesFilters && matchesSearch;
     });
-  }, [data, filters]);
+  }, [data, filters, searchQuery]);
 
   return (
     <div className={`overflow-x-auto my-rounded p-4 ${className}`}>
@@ -86,12 +96,21 @@ const Table = ({
               buttonTitle={buttonTitle}
             />
 
+            {/* search bar */}
+            <input
+              type="text"
+              placeholder="Search..."
+              className="border px-3 py-1 rounded w-48"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
             {/* ✅ Render filter dropdowns dynamically */}
             {filterableColumns.map((col) => (
               <select
                 key={col.accessor}
                 className="border px-3 py-1 rounded"
-                value={filters[col.accessor] || 'all'}
+                value={filters[col.accessor] || "all"}
                 onChange={(e) =>
                   setFilters((prev) => ({
                     ...prev,
