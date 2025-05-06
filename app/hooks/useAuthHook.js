@@ -13,7 +13,7 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
   const [users, setUsers] = useState({ users: [], totalPages: 1, page: 1 });
   const { loginContext } = useAuth();
   const router = useRouter();
-  const { showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
 
   const login = async (email, password) => {
     setLoading(true);
@@ -52,6 +52,7 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
 
   const updateUserRole = async (userId, role) => {
     setLoading(true);
+    const toastId = showToast("loading", "Updating user role...");
     try {
       const result = await manageUserRole(userId, role);
       if (result?.data?.user) {
@@ -79,6 +80,7 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
       return { success: false, error: error.message || "Something went wrong" };
     } finally {
       setLoading(false);
+      dismissToast(toastId);
     }
   };
 

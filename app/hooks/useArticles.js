@@ -6,6 +6,7 @@ import {
   deleteArticle,
   fetchArticleById,
 } from "../service/article.service";
+import { useToast } from "../context/ToastContext";
 
 export const useCreateArticle = (page = 1, id) => {
   const [loading, setLoading] = useState(false);
@@ -16,6 +17,8 @@ export const useCreateArticle = (page = 1, id) => {
     page: 1,
     totalPages: 1,
   });
+
+  const { showToast, dismissToast } = useToast();
 
   const getArticles = async () => {
     setLoading(true);
@@ -59,48 +62,66 @@ export const useCreateArticle = (page = 1, id) => {
   const addArticle = async (formData) => {
     setLoading(true);
     setError(null);
+    const toastId = showToast("loading", "Creating article...");
     try {
       const response = await createArticle(formData);
       if (response) {
         setSuccess(true);
+        showToast(
+          "success",
+          response.message || "Article created successfully!"
+        );
         await getArticles(); // Refresh after creation
       }
     } catch (err) {
       setError("Failed to create article.");
     } finally {
       setLoading(false);
+      dismissToast(toastId);
     }
   };
 
   const editArticle = async (updatedData) => {
     setLoading(true);
     setError(null);
+    const toastId = showToast("loading", "Updating article...");
     try {
       const response = await updateArticle(updatedData);
       if (response) {
         setSuccess(true);
+        showToast(
+          "success",
+          response.message || "Article updated successfully!"
+        );
         await getArticles(); // Refresh after update
       }
     } catch (err) {
       setError("Failed to update article.");
     } finally {
       setLoading(false);
+      dismissToast(toastId);
     }
   };
 
   const removeArticle = async (id) => {
     setLoading(true);
     setError(null);
+    const toastId = showToast("loading", "Deleting article...");
     try {
       const response = await deleteArticle(id);
       if (response) {
         setSuccess(true);
+        showToast(
+          "success",
+          response.message || "Article Removed successfully!"
+        );
         await getArticles(); // Refresh after delete
       }
     } catch (err) {
       setError("Failed to delete article.");
     } finally {
       setLoading(false);
+      dismissToast(toastId);
     }
   };
 
