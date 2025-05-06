@@ -1,16 +1,16 @@
-"use client";
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import TableDropdown from "./TableDropdown";
-import TableHeader from "./TableHeader";
-import TableBody from "./TableBody";
-import Pagination from "./Pagination";
+'use client';
+import TableBody from './TableBody';
+import Pagination from './Pagination';
+import TableHeader from './TableHeader';
+import { useRouter } from 'next/navigation';
+import TableDropdown from './TableDropdown';
+import React, { useState, useMemo } from 'react';
 
 const Table = ({
   columns,
   data,
   renderActions,
-  className = "",
+  className = '',
   showAddButton,
   AddButton,
   linkUrl,
@@ -23,30 +23,100 @@ const Table = ({
   const router = useRouter();
   const defaultVisible = columns.slice(0, 5).map((col) => col.accessor);
   const [visibleColumns, setVisibleColumns] = useState(defaultVisible);
+  const [filters, setFilters] = useState({});
 
   const filteredColumns = columns.filter((col) =>
     visibleColumns.includes(col.accessor)
   );
 
+  const filterableColumns = columns.filter((col) => col.filterable);
+
+  // ✅ Get unique values for filterable columns
+  const filterOptions = useMemo(() => {
+    const options = {};
+    filterableColumns.forEach((col) => {
+      const set = new Set();
+      data.forEach((item) => {
+        const value = item[col.accessor];
+        if (Array.isArray(value)) {
+          value.forEach((v) => set.add(v?.name));
+        } else if (typeof value === 'object') {
+          set.add(value?.name);
+        } else {
+          set.add(value);
+        }
+      });
+      options[col.accessor] = Array.from(set);
+    });
+    return options;
+  }, [data, filterableColumns]);
+
+  // ✅ Filtered data based on dynamic filters
+  const filteredData = useMemo(() => {
+    return data.filter((item) => {
+      return Object.entries(filters).every(([accessor, value]) => {
+        if (value === 'all') return true;
+
+        const itemValue = item[accessor];
+
+        if (Array.isArray(itemValue)) {
+          return itemValue.some((v) => v?.name === value);
+        }
+
+        if (typeof itemValue === 'object') {
+          return itemValue?.name === value;
+        }
+
+        return itemValue === value;
+      });
+    });
+  }, [data, filters]);
+
   return (
     <div className={`overflow-x-auto my-rounded p-4 ${className}`}>
       {!isDashboard && (
-        <div className="flex justify-between items-center mb-2">
-          <TableDropdown
-            columns={columns}
-            visibleColumns={visibleColumns}
-            setVisibleColumns={setVisibleColumns}
-            dynamicFields={dynamicFields}
-            addFunction={addFunction}
-            buttonTitle={buttonTitle}
-          />
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-wrap items-center gap-4 w-full">
+            <TableDropdown
+              columns={columns}
+              visibleColumns={visibleColumns}
+              setVisibleColumns={setVisibleColumns}
+              dynamicFields={dynamicFields}
+              addFunction={addFunction}
+              buttonTitle={buttonTitle}
+            />
+
+            {/* ✅ Render filter dropdowns dynamically */}
+            {filterableColumns.map((col) => (
+              <select
+                key={col.accessor}
+                className="border px-3 py-1 rounded"
+                value={filters[col.accessor] || 'all'}
+                onChange={(e) =>
+                  setFilters((prev) => ({
+                    ...prev,
+                    [col.accessor]: e.target.value,
+                  }))
+                }
+              >
+                <option value="all">All {col.label}</option>
+                {filterOptions[col.accessor]?.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt}
+                  </option>
+                ))}
+              </select>
+            ))}
+          </div>
+
           {showAddButton && <AddButton />}
         </div>
       )}
+
       <table className="min-w-full min-h-full table-auto text-sm text-left">
         <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
         <TableBody
-          data={Array.isArray(data) ? data : [data]}
+          data={Array.isArray(filteredData) ? filteredData : [filteredData]}
           columns={filteredColumns}
           renderActions={renderActions}
           linkUrl={linkUrl}
