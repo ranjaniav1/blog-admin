@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 import { loginUser } from "@/app/utils/auth.util";
 import { getAllUsers, manageUserRole } from "../service/auth.service";
+import { useToast } from "../context/ToastContext";
 
 export const useAuthHook = (allUserNeeded = false, page = 1) => {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState({ users: [], totalPages: 1, page: 1 });
   const { loginContext } = useAuth();
   const router = useRouter();
+  const { showToast } = useToast();
 
   const login = async (email, password) => {
     setLoading(true);
@@ -20,6 +22,7 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
       if (result) {
         loginContext(result.accessToken, result.user);
         router.push("/dashboard");
+        showToast("success", "Login successful");
         return { success: true };
       } else {
         return { success: false, error: "Invalid credentials" };
@@ -61,6 +64,12 @@ export const useAuthHook = (allUserNeeded = false, page = 1) => {
             user._id === userId ? updatedUser : user
           ),
         }));
+
+        // display toast
+        showToast(
+          "success",
+          result.message || "User role updated successfully"
+        );
 
         return { success: true, message: result.message };
       } else {
