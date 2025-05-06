@@ -1,0 +1,85 @@
+"use client";
+
+import React, { useState } from "react";
+import { useAuthHook } from "@/app/hooks/useAuthHook";
+import Table from "@/app/common/Table";
+import ActionButtons from "@/app/common/ActionButtons";
+import { userRoleFeild } from "@/app/config/admin.config";
+import Modal from "@/app/common/Modal";
+import EditFormModal from "@/app/common/EditFormModal";
+
+const Users = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [userId, setUserId] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const { loading, users, updateUserRole } = useAuthHook(true, currentPage);
+  console.log("all users: ", users);
+
+  const columns = [
+    { label: "Name", accessor: "fullname" },
+    { label: "Email", accessor: "email" },
+    { label: "Role", accessor: "role" },
+    {
+      label: "Avatar",
+      accessor: "avatar_url",
+      render: (url) => (
+        <img
+          src={url}
+          alt="Thumbnail"
+          className="h-12 w-12 object-cover rounded-full"
+        />
+      ),
+    },
+    { label: "Manage Access", accessor: "manage_access" },
+    { label: "Created At", accessor: "created_at" },
+    { label: "Updated At", accessor: "updated_at" },
+  ];
+
+  const renderActions = (row) => (
+    <ActionButtons
+      onEdit={(e) => {
+        setUserId(row._id);
+        e.stopPropagation();
+        setOpen(true);
+      }}
+    />
+  );
+
+  if (loading) {
+    return <div className="text-center py-10">Loading...</div>;
+  }
+
+  return (
+    <div className="primary my-rounded">
+      <Table
+        columns={columns}
+        data={users?.users || []}
+        className="primary"
+        pagination={{
+          totalPages: Number(users.totalPages),
+          currentPage: Number(users.page),
+          onPageChange: (newPage) => setCurrentPage(newPage),
+        }}
+        renderActions={renderActions}
+        dynamicFields={userRoleFeild}
+      />
+
+      <Modal isOpen={!!open} onClose={() => setOpen(false)}>
+        <EditFormModal
+          isOpen={open}
+          onClose={() => setOpen(false)}
+          title="Edit User Role"
+          fields={userRoleFeild}
+          onSave={(updatedRole) => {
+            console.log("Updated Role: ", updatedRole);
+            updateUserRole(userId, updatedRole.role);
+            setOpen(false);
+          }}
+        />
+      </Modal>
+    </div>
+  );
+};
+
+export default Users;

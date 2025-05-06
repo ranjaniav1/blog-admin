@@ -174,7 +174,7 @@ export const Webname = "ENews";
 
 export const currentUserRole = "superadmin"; // This should be dynamically set based on the logged-in user
 
-// ------------------------ Category Fields ------------------------  
+// ------------------------ Category Fields ------------------------
 export const categoryFields = [
   {
     name: "name",
@@ -245,4 +245,21 @@ export const tagFields = [
     required: true,
     placeholder: "Enter slug",
   },
-]
+];
+
+export const userRoleFeild = [
+  {
+    name: "role",
+    label: "Role",
+    type: "select",
+    required: true,
+    options: [
+      // { value: "superadmin", label: "Super Admin" },
+      { value: "admin", label: "Admin" },
+      { value: "author", label: "Author" },
+      { value: "user", label: "User" },
+      { value: "editor", label: "Editor" },
+      { value: "moderator", label: "Moderator" },
+    ],
+  },
+];

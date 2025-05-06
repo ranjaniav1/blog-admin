@@ -1,6 +1,4 @@
-import Cookies from "js-cookie";
-
-const { httpAxios } = require("../config/httpAxios");
+import { httpAxios } from "../config/httpAxios";
 
 async function login(email, password) {
   try {
@@ -12,10 +10,6 @@ async function login(email, password) {
       },
       { withCredentials: true }
     );
-    // Cookies.set("access_token", response.data.data.accessToken, { expires: 1 });
-    // Cookies.set("refresh_token", response.data.data.refreshToken, {
-    //   expires: 7,
-    // });
 
     return response.data;
   } catch (error) {
@@ -23,4 +17,24 @@ async function login(email, password) {
   }
 }
 
-export { login };
+async function getAllUsers(page) {
+  try {
+    const response = await httpAxios.get(`/auth/users?page=${page}`);
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data);
+  }
+}
+
+async function manageUserRole(userId, role) {
+  try {
+    const response = await httpAxios.put(`/auth/manage-user/${userId}`, {
+      role,
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data);
+  }
+}
+
+export { login, getAllUsers, manageUserRole };
