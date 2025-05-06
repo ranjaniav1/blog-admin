@@ -88,14 +88,14 @@ export const adminRoutes = [
     description: "Add and manage article tags.",
     allowedRoles: ["superadmin", "admin", "author"],
   },
-  {
-    title: "Author Profiles",
-    slug: "/admin/authors",
-    icon: FaUserEdit,
-    section: "News Management",
-    description: "Enhance author bios and social links.",
-    allowedRoles: ["superadmin", "admin", "author"],
-  },
+  // {
+  //   title: "Author Profiles",
+  //   slug: "/admin/authors",
+  //   icon: FaUserEdit,
+  //   section: "News Management",
+  //   description: "Enhance author bios and social links.",
+  //   allowedRoles: ["superadmin", "admin", "author"],
+  // },
 
   // --- Home Screen ---
   {
@@ -115,39 +115,39 @@ export const adminRoutes = [
     allowedRoles: ["superadmin", "admin"],
   },
 
-  // --- Other ---
-  {
-    title: "Media Library",
-    slug: "/admin/media",
-    icon: FaPhotoVideo,
-    section: "Other",
-    description: "Upload and manage images, videos, and audio.",
-    allowedRoles: ["superadmin", "admin", "author"],
-  },
-  {
-    title: "RSS Feeds",
-    slug: "/admin/rss",
-    icon: FaRss,
-    section: "Other",
-    description: "Configure RSS feed sources.",
-    allowedRoles: ["superadmin"],
-  },
-  {
-    title: "Notifications",
-    slug: "/admin/notifications",
-    icon: FaBell,
-    section: "Other",
-    description: "Send and manage system notifications.",
-    allowedRoles: ["superadmin", "admin"],
-  },
-  {
-    title: "Analytics",
-    slug: "/admin/analytics",
-    icon: FaChartBar,
-    section: "Other",
-    description: "Track views, reads, and shares per article.",
-    allowedRoles: ["superadmin", "admin"],
-  },
+  // // --- Other ---
+  // {
+  //   title: "Media Library",
+  //   slug: "/admin/media",
+  //   icon: FaPhotoVideo,
+  //   section: "Other",
+  //   description: "Upload and manage images, videos, and audio.",
+  //   allowedRoles: ["superadmin", "admin", "author"],
+  // },
+  // {
+  //   title: "RSS Feeds",
+  //   slug: "/admin/rss",
+  //   icon: FaRss,
+  //   section: "Other",
+  //   description: "Configure RSS feed sources.",
+  //   allowedRoles: ["superadmin"],
+  // },
+  // {
+  //   title: "Notifications",
+  //   slug: "/admin/notifications",
+  //   icon: FaBell,
+  //   section: "Other",
+  //   description: "Send and manage system notifications.",
+  //   allowedRoles: ["superadmin", "admin"],
+  // },
+  // {
+  //   title: "Analytics",
+  //   slug: "/admin/analytics",
+  //   icon: FaChartBar,
+  //   section: "Other",
+  //   description: "Track views, reads, and shares per article.",
+  //   allowedRoles: ["superadmin", "admin"],
+  // },
 
   // --- Ads ---
   {
@@ -251,15 +251,8 @@ export const userRoleFeild = [
   {
     name: "role",
     label: "Role",
-    type: "select",
+    type: "checkbox",
     required: true,
-    options: [
-      // { value: "superadmin", label: "Super Admin" },
-      { value: "admin", label: "Admin" },
-      { value: "author", label: "Author" },
-      { value: "user", label: "User" },
-      { value: "editor", label: "Editor" },
-      { value: "moderator", label: "Moderator" },
-    ],
+    message: "Are you sure you want to give access to this user for manage articles?",
   },
 ];

@@ -1,17 +1,19 @@
 "use client";
 
+import Table from "@/app/common/Table";
+import Modal from "@/app/common/Modal";
 import React, { useState } from "react";
 import { useAuthHook } from "@/app/hooks/useAuthHook";
-import Table from "@/app/common/Table";
 import ActionButtons from "@/app/common/ActionButtons";
-import { userRoleFeild } from "@/app/config/admin.config";
-import Modal from "@/app/common/Modal";
 import EditFormModal from "@/app/common/EditFormModal";
+import { userRoleFeild } from "@/app/config/admin.config";
+import { useToast } from "@/app/context/ToastContext";
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [userId, setUserId] = useState(null);
   const [open, setOpen] = useState(false);
+  const { showToast } = useToast();
 
   const { loading, users, updateUserRole } = useAuthHook(true, currentPage);
   console.log("all users: ", users);
@@ -39,6 +41,10 @@ const Users = () => {
   const renderActions = (row) => (
     <ActionButtons
       onEdit={(e) => {
+        if (row.role !== "user") {
+          showToast("error", "You can only update user role.");
+          return;
+        }
         setUserId(row._id);
         e.stopPropagation();
         setOpen(true);
