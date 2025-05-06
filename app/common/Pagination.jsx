@@ -10,7 +10,7 @@ const Pagination = ({ pagination }) => {
       <button
         onClick={() => handlePageChange(Math.max(1, pagination.currentPage - 1))}
         disabled={pagination.currentPage === 1}
-        className="btn btn-sm btn-outline"
+        className="btn btn-sm btn-outline hover:text-pink-500"
       >
         Previous
       </button>
@@ -20,7 +20,7 @@ const Pagination = ({ pagination }) => {
       <button
         onClick={() => handlePageChange(pagination.currentPage + 1)}
         disabled={pagination.currentPage === pagination.totalPages}
-        className="btn btn-sm btn-outline"
+        className="btn btn-sm btn-outline hover:text-pink-500"
       >
         Next
       </button>

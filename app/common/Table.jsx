@@ -43,7 +43,7 @@ const Table = ({
           {showAddButton && <AddButton />}
         </div>
       )}
-      <table className="min-w-full table-auto text-sm text-left">
+      <table className="min-w-full min-h-full table-auto text-sm text-left">
         <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
         <TableBody
           data={Array.isArray(data) ? data : [data]}

@@ -18,14 +18,6 @@ const page = () => {
   });
   return (
     <div className="flex flex-col gap-4 p-4">
-      <BreadCrumb
-        items={[
-          { label: "Home", href: "/dashboard" },
-          { label: "Articles", href: "/admin/articles" },
-          { label: "Add Articles", href: "/admin/articles/add" },
-        ]}
-      />
-
       <ArticleForm formData={formData} setFormData={setFormData} />
     </div>
   );
