@@ -4,6 +4,7 @@ import Navbar from "./layout/Navbar/Navbar";
 import Footer from "./layout/Fotter/Footer";
 import Sidebar from "./layout/Sidebar/Sidebar";
 import { useState } from "react";
+import BreadCrumb from "./common/BreadCrumb";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -37,12 +38,18 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content with Left Margin for Sidebar */}
       <div
-        className={`flex flex-col min-h-screen transition-all duration-300 ${
+        className={`flex flex-col min-h-screen transition-all duration-300 p-4 ${
           sidebarOpen ? "md:ml-80" : "md:ml-0"
         }`}
       >
         <Navbar onBurgerClick={() => setSidebarOpen(!sidebarOpen)} />
-          <main className="flex-1 my-rounded background">{children}</main>
+        <BreadCrumb
+          items={[
+            { label: "Home", href: "/dashboard" },
+            { label: "Users", href: "/admin/users" }, // You can use dynamic routing too
+          ]}
+        />
+        <main className="flex-1 my-rounded background mt-2">{children}</main>
         <Footer />
       </div>
     </>
