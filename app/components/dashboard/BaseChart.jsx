@@ -13,6 +13,36 @@ export default function BaseChart({
 }) {
   const isSingleColor = !!color;
 
+  // ✅ Validate pie chart: series is number[], labels is string[]
+  const isPie = chartType === "pie";
+  const isValidPie =
+    isPie &&
+    Array.isArray(series) &&
+    series.length > 0 &&
+    series.every((v) => typeof v === "number");
+
+  // ✅ Validate others: series is [{ name, data: [...] }]
+  const isValidSeries =
+    !isPie &&
+    Array.isArray(series) &&
+    series.length > 0 &&
+    series.every(
+      (s) =>
+        typeof s === "object" &&
+        s.data &&
+        Array.isArray(s.data) &&
+        s.data.length > 0
+    );
+
+  if (!isValidPie && !isValidSeries) {
+    return (
+      <div className="primary p-4 my-rounded shadow h-full">
+        <h2 className="text-md font-semibold mb-2">{title}</h2>
+        <p className="text-sm text-gray-400">No chart data available.</p>
+      </div>
+    );
+  }
+
   const options = {
     chart: {
       type: chartType,
@@ -21,8 +51,8 @@ export default function BaseChart({
       },
     },
     colors: isSingleColor ? [color] : colors,
-    labels: chartType === "pie" ? categories : undefined,
-    xaxis: chartType !== "pie" ? { categories: categories || [] } : undefined, // xaxis not needed for pie
+    labels: isPie ? categories : undefined,
+    xaxis: !isPie ? { categories: categories || [] } : undefined,
     dataLabels: {
       enabled: false,
     },

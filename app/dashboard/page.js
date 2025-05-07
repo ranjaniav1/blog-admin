@@ -7,22 +7,24 @@ import TopCategories from "../components/dashboard/TopCategories";
 
 export default function Home() {
   const { data, loading, error } = useDashboard();
-  loading && <p>Loading...</p>;
+
+  if (loading) return <p>Loading...</p>;
+  if (error || !data?.chartData) return <p>Error loading dashboard.</p>;
+
+  const { categoryPie, dailyActiveUsers, peakReadTimeData } = data.chartData;
 
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
-      {/* State Cards */}
       <div className="col-span-12">
-        <StateCards data={data?.stats} />
+        <StateCards data={data.stats} />
       </div>
 
-      {/* Trending Categories Pie Chart */}
       <div className="col-span-12 md:col-span-4">
         <BaseChart
           title="Trending Categories"
           chartType="pie"
-          series={data?.chartData?.categoryPie?.data || []}
-          categories={data?.chartData?.categoryPie?.labels || []}
+          series={categoryPie.data} // ✅ [0, 1, 2]
+          categories={categoryPie.labels} // ✅ ["Politics", ...]
           colors={[
             "#F59E0B",
             "#10B981",
@@ -39,7 +41,6 @@ export default function Home() {
         />
       </div>
 
-      {/* Peak Read Time Area Chart */}
       <div className="col-span-12 md:col-span-8">
         <BaseChart
           title="Peak Read Time (in mins)"
@@ -47,44 +48,29 @@ export default function Home() {
           series={[
             {
               name: "Read Time",
-              data:
-                data?.chartData?.peakReadTimeData?.map((item) => item.y) || [],
+              data: peakReadTimeData.map((item) => item.y),
             },
           ]}
-          categories={
-            data?.chartData?.peakReadTimeData?.map((item) => item.x) || []
-          }
+          categories={peakReadTimeData.map((item) => item.x)}
           color="#3B82F6"
         />
       </div>
 
-      {/* Daily Article Views Line Chart */}
       <div className="col-span-12 md:col-span-6">
         <BaseChart
           title="Daily Active Users"
           chartType="bar"
-          series={
-            data?.chartData?.dailyActiveUsers
-              ? [
-                  {
-                    name: "Users",
-                    data: data?.chartData?.dailyActiveUsers?.map(
-                      (item) => item.users
-                    ),
-                  },
-                ]
-              : []
-          }
-          categories={
-            data?.chartData?.dailyActiveUsers
-              ? data.chartData.dailyActiveUsers.map((item) => item.date)
-              : []
-          }
+          series={[
+            {
+              name: "Users",
+              data: dailyActiveUsers.map((item) => item.users),
+            },
+          ]}
+          categories={dailyActiveUsers.map((item) => item.date)}
           color="#10B981"
         />
       </div>
 
-      {/* Weekly Article Uploads Bar Chart */}
       <div className="col-span-12 my-rounded p-6 md:col-span-6 primary">
         <h1 className="text-lg font-semibold mb-4">Top Categories</h1>
         <TopCategories isDashboard />
