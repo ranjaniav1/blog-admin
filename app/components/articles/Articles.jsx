@@ -38,6 +38,12 @@ const Articles = () => {
       render: (date) =>
         date ? new Date(date).toISOString().split("T")[0] : "N/A",
     },
+    {
+      label: "Published Date",
+      accessor: "published_at",
+      render: (date) =>
+        date ? new Date(date).toISOString().split("T")[0] : "N/A",
+    },
     { label: "Total Shares", accessor: "total_shares" },
     { label: "Total Comments", accessor: "total_comments" },
     {
@@ -45,24 +51,24 @@ const Articles = () => {
       accessor: "createdBy", // optional, only needed if your table needs it
       render: (createdBy) => createdBy?.fullname || "N/A",
     },
-    
+
     {
       label: "Category",
       accessor: "category", // optional
       render: (category) => category?.name || "N/A",
-      filterable: true
+      filterable: true,
     },
     {
       label: "Sub Category",
       accessor: "subcategory", // optional
       render: (subcategory) => subcategory?.name || "N/A",
-      filterable: true
+      filterable: true,
     },
     {
       label: "Tags",
       accessor: "tags",
       render: (tags) => tags.map((t) => t.name).join(", "),
-      filterable: true
+      filterable: true,
     },
     {
       label: "Image",
@@ -113,7 +119,10 @@ const Articles = () => {
           currentPage: data.page,
           onPageChange: (newPage) => setPage(newPage),
         }}
-        addFunction={addArticle}
+        addFunction={(e) => {
+          e.stopPropagation();
+          router.push("/add");
+        }}
         renderActions={renderActions}
       />
 
