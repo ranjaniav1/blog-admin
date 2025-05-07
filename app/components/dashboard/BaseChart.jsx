@@ -3,7 +3,14 @@ import dynamic from "next/dynamic";
 
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function BaseChart({ title, chartType, series, categories, color, colors }) {
+export default function BaseChart({
+  title,
+  chartType,
+  series,
+  categories,
+  color,
+  colors,
+}) {
   const isSingleColor = !!color;
 
   const options = {
@@ -14,9 +21,8 @@ export default function BaseChart({ title, chartType, series, categories, color,
       },
     },
     colors: isSingleColor ? [color] : colors,
-    xaxis: {
-      categories: categories || [],
-    },
+    labels: chartType === "pie" ? categories : undefined,
+    xaxis: chartType !== "pie" ? { categories: categories || [] } : undefined, // xaxis not needed for pie
     dataLabels: {
       enabled: false,
     },
@@ -31,12 +37,7 @@ export default function BaseChart({ title, chartType, series, categories, color,
   return (
     <div className="primary p-4 my-rounded shadow h-full">
       <h2 className="text-md font-semibold mb-2">{title}</h2>
-      <Chart
-        options={options}
-        series={series}
-        type={chartType}
-        height={300}
-      />
+      <Chart options={options} series={series} type={chartType} height={300} />
     </div>
   );
 }
