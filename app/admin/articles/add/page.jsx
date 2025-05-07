@@ -19,6 +19,7 @@ const page = () => {
     image: null,
     video: null,
     expiry_date: formattedDate, // set dynamically
+    published_at: formattedDate, // set dynamically
   });
 
   return (
