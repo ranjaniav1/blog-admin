@@ -1,6 +1,8 @@
+'use client'
+
 // context/ToastContext.jsx or .tsx
-import { createContext, useContext, useState } from "react";
 import Toast from "../common/Toast";
+import { createContext, useContext, useState } from "react";
 
 const ToastContext = createContext();
 
