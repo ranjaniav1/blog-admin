@@ -12,6 +12,7 @@ export default function BaseChart({
   categories,
   color,
   colors,
+  stacked=false
 }) {
   const isSingleColor = !!color;
 
@@ -48,19 +49,26 @@ export default function BaseChart({
       </div>
     );
   }
-
   const options = {
     chart: {
       type: chartType,
       toolbar: { show: false },
+      stacked: chartType === "bar" && stacked, // ✅ only apply if bar and stacked=true
     },
     colors: isSingleColor ? [color] : colors,
     labels: isPie ? safeCategories : undefined,
     xaxis: !isPie ? { categories: safeCategories } : undefined,
     dataLabels: { enabled: false },
     stroke: { curve: chartType === "area" ? "smooth" : "straight" },
-    legend: { show: chartType !== "bar" },
+    legend: { show: chartType !== "bar" || stacked }, // ✅ show legend for stacked bars
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "50%",
+      },
+    },
   };
+
 
   return (
     <div className="primary p-4 my-rounded shadow h-full">

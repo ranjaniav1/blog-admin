@@ -36,7 +36,7 @@ const SocialSettings = ({ bgPrimary = false }) => {
   };
 
   const columns = [
-    { label: "Link", accessor: "link" },
+    { label: "Platform", accessor: "platform" },
     {
       label: "Image",
       accessor: "img",
@@ -44,6 +44,7 @@ const SocialSettings = ({ bgPrimary = false }) => {
         <img src={val} alt="Social Media" className="w-12 h-12 my-rounded" />
       ),
     },
+    { label: "Link", accessor: "link" },
     {
       label: "Created At",
       accessor: "created_at",
@@ -77,17 +78,13 @@ const SocialSettings = ({ bgPrimary = false }) => {
     return <div className="text-center py-10">Loading...</div>;
   }
 
-  if (!settings?.newSocialMedia) {
-    return (
-      <div className="text-center py-10">No social settings available.</div>
-    );
-  }
+                                        
 
   return (
     <div className="p-4">
       <Table
         columns={columns}
-        data={settings?.newSocialMedia || []}
+        data={settings || []}
         renderActions={renderActions}
         className={"primary"}
         pagination={{
