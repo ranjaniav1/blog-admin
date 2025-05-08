@@ -13,6 +13,10 @@ export default function Home() {
 
   const { categoryPie, dailyActiveUsers, peakReadTimeData } = data.chartData;
 
+  if (!categoryPie || !dailyActiveUsers || !peakReadTimeData) {
+    return <p>Incomplete chart data.</p>;
+  }
+
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
       <div className="col-span-12">
@@ -23,8 +27,8 @@ export default function Home() {
         <BaseChart
           title="Trending Categories"
           chartType="pie"
-          series={categoryPie.data} // ✅ [0, 1, 2]
-          categories={categoryPie.labels} // ✅ ["Politics", ...]
+          series={categoryPie.data}
+          categories={categoryPie.labels}
           colors={[
             "#F59E0B",
             "#10B981",
