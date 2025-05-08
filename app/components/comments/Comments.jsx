@@ -55,21 +55,21 @@ const Comments = () => {
       label: "User",
       accessor: "user.fullname",
       render: (_, row) => (
-        <span className="font-medium text-gray-700">{row.user.fullname}</span>
+        <span className="font-medium">{row.user.fullname}</span>
       ),
     },
     {
       label: "Article Title",
       accessor: "article.title",
       render: (_, row) => (
-        <span className="text-blue-600 font-semibold">{row.article.title}</span>
+        <span className="font-semibold">{row.article.title}</span>
       ),
     },
     {
       label: "Content",
       accessor: "content",
       render: (val) => (
-        <div className="text-gray-600 max-w-xs line-clamp-2">{val}</div>
+        <div className="max-w-xs line-clamp-2">{val}</div>
       ),
     },
     {
@@ -110,6 +110,7 @@ const Comments = () => {
         className="primary"
         renderActions={renderActions}
         pagination={false}
+        showAddButton={false}
       />
 
       {/* Delete Confirmation Modal */}
