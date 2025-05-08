@@ -186,13 +186,19 @@ export const socialFields = [
   {
     name: 'socialmediaimage',
     label: "Icon",
-    accessor: "img",
+    accessor: "socialmediaimage",
     type: "file", // For image URL input
   },
   {
     name: "link",
     label: "Link",
     accessor: "link",
+    type: "text", // For text input
+  },
+  {
+    name: "platform",
+    label: "Platform",
+    accessor: "platform",
     type: "text", // For text input
   },
 ];
