@@ -10,14 +10,14 @@ export default function ThemeToggleButton() {
     const root = document.documentElement;
 
     if (theme === "dark") {
-      root.style.setProperty("--background", "#202020e5");
+      root.style.setProperty("--background", "#1e1e1e");
       root.style.setProperty("--primary", "#0a0a0a");
       root.style.setProperty("--foreground", "#ededed");
       root.style.setProperty("--border", "#27272a");
       root.style.setProperty("--text-primary", "#ededed");
       root.style.setProperty("--text-secondary", "#a1a1aa");
     } else {
-      root.style.setProperty("--background", "#dadada");
+      root.style.setProperty("--background", "#f4f4f5");
       root.style.setProperty("--primary", "#fff");
       root.style.setProperty("--foreground", "#171717");
       root.style.setProperty("--border", "#e5e7eb");
