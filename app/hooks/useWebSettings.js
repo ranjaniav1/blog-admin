@@ -1,13 +1,28 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
-import { getSettings } from "../service/settings.service";
+import { getSettings, updateSetting } from "../service/settings.service";
 import { useToast } from "../context/ToastContext";
 
 export const useSettings = () => {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { showToast } = useToast();
+  const { showToast, dismissToast } = useToast();
+
+  const updateWebSettings = async (data) => {
+    setLoading(true);
+    const toastId = showToast("loading", "Updating settings...");
+    try {
+      const response = await updateSetting(data);
+      setSettings(response.data);
+      showToast("success", "Settings updated successfully.");
+    } catch (error) {
+      showToast("error", "Failed to update settings.");
+    } finally {
+      setLoading(false);
+      dismissToast(toastId);
+    }
+  };
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -23,6 +38,8 @@ export const useSettings = () => {
 
     fetchSettings();
   }, []);
+
+  
 
   return { settings, loading };
 };

@@ -69,6 +69,8 @@ const Users = () => {
         }}
         renderActions={renderActions}
         dynamicFields={userRoleFeild}
+        showAddButton={false}
+        
       />
 
       <Modal isOpen={!!open} onClose={() => setOpen(false)}>

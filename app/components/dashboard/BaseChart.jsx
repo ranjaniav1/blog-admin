@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import dynamic from "next/dynamic";
 
@@ -10,28 +12,33 @@ export default function BaseChart({
   categories,
   color,
   colors,
+  stacked=false
 }) {
   const isSingleColor = !!color;
 
-  // ✅ Validate pie chart: series is number[], labels is string[]
   const isPie = chartType === "pie";
+  const safeSeries = series || [];
+  const safeCategories = categories || [];
+
+  // ✅ Validate pie chart: series is number[]
   const isValidPie =
     isPie &&
-    Array.isArray(series) &&
-    series.length > 0 &&
-    series.every((v) => typeof v === "number");
+    Array.isArray(safeSeries) &&
+    safeSeries.length > 0 &&
+    safeSeries.every((v) => typeof v === "number") &&
+    safeSeries.some((v) => v > 0); // 🔥 Must have at least one non-zero value
 
-  // ✅ Validate others: series is [{ name, data: [...] }]
   const isValidSeries =
     !isPie &&
-    Array.isArray(series) &&
-    series.length > 0 &&
-    series.every(
+    Array.isArray(safeSeries) &&
+    safeSeries.length > 0 &&
+    safeSeries.every(
       (s) =>
         typeof s === "object" &&
         s.data &&
         Array.isArray(s.data) &&
-        s.data.length > 0
+        s.data.length > 0 &&
+        s.data.some((val) => val > 0) // 🔥 Ensure there's at least one non-zero data point
     );
 
   if (!isValidPie && !isValidSeries) {
@@ -42,32 +49,36 @@ export default function BaseChart({
       </div>
     );
   }
-
   const options = {
     chart: {
       type: chartType,
-      toolbar: {
-        show: false,
-      },
+      toolbar: { show: false },
+      stacked: chartType === "bar" && stacked, // ✅ only apply if bar and stacked=true
     },
     colors: isSingleColor ? [color] : colors,
-    labels: isPie ? categories : undefined,
-    xaxis: !isPie ? { categories: categories || [] } : undefined,
-    dataLabels: {
-      enabled: false,
-    },
-    stroke: {
-      curve: chartType === "area" ? "smooth" : "straight",
-    },
-    legend: {
-      show: chartType !== "bar",
+    labels: isPie ? safeCategories : undefined,
+    xaxis: !isPie ? { categories: safeCategories } : undefined,
+    dataLabels: { enabled: false },
+    stroke: { curve: chartType === "area" ? "smooth" : "straight" },
+    legend: { show: chartType !== "bar" || stacked }, // ✅ show legend for stacked bars
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: "50%",
+      },
     },
   };
+
 
   return (
     <div className="primary p-4 my-rounded shadow h-full">
       <h2 className="text-md font-semibold mb-2">{title}</h2>
-      <Chart options={options} series={series} type={chartType} height={300} />
+      <Chart
+        options={options}
+        series={safeSeries}
+        type={chartType}
+        height={300}
+      />
     </div>
   );
 }

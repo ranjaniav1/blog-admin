@@ -5,7 +5,7 @@ import { SlOptionsVertical } from "react-icons/sl";
 import EditFormModal from "./EditFormModal";
 import React, { useState, useRef, useEffect } from "react";
 
-const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction, buttonTitle }) => {
+const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction, buttonTitle, showAddButton = true }) => {
   const [open, setOpen] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const dropdownRef = useRef();
@@ -36,7 +36,7 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
     >
       {/* -------------------------------------- Add button ------------------------------------ */}
 
-      <Button
+      {showAddButton && <Button
         variant="outline"
         bgColorRequired
         onClick={() => setShowAddCategory(!showAddCategory)}
@@ -44,7 +44,7 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
       >
         <GoPlus />
         {buttonTitle || "Add "}
-      </Button>
+      </Button>}
 
       {showAddCategory && (
         <EditFormModal
@@ -67,10 +67,10 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
         variant="outline"
         bgColorRequired
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2"
+        className="flex items-center gap-2 px-4 py-3 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2 background"
       >
         <SlOptionsVertical />
-        Show/Hide Columns
+        {/* Show/Hide Columns */}
       </Button>
 
       {open && (
@@ -97,4 +97,4 @@ const ColumnDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFie
   );
 };
 
-export default ColumnDropdown;
+export default TableDropdown;

@@ -1,9 +1,6 @@
 import DashboardStatsCard from "@/app/common/DashboardStateCards";
-import { FaUsers, FaFileAlt, FaCommentDots } from "react-icons/fa";
-import { BiSolidCategory } from "react-icons/bi";
-
-// TODO: it should be dynamic data from the server
-// but for now we will use static data
+import { FaUsers, FaFileAlt, FaCommentDots, FaStar, FaFire } from "react-icons/fa";
+import { BiSolidCategory, BiSubdirectoryRight } from "react-icons/bi";
 
 const StateCards = ({ data }) => {
   const stats = [
@@ -20,6 +17,12 @@ const StateCards = ({ data }) => {
       color: "#10B981", // green
     },
     {
+      title: "Total Sub-Categories",
+      value: data?.totalSubCategories,
+      icon: BiSubdirectoryRight,
+      color: "#8B5CF6", // violet
+    },
+    {
       title: "Total Articles",
       value: data?.totalArticles,
       icon: FaFileAlt,
@@ -30,6 +33,18 @@ const StateCards = ({ data }) => {
       value: data?.totalComments,
       icon: FaCommentDots,
       color: "#EF4444", // red
+    },
+    {
+      title: "Featured Articles",
+      value: data?.featuredCount,
+      icon: FaStar,
+      color: "#EAB308", // yellow
+    },
+    {
+      title: "Breaking News",
+      value: data?.breakingCount,
+      icon: FaFire,
+      color: "#F97316", // orange
     },
   ];
 

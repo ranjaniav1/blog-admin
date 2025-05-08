@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #dadada;
+  --background: #f4f4f5;
   --primary: #fff;
   --foreground: #171717;
   --border: #e5e7eb; /* light gray border */
@@ -11,7 +11,7 @@
   --font-size-sm: 14px;
   --font-size-lg: 18px;
   --active: var(--color-background);
-  --rounded: 12px;
+  --rounded: 5px;
 }
 
 @theme inline {
@@ -26,13 +26,13 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #202020e5;
+    --background: #1e1e1e;
     --primary: #0a0a0a;
     --foreground: #ededed;
     --border: #27272a; /* darker border for dark mode */
     --text-primary: #ededed;
     --text-secondary: #a1a1aa;
-    --active: #c21858;
+    --active: #3b82f6;
   }
 }
 
@@ -48,7 +48,7 @@ body {
   background-color: var(--primary);
 }
 
-main{
+main {
   border-radius: var(--rounded);
 }
 
@@ -120,4 +120,14 @@ option {
 
 .link-active {
   background-color: var(--background);
+}
+
+/* styles/globals.css or global.css */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 114, 128, 0.5); /* Tailwind's gray-500 */
+  border-radius: 4px;
 }

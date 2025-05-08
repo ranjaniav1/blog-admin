@@ -31,14 +31,6 @@ export const adminRoutes = [
     allowedRoles: ["superadmin", "admin"],
   },
   {
-    title: "Subscribers",
-    slug: "/admin/subscribers",
-    icon: FaUserCheck,
-    section: "User Management",
-    description: "Manage newsletter subscribers.",
-    allowedRoles: ["superadmin", "admin"],
-  },
-  {
     title: "Comments",
     slug: "/admin/comments",
     icon: FaCommentDots,
@@ -185,6 +177,28 @@ export const userRoleFeild = [
     label: "Role",
     type: "checkbox",
     required: true,
-    message: "Are you sure you want to give access to this user for manage articles?",
+    message:
+      "Are you sure you want to give access to this user for manage articles?",
+  },
+];
+
+export const socialFields = [
+  {
+    name: 'socialmediaimage',
+    label: "Icon",
+    accessor: "socialmediaimage",
+    type: "file", // For image URL input
+  },
+  {
+    name: "link",
+    label: "Link",
+    accessor: "link",
+    type: "text", // For text input
+  },
+  {
+    name: "platform",
+    label: "Platform",
+    accessor: "platform",
+    type: "text", // For text input
   },
 ];

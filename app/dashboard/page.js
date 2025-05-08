@@ -11,7 +11,26 @@ export default function Home() {
   if (loading) return <p>Loading...</p>;
   if (error || !data?.chartData) return <p>Error loading dashboard.</p>;
 
-  const { categoryPie, dailyActiveUsers, peakReadTimeData } = data.chartData;
+  const { categoryPie, stackedArticlesByCategory, areaChartData } =
+    data.chartData;
+
+  if (!categoryPie || !stackedArticlesByCategory || !areaChartData) {
+    return <p>Incomplete chart data.</p>;
+  }
+
+  // Validate Category Pie Data
+  const validCategoryPie = categoryPie.data.filter((value) => value > 0);
+  const validCategoryLabels =
+    validCategoryPie.length > 0 ? categoryPie.labels : ["No Data"];
+
+  // Prepare Stacked Series
+  const stackedSeries = Object.entries(stackedArticlesByCategory.series).map(
+    ([name, data]) => ({
+      name,  // Name will be the category (e.g., Business)
+      data: data || []  // Ensure data is an array, even if empty
+    })
+  );
+console.log("stack chart", stackedSeries);  
 
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
@@ -19,12 +38,13 @@ export default function Home() {
         <StateCards data={data.stats} />
       </div>
 
+      {/* Pie Chart for Categories */}
       <div className="col-span-12 md:col-span-4">
         <BaseChart
           title="Trending Categories"
           chartType="pie"
-          series={categoryPie.data} // ✅ [0, 1, 2]
-          categories={categoryPie.labels} // ✅ ["Politics", ...]
+          series={categoryPie.data}
+          categories={categoryPie.labels}
           colors={[
             "#F59E0B",
             "#10B981",
@@ -41,36 +61,39 @@ export default function Home() {
         />
       </div>
 
+      {/* Area Chart for Articles & Comments over Time */}
       <div className="col-span-12 md:col-span-8">
         <BaseChart
-          title="Peak Read Time (in mins)"
+          title="Articles and Comments Over Time"
           chartType="area"
           series={[
             {
-              name: "Read Time",
-              data: peakReadTimeData.map((item) => item.y),
+              name: "Articles",
+              data: areaChartData.map((item) => item.articles),
+            },
+            {
+              name: "Comments",
+              data: areaChartData.map((item) => item.comments),
             },
           ]}
-          categories={peakReadTimeData.map((item) => item.x)}
-          color="#3B82F6"
+          categories={areaChartData.map((item) => item.x)}
+          colors={["#3B82F6", "#F87171"]}
         />
       </div>
 
+      {/* Stacked Bar Chart for Articles by Category */}
       <div className="col-span-12 md:col-span-6">
         <BaseChart
-          title="Daily Active Users"
-          chartType="bar"
-          series={[
-            {
-              name: "Users",
-              data: dailyActiveUsers.map((item) => item.users),
-            },
-          ]}
-          categories={dailyActiveUsers.map((item) => item.date)}
-          color="#10B981"
+          title="Articles by Category (Stacked)"
+          chartType="line"
+          series={stackedSeries}  // Array of series like [{ name: 'Business', data: [9] }, ...]
+          categories={stackedSeries.map((item) => item.name)}  // Dynamically populated categories
+          // stacked={true}
+          colors={["#10B981", "#8B5CF6", "#F59E0B", "#EF4444"]}
         />
       </div>
 
+      {/* Top Categories */}
       <div className="col-span-12 my-rounded p-6 md:col-span-6 primary">
         <h1 className="text-lg font-semibold mb-4">Top Categories</h1>
         <TopCategories isDashboard />

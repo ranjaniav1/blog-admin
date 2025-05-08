@@ -1,25 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useToast } from "@/app/context/ToastContext";
-import InputField from "@/app/common/InputField";
 import Button from "@/app/common/Button";
+import { useState, useEffect } from "react";
+import InputField from "@/app/common/InputField";
+import { useToast } from "@/app/context/ToastContext";
+import { useSettings } from "@/app/hooks/useWebSettings";
 
-export default function WebSettingsForm({ initialData }) {
-  const [form, setForm] = useState(initialData?.webSettings || {});
-  const [loading, setLoading] = useState(false);
+export default function WebSettingsForm() {
+  const { settings, loading } = useSettings();
+
+  console.log("Settings:", settings);
+
+  const [settingsloading, setSettingLoading] = useState(false);
+  const [form, setForm] = useState(settings?.webSettings || {});
   const [selectedTheme, setSelectedTheme] = useState("default");
-  const [allThemes, setAllThemes] = useState(initialData?.allThemePalettes || {});
+  const [allThemes, setAllThemes] = useState(settings?.allThemePalettes || {});
   const { showToast } = useToast();
 
   useEffect(() => {
-    if (initialData?.webSettings) {
-      setForm((prev) => ({
-        ...prev,
-        themePalette: allThemes[selectedTheme] || {},
-      }));
+    if (settings?.webSettings && settings?.allThemePalettes) {
+      setForm({
+        ...settings.webSettings,
+        themePalette: settings.allThemePalettes[selectedTheme] || {},
+      });
+      setAllThemes(settings.allThemePalettes);
     }
-  }, [selectedTheme]);
+  }, [settings]);
+
+  if (loading) return <p>Loading...</p>;
+  console.log("Settings:", settings);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +57,7 @@ export default function WebSettingsForm({ initialData }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setSettingLoading(true);
     try {
       const res = await fetch("/api/settings/update", {
         method: "PUT",
@@ -67,7 +76,7 @@ export default function WebSettingsForm({ initialData }) {
     } catch (error) {
       showToast("error", "Something went wrong.");
     } finally {
-      setLoading(false);
+      setSettingLoading(false);
     }
   };
 
@@ -137,7 +146,9 @@ export default function WebSettingsForm({ initialData }) {
 
       {/* Color pickers for themePalette */}
       <div>
-        <label className="block font-medium text-gray-700 mt-4">Theme Colors</label>
+        <label className="block font-medium text-gray-700 mt-4">
+          Theme Colors
+        </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
           {form.themePalette &&
             Object.entries(form.themePalette).map(([key, value]) => (
@@ -162,10 +173,10 @@ export default function WebSettingsForm({ initialData }) {
           type="submit"
           variant="outline"
           bgColorRequired
-          disabled={loading}
+          disabled={settingsloading}
           className="btn px-3 mt-6 py-3 font-semibold rounded-md hover:bg-white"
         >
-          {loading ? "Saving..." : "Save Settings"}
+          {settingsloading ? "Saving..." : "Save Settings"}
         </Button>
       </div>
     </form>

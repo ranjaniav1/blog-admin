@@ -58,7 +58,7 @@ const BreadCrumb = () => {
                   {item.label}
                 </Link>
               ) : (
-                <span className="active px-2.5 py-1 my-rounded font-semibold text-white">
+                <span className="active px-3 py-1 rounded-md text-white font-semibold flex items-center justify-center">
                   {item.label}
                 </span>
               )}

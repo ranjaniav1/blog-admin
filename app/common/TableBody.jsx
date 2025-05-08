@@ -1,27 +1,28 @@
 const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
-  <tbody>
-    {data?.map((item) => (
+  <tbody className="text-lg">
+    {data?.map((item, index) => (
       <tr
-        key={item._id || item.slug}
-        className={`border-b transition-all duration-150 cursor-pointer ${
-          linkUrl ? "hover:text-pink-700" : ""
+        key={item._id || item.slug || index}
+        className={`border-b transition-colors duration-150 cursor-pointer ${
+          linkUrl ? "hover:text-blue-600" : ""
         }`}
         onClick={() => {
           if (linkUrl) router.push(`${linkUrl}/${item._id}/${item.slug}`);
         }}
       >
-        {/* All table's column mapped here and accessor is a key that used to fetch data from json response */}
         {columns.map((col) => (
-          <td key={col.accessor} className="px-4 py-3">
+          <td
+            key={col.accessor}
+            className="px-6 py-4 whitespace-nowrap align-middle"
+          >
             {col.render
               ? col.render(item[col.accessor], item)
               : item[col?.accessor]}
           </td>
         ))}
-        {/* action button render here and on that click, stopPropogation() called to prevent push to another route */}
         {renderActions && (
           <td
-            className="px-4 py-3 flex justify-center gap-2"
+            className="px-6 py-4 whitespace-nowrap flex justify-center gap-2"
             onClick={(e) => e.stopPropagation()}
           >
             {renderActions(item)}

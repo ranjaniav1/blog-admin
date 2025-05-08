@@ -5,6 +5,7 @@ import TableHeader from "./TableHeader";
 import { useRouter } from "next/navigation";
 import TableDropdown from "./TableDropdown";
 import React, { useState, useMemo } from "react";
+import InputField from "./InputField";
 
 const Table = ({
   columns,
@@ -94,37 +95,48 @@ const Table = ({
               dynamicFields={dynamicFields}
               addFunction={addFunction}
               buttonTitle={buttonTitle}
+              showAddButton={showAddButton}
             />
 
-            {/* search bar */}
-            <input
-              type="text"
-              placeholder="Search..."
-              className="border px-3 py-1 rounded w-48"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
+            {/* Search Bar */}
+            <div className="relative w-64">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                🔍
+              </span>
+              <InputField
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="pl-10 pr-4 py-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                variant="primary"
+                size="md"
+              />
+            </div>
 
-            {/* ✅ Render filter dropdowns dynamically */}
+            {/* Dropdown Filters */}
             {filterableColumns.map((col) => (
-              <select
-                key={col.accessor}
-                className="border px-3 py-1 rounded"
-                value={filters[col.accessor] || "all"}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    [col.accessor]: e.target.value,
-                  }))
-                }
-              >
-                <option value="all">All {col.label}</option>
-                {filterOptions[col.accessor]?.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+              <div key={col.accessor} className="relative w-48">
+                <select
+                  className="w-full appearance-none border border-gray-300 py-2 pl-4 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-gray-700"
+                  value={filters[col.accessor] || "all"}
+                  onChange={(e) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      [col.accessor]: e.target.value,
+                    }))
+                  }
+                >
+                  <option value="all">All {col.label}</option>
+                  {filterOptions[col.accessor]?.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+                  ▼
+                </div>
+              </div>
             ))}
           </div>
 

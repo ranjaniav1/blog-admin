@@ -20,10 +20,33 @@ const Articles = () => {
 
   const articleTableColumns = [
     { label: "Title", accessor: "title" },
+    {
+      label: "Image",
+      accessor: "image_url",
+      render: (url) => (
+        <img
+          src={url}
+          alt="Thumbnail"
+          className="h-12 w-12 object-cover my-rounded"
+        />
+      ),
+    },
+    {
+      label: "Category",
+      accessor: "category", // optional
+      render: (category) => category?.name || "N/A",
+      filterable: true,
+    },
+    {
+      label: "Author",
+      accessor: "createdBy", // optional, only needed if your table needs it
+      render: (createdBy) => createdBy?.fullname || "N/A",
+    },
+    { label: "Status", accessor: "status", filterable: true },
+    { label: "Total Comments", accessor: "total_comments" },
     { label: "Slug", accessor: "slug" },
     { label: "Excerpt", accessor: "excerpt" },
     { label: "Content", accessor: "content" },
-    { label: "Status", accessor: "status", filterable: true },
     { label: "Read Time", accessor: "read_time" },
     { label: "is Featured", accessor: "is_featured" },
     {
@@ -45,19 +68,7 @@ const Articles = () => {
         date ? new Date(date).toISOString().split("T")[0] : "N/A",
     },
     { label: "Total Shares", accessor: "total_shares" },
-    { label: "Total Comments", accessor: "total_comments" },
-    {
-      label: "Author",
-      accessor: "createdBy", // optional, only needed if your table needs it
-      render: (createdBy) => createdBy?.fullname || "N/A",
-    },
 
-    {
-      label: "Category",
-      accessor: "category", // optional
-      render: (category) => category?.name || "N/A",
-      filterable: true,
-    },
     {
       label: "Sub Category",
       accessor: "subcategory", // optional
@@ -70,17 +81,7 @@ const Articles = () => {
       render: (tags) => tags.map((t) => t.name).join(", "),
       filterable: true,
     },
-    {
-      label: "Image",
-      accessor: "image_url",
-      render: (url) => (
-        <img
-          src={url}
-          alt="Thumbnail"
-          className="h-12 w-12 object-cover my-rounded"
-        />
-      ),
-    },
+
     {
       label: "Video",
       accessor: "video_url",

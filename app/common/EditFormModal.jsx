@@ -65,6 +65,27 @@ const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
             required={field.required}
           />
         );
+
+      case "file":
+        return (
+          <input
+            type="file"
+            name={field.accessor}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                // Handle the file upload
+                setFormData((prev) => ({
+                  ...prev,
+                  [field.accessor]: file, // Store the file object in the formData
+                }));
+              }
+            }}
+            className="mt-1 block w-full"
+            required={field.required}
+          />
+        );
+
       case "checkbox":
         return (
           <label className="inline-flex items-center">

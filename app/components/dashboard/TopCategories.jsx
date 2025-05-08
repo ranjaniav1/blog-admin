@@ -18,7 +18,6 @@ const TopCategories = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [modalType, setModalType] = useState(""); // "edit" | "delete"
-  const [showAddCategory, setShowAddCategory] = useState(false);
 
   const {
     data,
@@ -104,21 +103,6 @@ const TopCategories = ({
         buttonTitle={"Add Category"}
         isDashboard={isDashboard}
       />
-
-      {/* add category modal - seperate form edit and delete */}
-      {showAddCategory && (
-        <EditFormModal
-          isOpen={showAddCategory}
-          onClose={() => setShowAddCategory(false)}
-          title="Add New Category"
-          data={{}} // empty data for adding new
-          fields={categoryFields}
-          onSave={(newCategory) => {
-            addCategory(newCategory);
-            setShowAddCategory(false);
-          }}
-        />
-      )}
 
       <Modal
         isOpen={!!modalType}
