@@ -19,7 +19,7 @@ export const useSocialSettings = () => {
     const toastId = showToast("loading", "Creating settings...");
     try {
       const response = await createSocialSetting(data);
-      setSettings(response.data.socialmedia); // ✅ Fix
+      setSettings(response.data.SocialMedia); // ✅ Fix
       showToast("success", "Settings created successfully.");
     } catch (error) {
       showToast("error", "Failed to create settings.");
@@ -62,7 +62,7 @@ export const useSocialSettings = () => {
   const fetchSettings = async () => {
     try {
       const response = await getSocialSettings();
-      setSettings(response.data.socialmedia); // ✅ Fix
+      setSettings(response.data.SocialMedia); // ✅ Fix
     } catch (error) {
       showToast("error", "Failed to fetch settings.");
     } finally {
