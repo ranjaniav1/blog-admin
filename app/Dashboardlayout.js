@@ -12,9 +12,8 @@ export default function DashboardLayout({ children }) {
   return (
     <>
       <div
-        className={`fixed top-0 left-0 h-screen bg-white z-40 transition-all duration-300 ease-in-out hidden md:block ${
-          sidebarOpen ? "w-80" : "w-0"
-        } overflow-hidden`}
+        className={`fixed top-0 left-0 h-screen z-40 transition-all duration-300 ease-in-out hidden md:block ${sidebarOpen ? "w-80" : "w-0"
+          } overflow-hidden`}
       >
         <Sidebar />
       </div>
@@ -27,9 +26,8 @@ export default function DashboardLayout({ children }) {
             onClick={() => setSidebarOpen(false)}
           />
           <div
-            className={`relative w-80 bg-white shadow-lg h-full z-50 transition-transform duration-300 transform ${
-              sidebarOpen ? "translate-x-0" : "-translate-x-full"
-            }`}
+            className={`relative w-80 shadow-lg h-full z-50 transition-transform duration-300 transform ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+              }`}
           >
             <Sidebar />
           </div>
@@ -38,9 +36,8 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content with Left Margin for Sidebar */}
       <div
-        className={`flex flex-col min-h-screen transition-all duration-300 p-4 ${
-          sidebarOpen ? "md:ml-80" : "md:ml-0"
-        }`}
+        className={`flex flex-col  min-h-screen transition-all duration-300  ${sidebarOpen ? "md:ml-80" : "md:ml-0"
+          }`}
       >
         <Navbar onBurgerClick={() => setSidebarOpen(!sidebarOpen)} />
         <BreadCrumb

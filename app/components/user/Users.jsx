@@ -20,8 +20,6 @@ const Users = () => {
 
   const columns = [
     { label: "Name", accessor: "fullname" },
-    { label: "Email", accessor: "email" },
-    { label: "Role", accessor: "role" },
     {
       label: "Avatar",
       accessor: "avatar_url",
@@ -29,10 +27,12 @@ const Users = () => {
         <img
           src={url}
           alt="Thumbnail"
-          className="h-12 w-12 object-cover rounded-full"
+          className="h-12 w-12 object-cover my-rounded"
         />
       ),
     },
+    { label: "Role", accessor: "role" },
+    { label: "Email", accessor: "email" },
     { label: "Manage Access", accessor: "manage_access" },
     { label: "Created At", accessor: "created_at" },
     { label: "Updated At", accessor: "updated_at" },

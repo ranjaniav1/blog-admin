@@ -41,7 +41,6 @@ const TopCategories = ({
   const columns = [
     { label: "Name", accessor: "name" },
     { label: "Slug", accessor: "slug" },
-    { label: "Description", accessor: "description" },
     {
       label: "Created At",
       accessor: "created_at",

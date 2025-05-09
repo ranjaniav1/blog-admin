@@ -9,30 +9,35 @@ const StateCards = ({ data }) => {
       value: data?.totalUsers,
       icon: FaUsers,
       color: "#3B82F6", // blue
+      href: "/admin/users",
     },
     {
       title: "Total Categories",
       value: data?.totalCategories,
       icon: BiSolidCategory,
       color: "#10B981", // green
+      href: "/admin/categories",
     },
     {
       title: "Total Sub-Categories",
       value: data?.totalSubCategories,
       icon: BiSubdirectoryRight,
       color: "#8B5CF6", // violet
+      href: "/admin/sub-categories",
     },
     {
       title: "Total Articles",
       value: data?.totalArticles,
       icon: FaFileAlt,
       color: "#F59E0B", // amber
+      href: "/admin/articles",
     },
     {
       title: "Total Comments",
       value: data?.totalComments,
       icon: FaCommentDots,
       color: "#EF4444", // red
+      href: "/admin/comments",
     },
     {
       title: "Featured Articles",
@@ -49,7 +54,7 @@ const StateCards = ({ data }) => {
   ];
 
   return (
-    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 p-2">
+    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-4">
       {stats.map((stat, index) => (
         <DashboardStatsCard key={index} {...stat} />
       ))}
