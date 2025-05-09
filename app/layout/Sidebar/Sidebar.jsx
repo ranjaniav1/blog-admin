@@ -24,11 +24,12 @@ const Sidebar = () => {
 
   return (
     <div className="primary h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
-      <Link href={"/"}>
-        <div className="flex p-4 gap-3 items-center mt-6">
-          <Poligon fill={"#000"} text={Webname.slice(0, 1)} />
-          <h1 className="font-bold text-2xl">{Webname}</h1>
-        </div>
+      <Link href={"/"} className="flex justify-center"> 
+        <img
+          src="/logo.png"
+          alt="Logo"
+          className="object-contain h-16"
+        />
       </Link>
 
       <div className="space-y-4 overflow-y-auto mt-4">

@@ -30,7 +30,7 @@ export default function Home() {
       data: data || []  // Ensure data is an array, even if empty
     })
   );
-console.log("stack chart", stackedSeries);  
+  console.log("stack chart", stackedSeries);
 
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
@@ -80,7 +80,6 @@ console.log("stack chart", stackedSeries);
           colors={["#3B82F6", "#F87171"]}
         />
       </div>
-
       {/* Stacked Bar Chart for Articles by Category */}
       <div className="col-span-12 md:col-span-6">
         <BaseChart
@@ -95,9 +94,9 @@ console.log("stack chart", stackedSeries);
 
       {/* Top Categories */}
       <div className="col-span-12 my-rounded p-6 md:col-span-6 primary">
-        <h1 className="text-lg font-semibold mb-4">Top Categories</h1>
+        <h1 className="text-lg font-semibold mb-2 pl-4">Top Categories</h1>
         <TopCategories isDashboard />
       </div>
-    </div>
+    </div >
   );
 }

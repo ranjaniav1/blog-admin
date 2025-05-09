@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@tinymce/tinymce-react": "^6.1.0",
-    "apexcharts": "^4.7.0",
     "axios": "^1.9.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.9.2",
