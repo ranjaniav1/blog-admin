@@ -9,11 +9,11 @@ export const useSettings = () => {
   const [loading, setLoading] = useState(true);
   const { showToast, dismissToast } = useToast();
 
-  const updateWebSettings = async (data) => {
+  const updateWebSettings = async (id, data) => {
     setLoading(true);
     const toastId = showToast("loading", "Updating settings...");
     try {
-      const response = await updateSetting(data);
+      const response = await updateSetting(id, data);
       setSettings(response.data);
       showToast("success", "Settings updated successfully.");
     } catch (error) {
@@ -39,7 +39,5 @@ export const useSettings = () => {
     fetchSettings();
   }, []);
 
-  
-
-  return { settings, loading };
+  return { settings, loading, updateWebSettings };
 };
