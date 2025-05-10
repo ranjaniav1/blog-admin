@@ -80,8 +80,9 @@ export default function Home() {
           colors={["#3B82F6", "#F87171"]}
         />
       </div>
+      
       {/* Stacked Bar Chart for Articles by Category */}
-      <div className="col-span-12 md:col-span-6">
+      <div className="col-span-12 md:col-span-6 mt-4">
         <BaseChart
           title="Articles by Category (Stacked)"
           chartType="line"
@@ -93,7 +94,7 @@ export default function Home() {
       </div>
 
       {/* Top Categories */}
-      <div className="col-span-12 my-rounded p-6 md:col-span-6 primary">
+      <div className="col-span-12 my-rounded p-6 md:col-span-6 card mt-4">
         <h1 className="text-lg font-semibold mb-2 pl-4">Top Categories</h1>
         <TopCategories isDashboard />
       </div>
