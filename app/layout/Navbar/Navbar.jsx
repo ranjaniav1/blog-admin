@@ -25,13 +25,13 @@ const Navbar = ({ onBurgerClick }) => {
   }, []);
 
   const { user } = useAuth();
-  const { showToast } = useToast();
+  
 
   return (
     <>
       <div className="relative">
-        <div className="py-6 primary">
-          <div className="background flex justify-between p-5 my-rounded">
+        <div className="card py-2">
+          <div className="flex justify-between p-5 my-rounded">
             <div className="flex items-center gap-2">
               <IconButton
                 Icon={RxHamburgerMenu}
@@ -46,19 +46,6 @@ const Navbar = ({ onBurgerClick }) => {
             <div className="right-side-menu flex gap-2 items-center">
               <div className="theme">
                 <ThemeToggleButton />
-              </div>
-
-              {/* Notification hidden on small */}
-              <div className="notification hidden sm:block">
-                <IconButton
-                  Icon={IoIosNotificationsOutline}
-                  aria_label="Notification"
-                  tooltip="Notification"
-                  needBg
-                  onClick={() =>
-                    showToast("loading", "Sample Success message!")
-                  }
-                />
               </div>
 
               <div className="user flex items-center gap-2">

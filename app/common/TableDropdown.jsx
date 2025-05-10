@@ -4,6 +4,7 @@ import { GoPlus } from "react-icons/go";
 import { SlOptionsVertical } from "react-icons/sl";
 import EditFormModal from "./EditFormModal";
 import React, { useState, useRef, useEffect } from "react";
+import IconButton from "./IconButton";
 
 const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction, buttonTitle, showAddButton = true }) => {
   const [open, setOpen] = useState(false);
@@ -63,18 +64,17 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
 
       {/* ----------------------------- show / hide column feature -------------------------------------- */}
 
-      <Button
-        variant="outline"
-        bgColorRequired
+      <IconButton
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-4 py-3 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2 background"
-      >
-        <SlOptionsVertical />
-        {/* Show/Hide Columns */}
-      </Button>
+        className="flex items-center gap-2 p-3 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2 background"
+        tooltip="Show/Hide Columns"
+        Icon={SlOptionsVertical}
+        needBg
+
+      />
 
       {open && (
-        <div className="absolute primary z-10 w-60 origin-top-right my-rounded shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
+        <div className="absolute card z-10 w-60 origin-top-right my-rounded shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
           <div className="p-2">
             {columns.map((col) => (
               <label

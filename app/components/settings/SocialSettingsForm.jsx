@@ -86,7 +86,7 @@ const SocialSettings = ({ bgPrimary = false }) => {
         columns={columns}
         data={settings || []}
         renderActions={renderActions}
-        className={"primary"}
+        className={"card"}
         pagination={{
           totalPages: 1, // Assuming we don't have pagination here
           currentPage: currentPage,

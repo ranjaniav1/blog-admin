@@ -5,130 +5,145 @@ import { useState, useEffect } from "react";
 import InputField from "@/app/common/InputField";
 import { useToast } from "@/app/context/ToastContext";
 import { useSettings } from "@/app/hooks/useWebSettings";
+import { useThemes } from "@/app/hooks/useTheme";
 
 export default function WebSettingsForm() {
-  const { settings, loading } = useSettings();
-
-  console.log("Settings:", settings);
+  const { settings, loading, updateWebSettings } = useSettings();
+  const { showToast } = useToast();
+  const { updateTheme } = useThemes(); // Importing updateTheme function
 
   const [settingsloading, setSettingLoading] = useState(false);
-  const [form, setForm] = useState(settings?.webSettings || {});
-  const [selectedTheme, setSelectedTheme] = useState("default");
-  const [allThemes, setAllThemes] = useState(settings?.allThemePalettes || {});
-  const { showToast } = useToast();
+  const [form, setForm] = useState({});
+  const [selectedTheme, setSelectedTheme] = useState("");
+  const [allThemes, setAllThemes] = useState([]);
+  const [themeChanged, setThemeChanged] = useState(false);
 
   useEffect(() => {
-    if (settings?.webSettings && settings?.allThemePalettes) {
+    if (settings?.webSettings?.config?.themes?.length) {
+      const initialTheme = settings.webSettings.config.themes[0];
+      setSelectedTheme(initialTheme.name);
+      setAllThemes(settings.webSettings.config.themes);
       setForm({
-        ...settings.webSettings,
-        themePalette: settings.allThemePalettes[selectedTheme] || {},
+        name: settings.webSettings.name || "",
+        footerText: settings.webSettings.footerText || "",
+        googleAdsenseCode: settings.webSettings.googleAdsenseCode || "",
+        headerLogo: settings.webSettings.headerLogo || "",
+        footerLogo: settings.webSettings.footerLogo || "",
+        themePalette: initialTheme || {},
       });
-      setAllThemes(settings.allThemePalettes);
     }
   }, [settings]);
 
-  if (loading) return <p>Loading...</p>;
-  console.log("Settings:", settings);
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name.startsWith("themePalette.")) {
-      const key = name.split(".")[1];
+    const { name, value, type, checked } = e.target;
+    const path = name.split(".");
+    if (path[0] === "themePalette") {
+      const updatedPalette = { ...form.themePalette };
+      const [_, category, key] = path;
+      updatedPalette[category][key] = type === "checkbox" ? checked : value;
+
       setForm((prev) => ({
         ...prev,
-        themePalette: {
-          ...prev.themePalette,
-          [key]: value,
-        },
+        themePalette: updatedPalette,
       }));
+      setThemeChanged(true); // Mark theme as changed
     } else {
       setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
   const handleThemeChange = (e) => {
-    const newTheme = e.target.value;
-    setSelectedTheme(newTheme);
-    setForm((prev) => ({
-      ...prev,
-      themePalette: allThemes[newTheme],
-    }));
+    const newThemeName = e.target.value;
+    const theme = allThemes.find((t) => t.name === newThemeName);
+    if (theme) {
+      setSelectedTheme(newThemeName);
+      setForm((prev) => ({
+        ...prev,
+        themePalette: theme,
+      }));
+      setThemeChanged(true); // Mark theme as changed
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSettingLoading(true);
     try {
-      const res = await fetch("/api/settings/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
-      });
-
-      const result = await res.json();
-      if (result.success) {
-        showToast("success", "Settings updated successfully!");
-      } else {
-        showToast("error", "Failed to update settings.");
+      // 1. Update theme only if changed
+      if (themeChanged) {
+        await updateTheme(form.themePalette._id, form.themePalette);
       }
+
+      // 2. Always update web settings
+      await updateWebSettings(settings?._id, form);
+
+      showToast("success", "Settings updated successfully!");
+      setThemeChanged(false); // reset change flag
     } catch (error) {
+      console.error(error);
       showToast("error", "Something went wrong.");
     } finally {
       setSettingLoading(false);
     }
   };
 
+  if (loading || !form.themePalette) return <p>Loading...</p>;
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-8 rounded-lg">
-      <h2 className="text-2xl font-semibold text-gray-800">Website Settings</h2>
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-6 p-6 rounded-lg card m-4"
+    >
+      {/* BASIC SETTINGS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label className="block font-medium text-gray-700">
+            Website Name
+          </label>
+          <InputField
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="Enter Website Name"
+            variant="primary"
+            size="md"
+          />
+        </div>
 
-      <div>
-        <label className="block font-medium text-gray-700">Website Name</label>
-        <InputField
-          type="text"
-          name="webName"
-          value={form.webName || ""}
-          onChange={handleChange}
-          className="mt-2"
-          placeholder="Enter Website Name"
-          variant="primary"
-          size="md"
-        />
+        <div>
+          <label className="block font-medium text-gray-700">Footer Text</label>
+          <InputField
+            type="text"
+            name="footerText"
+            value={form.footerText}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="Enter Footer Text"
+            variant="primary"
+            size="md"
+          />
+        </div>
+
+        <div>
+          <label className="block font-medium text-gray-700">
+            Google Adsense Code
+          </label>
+          <InputField
+            type="text"
+            name="googleAdsenseCode"
+            value={form.googleAdsenseCode}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="Enter Adsense Code"
+            variant="primary"
+            size="md"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block font-medium text-gray-700">Footer Text</label>
-        <InputField
-          type="text"
-          name="footerText"
-          value={form.footerText || ""}
-          onChange={handleChange}
-          className="mt-2"
-          placeholder="Enter Footer Text"
-          variant="primary"
-          size="md"
-        />
-      </div>
-
-      <div>
-        <label className="block font-medium text-gray-700">
-          Google Adsense Code
-        </label>
-        <InputField
-          type="text"
-          name="googleAdsenseCode"
-          value={form.googleAdsenseCode || ""}
-          onChange={handleChange}
-          className="mt-2"
-          placeholder="Enter Adsense Code"
-          variant="primary"
-          size="md"
-        />
-      </div>
-
-      {/* Theme selector dropdown */}
+      {/* THEME SELECTOR */}
       <div>
         <label className="block font-medium text-gray-700">Select Theme</label>
         <select
@@ -136,45 +151,66 @@ export default function WebSettingsForm() {
           onChange={handleThemeChange}
           className="mt-2 p-2 border rounded-md w-full"
         >
-          {Object.keys(allThemes).map((themeKey) => (
-            <option key={themeKey} value={themeKey}>
-              {themeKey.charAt(0).toUpperCase() + themeKey.slice(1)}
+          {allThemes.map((theme) => (
+            <option key={theme._id} value={theme.name}>
+              {theme.name}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Color pickers for themePalette */}
+      {/* NESTED COLOR PICKERS */}
       <div>
-        <label className="block font-medium text-gray-700 mt-4">
-          Theme Colors
-        </label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
-          {form.themePalette &&
-            Object.entries(form.themePalette).map(([key, value]) => (
-              <div key={key}>
-                <label className="block text-sm text-gray-700 capitalize">
-                  {key}
-                </label>
-                <input
-                  type="color"
-                  name={`themePalette.${key}`}
-                  value={value}
-                  onChange={handleChange}
-                  className="w-full h-10 border rounded-md mt-1"
-                />
-              </div>
-            ))}
-        </div>
+        <h3 className="mt-4 font-medium text-gray-800">Theme Colors</h3>
+        {form.themePalette &&
+          Object.entries(form.themePalette).map(([category, group]) => {
+            if (
+              typeof group === "object" &&
+              ![
+                "_id",
+                "name",
+                "createdBy",
+                "createdAt",
+                "updatedAt",
+                "__v",
+              ].includes(category)
+            ) {
+              return (
+                <div key={category} className="mt-4">
+                  <h4 className="font-semibold text-gray-700 capitalize">
+                    {category}
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+                    {Object.entries(group).map(([key, val]) => (
+                      <div key={key}>
+                        <label className="block text-sm text-gray-700 capitalize">
+                          {key}
+                        </label>
+                        <input
+                          type={typeof val === "boolean" ? "checkbox" : "color"}
+                          name={`themePalette.${category}.${key}`}
+                          checked={typeof val === "boolean" ? val : undefined}
+                          value={typeof val === "boolean" ? undefined : val}
+                          onChange={handleChange}
+                          className="w-full h-10 border rounded-md mt-1"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
       </div>
 
       <div className="flex justify-end w-full">
         <Button
           type="submit"
-          variant="outline"
+          variant="primary"
           bgColorRequired
           disabled={settingsloading}
-          className="btn px-3 mt-6 py-3 font-semibold rounded-md hover:bg-white"
+          className="btn px-3 mt-6 py-3 font-semibold rounded-md"
         >
           {settingsloading ? "Saving..." : "Save Settings"}
         </Button>

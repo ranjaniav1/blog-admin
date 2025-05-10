@@ -8,6 +8,7 @@ import ActionButtons from "@/app/common/ActionButtons";
 import EditFormModal from "@/app/common/EditFormModal";
 import { userRoleFeild } from "@/app/config/admin.config";
 import { useToast } from "@/app/context/ToastContext";
+import { format } from "date-fns";
 
 const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -31,11 +32,25 @@ const Users = () => {
         />
       ),
     },
-    { label: "Role", accessor: "role" },
+    { label: "Role", accessor: "role", filterable: true },
     { label: "Email", accessor: "email" },
     { label: "Manage Access", accessor: "manage_access" },
-    { label: "Created At", accessor: "created_at" },
-    { label: "Updated At", accessor: "updated_at" },
+    {
+      label: "Created At",
+      accessor: "created_at",
+      render: (val) => {
+        const date = new Date(val);
+        return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      },
+    },
+    {
+      label: "Updated At",
+      accessor: "updated_at",
+      render: (val) => {
+        const date = new Date(val);
+        return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      },
+    },
   ];
 
   const renderActions = (row) => (
@@ -57,11 +72,11 @@ const Users = () => {
   }
 
   return (
-    <div className="primary my-rounded">
+    <div className="card my-rounded">
       <Table
         columns={columns}
         data={users?.users || []}
-        className="primary"
+        className="card"
         pagination={{
           totalPages: Number(users.totalPages),
           currentPage: Number(users.page),
@@ -70,7 +85,6 @@ const Users = () => {
         renderActions={renderActions}
         dynamicFields={userRoleFeild}
         showAddButton={false}
-        
       />
 
       <Modal isOpen={!!open} onClose={() => setOpen(false)}>

@@ -43,7 +43,7 @@ export default function BaseChart({
 
   if (!isValidPie && !isValidSeries) {
     return (
-      <div className="primary p-4 my-rounded shadow h-full">
+      <div className="card p-4 my-rounded shadow h-full">
         <h2 className="text-md font-semibold mb-2">{title}</h2>
         <p className="text-sm text-gray-400">No chart data available.</p>
       </div>
@@ -71,7 +71,7 @@ export default function BaseChart({
 
 
   return (
-    <div className="primary p-4 my-rounded shadow h-full">
+    <div className="card p-4 my-rounded shadow h-full">
       <h2 className="text-md font-semibold mb-2">{title}</h2>
       <Chart
         options={options}

@@ -81,7 +81,7 @@ const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
                 }));
               }
             }}
-            className="mt-1 block w-full"
+            className="mt-1 block w-full border border-dashed p-1.5 my-rounded"
             required={field.required}
           />
         );

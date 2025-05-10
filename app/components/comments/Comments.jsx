@@ -103,11 +103,11 @@ const Comments = () => {
   }
 
   return (
-    <div className="primary my-rounded shadow-md bg-white p-4">
+    <div className="card my-rounded shadow-md bg-white p-4">
       <Table
         columns={columns}
         data={commentsData.comments || []}
-        className="primary"
+        className="card"
         renderActions={renderActions}
         pagination={false}
         showAddButton={false}

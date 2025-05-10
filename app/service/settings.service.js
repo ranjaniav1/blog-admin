@@ -12,9 +12,9 @@ export async function getSettings() {
   }
 }
 
-export async function updateSetting(data) {
+export async function updateSetting(id, data) {
   try {
-    const resposne = await httpAxios.put("/web-setting/update", data);
+    const resposne = await httpAxios.put(`/web-setting/${id}`, data);
     return resposne.data;
   } catch (error) {
     console.error("Error updating settings:", error);

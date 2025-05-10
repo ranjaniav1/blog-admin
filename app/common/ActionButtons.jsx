@@ -8,7 +8,7 @@ const ActionButtons = ({ onEdit, onDelete, tooltip = true }) => {
       {onEdit && (
         <button
           onClick={(e) => onEdit(e)}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
+          className="inline-flex items-center gap-1 p-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
           title={tooltip ? "Edit" : ""}
         >
           <MdOutlineModeEditOutline className="text-lg" />
@@ -17,7 +17,7 @@ const ActionButtons = ({ onEdit, onDelete, tooltip = true }) => {
       {onDelete && (
         <button
           onClick={(e) => onDelete(e)}
-          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition"
+          className="inline-flex items-center gap-1 p-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition"
           title={tooltip ? "Delete" : ""}
         >
           <MdOutlineDelete className="text-lg" />

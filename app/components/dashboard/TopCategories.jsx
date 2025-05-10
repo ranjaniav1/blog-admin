@@ -89,7 +89,7 @@ const TopCategories = ({
         linkUrl={`/admin/sub-categories`}
         data={isDashboard ? data.categories.slice(0, 3) : data?.categories}
         renderActions={renderActions}
-        className={bgPrimary ? "primary" : ""}
+        className={bgPrimary ? "card" : ""}
         pagination={
           !isDashboard && {
             totalPages: Number(data.totalPages),

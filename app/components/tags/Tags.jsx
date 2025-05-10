@@ -75,7 +75,7 @@ const Tags = ({ showUpdatedAt = false, bgPrimary = false }) => {
         columns={columns}
         data={data?.tags}
         renderActions={renderActions}
-        className={bgPrimary ? "primary" : ""}
+        className={bgPrimary ? "card" : ""}
         pagination={{
           totalPages: Number(data.totalPages),
           currentPage: Number(data.page),

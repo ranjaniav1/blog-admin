@@ -23,7 +23,7 @@ const Sidebar = () => {
   const sections = [...new Set(filteredRoutes.map((r) => r.section))];
 
   return (
-    <div className="primary h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
+    <div className="card h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
       <Link href={"/"} className="flex justify-center"> 
         <img
           src="/logo.png"
@@ -34,7 +34,7 @@ const Sidebar = () => {
 
       <div className="space-y-4 overflow-y-auto mt-4">
         {sections.map((section) => (
-          <div key={section}>
+          <div key={section || Math.random()*1000}>
             <h2 className="text-lg font-semibold my-2 text-gray-700 tracking-wider">
               {section}
             </h2>
@@ -43,7 +43,7 @@ const Sidebar = () => {
                 .filter((r) => r.section === section)
                 .map((route) => (
                   <SidebarLink
-                    key={route.slug}
+                    key={route.slug || route.icon}
                     {...route}
                     isActive={pathname.includes(route.slug)} // ✅ URL-based active state
                   />

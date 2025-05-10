@@ -87,17 +87,7 @@ const Table = ({
     <div className={`overflow-x-auto my-rounded p-4 ${className}`}>
       {!isDashboard && (
         <div className="flex justify-between items-center mb-4">
-          <div className="flex flex-wrap items-center gap-4 w-full">
-            <TableDropdown
-              columns={columns}
-              visibleColumns={visibleColumns}
-              setVisibleColumns={setVisibleColumns}
-              dynamicFields={dynamicFields}
-              addFunction={addFunction}
-              buttonTitle={buttonTitle}
-              showAddButton={showAddButton}
-            />
-
+          <div className="flex flex-wrap md:flex-nowrap items-center gap-4 w-full">
             {/* Search Bar */}
             <div className="relative w-64">
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -141,6 +131,16 @@ const Table = ({
           </div>
 
           {showAddButton && <AddButton />}
+
+          <TableDropdown
+            columns={columns}
+            visibleColumns={visibleColumns}
+            setVisibleColumns={setVisibleColumns}
+            dynamicFields={dynamicFields}
+            addFunction={addFunction}
+            buttonTitle={buttonTitle}
+            showAddButton={showAddButton}
+          />
         </div>
       )}
 
