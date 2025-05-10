@@ -91,7 +91,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="primary p-6 max-w-full shadow-md my-rounded grid grid-cols-1 md:grid-cols-2 gap-6"
+      className="card p-6 max-w-full shadow-md my-rounded grid grid-cols-1 md:grid-cols-2 gap-6"
     >
       {/* Title */}
       <div className="flex flex-col">

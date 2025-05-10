@@ -3,8 +3,8 @@ const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
     {data?.map((item, index) => (
       <tr
         key={item._id || item.slug || index}
-        className={`border-b transition-colors duration-150 cursor-pointer ${
-          linkUrl ? "hover:text-blue-600" : ""
+        className={`border-b transition-colors duration-150  ${
+          linkUrl ? "hover:text-blue-600 cursor-pointer" : ""
         }`}
         onClick={() => {
           if (linkUrl) router.push(`${linkUrl}/${item._id}/${item.slug}`);

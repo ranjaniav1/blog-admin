@@ -37,10 +37,12 @@ const Articles = () => {
       render: (category) => category?.name || "N/A",
       filterable: true,
     },
+    // TODO: Add author role to filter
     {
       label: "Author",
       accessor: "createdBy", // optional, only needed if your table needs it
       render: (createdBy) => createdBy?.fullname || "N/A",
+      // filterable: true,
     },
     { label: "Status", accessor: "status", filterable: true },
     { label: "Total Comments", accessor: "total_comments" },
@@ -112,7 +114,7 @@ const Articles = () => {
   return (
     <div>
       <Table
-        className="primary"
+        className="card"
         data={data.articles ?? []}
         columns={articleTableColumns}
         pagination={{

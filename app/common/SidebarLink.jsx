@@ -8,7 +8,7 @@ const SidebarLink = ({ title, slug, icon: Icon, isActive, section }) => {
       <Link href={slug}>
         <div
           className={`flex items-center gap-2 p-4 my-rounded transition-all duration-200 ${
-            isActive ? " link-active text-pink-600" : ""
+            isActive ? " link-active text-blue-600" : ""
           } link`}
         >
           {Icon && <Icon className="text-lg" />}
