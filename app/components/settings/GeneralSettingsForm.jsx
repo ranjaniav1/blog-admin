@@ -3,162 +3,214 @@
 import React, { useEffect, useState } from "react";
 import { useGeneralSettings } from "@/app/hooks/useGeneralSettings";
 import InputField from "@/app/common/InputField";
+import Button from "@/app/common/Button";
+import { useThemes } from "@/app/hooks/useTheme";
+import { useToast } from "@/app/context/ToastContext";
 
 const GeneralSettingsForm = () => {
   const { loading, settings, updateGeneralSettings } = useGeneralSettings();
-  const [form, setForm] = useState({
-    panelName: "",
-    primaryColor: "",
-    secondaryColor: "",
-    activeColor: "",
-    autoDelete: false,
-    expireNews: false,
-    logo: "",
-  });
+  const { updateTheme } = useThemes();
+  const { showToast } = useToast();
+
+  const [form, setForm] = useState({});
+  const [allThemes, setAllThemes] = useState([]);
+  const [themeChange, setThemeChange] = useState(false);
 
   useEffect(() => {
-    if (settings) {
+    const storedSettings = JSON.parse(localStorage.getItem("panel"));
+
+    if (storedSettings) {
+      console.log("Loaded Settings from LocalStorage:", storedSettings);
+      const initialTheme = storedSettings?.config?.themes?.[0];
+
       setForm({
-        panelName: settings.panelName || "",
-        primaryColor: settings.primaryColor || "",
-        secondaryColor: settings.secondaryColor || "",
-        activeColor: settings.activeColor || "",
-        autoDelete: settings.autoDelete || false,
-        expireNews: settings.expireNews || false,
-        logo: settings.logo || "",
+        panelName: storedSettings?.panelName || "",
+        expireNews: storedSettings?.expireNews || false,
+        headerLogo: storedSettings?.logo || "",
+        selectedTheme: storedSettings?.themeName || "",
+        fontFamily: storedSettings?.config?.fontFamily || "",
+        fontSizeBase: storedSettings?.config?.fontSizeBase || "",
+        headingFontSize: storedSettings?.config?.headingFontSize || "",
+        borderRadius: storedSettings?.config?.borderRadius || "",
+        themePalette: initialTheme || {}, // Set the theme palette as per the stored settings
       });
+
+      setAllThemes(storedSettings?.config?.themes || []);
     }
-  }, [settings]);
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const path = name.split(".");
+
+    if (path[0] === "themePalette") {
+      const updatedPalette = { ...form.themePalette };
+      const [_, category, key] = path;
+      updatedPalette[category][key] = type === "checkbox" ? checked : value;
+
+      setForm((prev) => ({
+        ...prev,
+        themePalette: updatedPalette,
+      }));
+      setThemeChange(true);
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleThemeChange = (e) => {
+    const newThemeName = e.target.value;
+    const theme = allThemes.find((t) => t.name === newThemeName);
+    if (theme) {
+      setForm((prev) => ({
+        ...prev,
+        selectedTheme: newThemeName,
+        themePalette: theme, // Change theme palette on theme change
+      }));
+    }
+    setThemeChange(true);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateGeneralSettings(form);
+    try {
+      if (themeChange) {
+        const updatedTheme = {
+          ...form.themePalette,
+          name: form.selectedTheme,
+        };
+        await updateTheme(updatedTheme._id, updatedTheme);
+      }
+      console.log("updated color pallete", form.themePalette);
+      await updateGeneralSettings(form);
+      console.log("Updated panel Settings");
+      showToast("success", "Settings updated successfully.");
+    } catch (error) {
+      console.error(error);
+      showToast("error", "Failed to update settings.");
+    }
   };
 
-  if (loading)
-    return <p className="text-center text-gray-500">Loading settings...</p>;
-  if (!settings)
-    return <p className="text-center text-red-500">Failed to load settings.</p>;
+  if (loading || !form.themePalette) return <p>Loading...</p>;
 
   return (
-    <div className="p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="primary mx-auto p-6 my-rounded space-y-5"
-      >
+    <form onSubmit={handleSubmit} className="space-y-6 p-6 rounded-lg card m-4">
+      {/* Basic Settings */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label className="block text-sm font-medium mb-1">Panel Name</label>
+          <label className="block font-medium text-gray-700">Panel Name</label>
           <InputField
+            type="text"
             name="panelName"
             value={form.panelName}
             onChange={handleChange}
-            placeholder="Enter panel name"
-            required
+            className="mt-2"
+            placeholder="Enter Panel Name"
             variant="primary"
             size="md"
           />
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Primary Color
-            </label>
-            <input
-              type="color"
-              name="primaryColor"
-              value={form.primaryColor}
-              onChange={handleChange}
-              className="w-full h-10 rounded border border-gray-300 cursor-pointer"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Secondary Color
-            </label>
-            <input
-              type="color"
-              name="secondaryColor"
-              value={form.secondaryColor}
-              onChange={handleChange}
-              className="w-full h-10 rounded border border-gray-300 cursor-pointer"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">
-              Active Color
-            </label>
-            <input
-              type="color"
-              name="activeColor"
-              value={form.activeColor}
-              onChange={handleChange}
-              className="w-full h-10 rounded border border-gray-300 cursor-pointer"
-            />
-          </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Logo URL</label>
-          <InputField
-            name="logo"
-            value={form.logo}
+          <label className="block font-medium text-gray-700">Expire News</label>
+          <input
+            type="checkbox"
+            name="expireNews"
+            checked={form.expireNews}
             onChange={handleChange}
-            placeholder="https://..."
+            className="mt-2"
+          />
+        </div>
+
+        <div>
+          <label className="block font-medium text-gray-700">Logo</label>
+          <InputField
+            type="text"
+            name="headerLogo"
+            value={form.headerLogo}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="Enter Logo URL"
             variant="primary"
             size="md"
           />
-          {form.logo && (
-            <img
-              src={form.logo}
-              alt="Logo Preview"
-              className="mt-2 h-16 object-contain"
-            />
-          )}
         </div>
+      </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="autoDelete"
-              checked={form.autoDelete}
-              onChange={handleChange}
-            />
-            <span>Auto Delete</span>
-          </label>
+      {/* Theme Selector */}
+      <div>
+        <label className="block font-medium text-gray-700">Select Theme</label>
+        <select
+          value={form.selectedTheme}
+          onChange={handleThemeChange}
+          className="mt-2 p-2 border rounded-md w-full"
+        >
+          {allThemes.map((theme) => (
+            <option key={theme.name} value={theme.name}>
+              {theme.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
-          <label className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              name="expireNews"
-              checked={form.expireNews}
-              onChange={handleChange}
-            />
-            <span>Expire News</span>
-          </label>
-        </div>
+      {/* Theme Colors */}
+      <div>
+        <h3 className="mt-4 font-medium text-gray-800">Theme Colors</h3>
+        {form.themePalette &&
+          Object.entries(form.themePalette).map(([category, group]) => {
+            if (
+              typeof group === "object" &&
+              ![
+                "_id",
+                "name",
+                "createdBy",
+                "createdAt",
+                "updatedAt",
+                "__v",
+              ].includes(category)
+            ) {
+              return (
+                <div key={category} className="mt-4">
+                  <h4 className="font-semibold text-gray-700 capitalize">
+                    {category}
+                  </h4>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+                    {Object.entries(group).map(([key, val]) => (
+                      <div key={key}>
+                        <label className="block text-sm text-gray-700 capitalize">
+                          {key}
+                        </label>
+                        <input
+                          type={typeof val === "boolean" ? "checkbox" : "color"}
+                          name={`themePalette.${category}.${key}`}
+                          checked={typeof val === "boolean" ? val : undefined}
+                          value={typeof val === "boolean" ? undefined : val}
+                          onChange={handleChange}
+                          className="w-full h-10 border rounded-md mt-1"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })}
+      </div>
 
-        <div className="pt-4">
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
-          >
-            Update Settings
-          </button>
-        </div>
-      </form>
-    </div>
+      {/* Submit Button */}
+      <div className="flex justify-end pt-4">
+        <Button
+          type="submit"
+          variant="primary"
+          bgColorRequired
+          disabled={loading}
+          className="px-6 py-3 font-semibold rounded-md"
+        >
+          {loading ? "Saving..." : "Update Settings"}
+        </Button>
+      </div>
+    </form>
   );
 };
 
