@@ -2,26 +2,25 @@ import {
   FaUsers,
   FaListAlt,
   FaCommentDots,
-  FaChartBar,
-  FaPhotoVideo,
   FaTags,
-  FaRss,
-  FaBullhorn,
   FaCogs,
-  FaFire,
-  FaUserEdit,
-  FaUserCheck,
-  FaBookmark,
-  FaStar,
-  FaBell,
 } from "react-icons/fa";
-import { MdSubtitles, MdOutlineArticle } from "react-icons/md";
+import { MdSubtitles, MdOutlineArticle, MdSpaceDashboard  } from "react-icons/md";
+
 
 // ------------------------ Admin Routes ------------------------
 // This file contains the configuration for the admin routes, including their titles, slugs, icons, sections, descriptions, and allowed roles.
 
 export const adminRoutes = [
   // --- User Management ---
+  {
+    title: "Dashboard",
+    slug: "/dashboard",
+    icon: MdSpaceDashboard,
+    section: "Dashboard",
+    description: "Overview of platform statistics.",
+    allowedRoles: ["superadmin", "admin"],
+  },
   {
     title: "Users",
     slug: "/admin/users",
@@ -34,7 +33,6 @@ export const adminRoutes = [
     title: "Comments",
     slug: "/admin/comments",
     icon: FaCommentDots,
-    section: "User Management",
     description: "Moderate article comments.",
     allowedRoles: ["superadmin", "admin"],
   },
