@@ -1,39 +1,16 @@
 @import "tailwindcss";
 
+/* Global CSS */
 :root {
-  --background: #f4f4f5;
-  --primary: #fff;
-  --foreground: #171717;
-  --border: #e5e7eb; /* light gray border */
-  --text-primary: #171717;
-  --text-secondary: #52525b;
-  --font-size-base: 16px;
-  --font-size-sm: 14px;
-  --font-size-lg: 18px;
-  --active: var(--color-background);
+  --background: #ffffff; /* Light theme background */
+  --card: #f9f9f9; /* Light theme card color */
+  --primary: #000000; /* Light theme primary color */
+  --foreground: #333333; /* Light theme text color */
+  --border: #ccc; /* Light theme border color */
   --rounded: 5px;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-border: var(--border);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1e1e1e;
-    --primary: #0a0a0a;
-    --foreground: #ededed;
-    --border: #27272a; /* darker border for dark mode */
-    --text-primary: #ededed;
-    --text-secondary: #a1a1aa;
-    --active: #3b82f6;
-  }
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --font-size-base: 16px;
 }
 
 html,
@@ -69,8 +46,11 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
-.primary,
-option {
+.card, option{
+  background-color: var(--card);
+}
+
+.primary {
   background-color: var(--primary);
 }
 
