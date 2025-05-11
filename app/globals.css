@@ -3,37 +3,37 @@
 /* Global CSS */
 :root {
   /* ------ Backgrounds -------- */
-  --body: #ffffff; /* Light theme body color */
-  --buttonbg: #f0f0f0; /* Light theme button background color */
-  --cardbg: #f9f9f9; /* Light theme card background color */
-  --headerbg: #f0f0f0; /* Light theme header background color */
-  --navbg: #f0f0f0; /* Light theme navigation background color */
+  --body: #ffffff; 
+  --buttonbg: #f0f0f0; 
+  --cardbg: #f9f9f9; 
+  --headerbg: #f0f0f0; 
+  --navbg: #f0f0f0;
 
   /* ---------- Border ----------- */
-  --border: #ccc; /* Light theme border color */
-  --radiuse: 5px; /* Light theme border radius */
+  --border: #ccc; 
+  --radiuse: 5px;
   --border-style: "solid"
 
   /* ---------- Icons ----------- */
-  --default-icon: #000000; /* Light theme default icon color */
-  --main-icon: #000000; /* Light theme main icon color */
+  --default-icon: #000000; 
+  --main-icon: #000000; 
 
   /* --------- Effects ---------- */
-  --hover: #e0e0e0; /* Light theme hover effect color */
-  --shadow: rgba(0, 0, 0, 0.1); /* Light theme shadow color */
+  --hover: #e0e0e0; 
+  --shadow: rgba(0, 0, 0, 0.1);
 
   /* --------- Text ------------ */
-  --button-text: #000000; /* Light theme button text color */
-  --header-text: #000000; /* Light theme header text color */
-  --card-text: #000000; /* Light theme card text color */
-  --primary-text: #000000; /* Light theme primary text color */
-  --secondary-text: #666666; /* Light theme secondary text color */
+  --button-text: #000000; 
+  --header-text: #000000; 
+  --card-text: #000000; 
+  --primary-text: #000000; 
+  --secondary-text: #666666; 
 
   /* --------- Typo ------------ */
-  --font-sans: "Inter", sans-serif; /* Light theme font family */
-  --font-serif: "Merriweather", serif; /* Light theme serif font family */
-  --font-size: 16px; /* Light theme font size */
-  --heading-font-size: 24px; /* Light theme heading font size */
+  --font-sans: "Inter", sans-serif; 
+  --font-serif: "Merriweather", serif; 
+  --font-size: 16px; 
+  --heading-font-size: 24px; 
 
 }
 
@@ -48,6 +48,11 @@ body {
   font-size: var(--font-size);
   background-color: var(--body);
   border-color: var(--border);
+}
+
+.my-font{
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--font-size);
 }
 
 .heading{

@@ -72,7 +72,7 @@ export default function BaseChart({
 
   return (
     <div className="card p-4 my-rounded shadow h-full">
-      <h2 className="text-md font-semibold mb-2">{title}</h2>
+      <h2 className="my-font font-semibold mb-2">{title}</h2>
       <Chart
         options={options}
         series={safeSeries}
