@@ -19,9 +19,13 @@ export default function Home() {
   }
 
   // Validate Category Pie Data
-  const validCategoryPie = categoryPie.data.filter((value) => value > 0);
-  const validCategoryLabels =
-    validCategoryPie.length > 0 ? categoryPie.labels : ["No Data"];
+  // Filter out 0 values and their corresponding labels
+  const filteredCategoryPie = categoryPie.data
+    .map((value, index) => ({ value, label: categoryPie.labels[index] }))
+    .filter((item) => item.value > 0);
+
+  const validCategoryData = filteredCategoryPie.map((item) => item.value);
+  const validCategoryLabels = filteredCategoryPie.map((item) => item.label);
 
   // Prepare Stacked Series
   const stackedSeries = Object.entries(stackedArticlesByCategory.series).map(
@@ -43,8 +47,8 @@ export default function Home() {
         <BaseChart
           title="Trending Categories"
           chartType="pie"
-          series={categoryPie.data}
-          categories={categoryPie.labels}
+          series={validCategoryData}
+          categories={validCategoryLabels}
           colors={[
             "#F59E0B",
             "#10B981",
@@ -80,16 +84,16 @@ export default function Home() {
           colors={["#3B82F6", "#F87171"]}
         />
       </div>
-      
+
       {/* Stacked Bar Chart for Articles by Category */}
       <div className="col-span-12 md:col-span-6 mt-4">
         <BaseChart
           title="Articles by Category (Stacked)"
-          chartType="line"
-          series={stackedSeries}  // Array of series like [{ name: 'Business', data: [9] }, ...]
-          categories={stackedSeries.map((item) => item.name)}  // Dynamically populated categories
-          // stacked={true}
+          chartType="bar"
+          series={stackedSeries}  
+          categories={Object.keys(stackedArticlesByCategory.series)}          // stacked={true}
           colors={["#10B981", "#8B5CF6", "#F59E0B", "#EF4444"]}
+          stacked={true}
         />
       </div>
 
