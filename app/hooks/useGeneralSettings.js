@@ -36,26 +36,9 @@ export const useGeneralSettings = () => {
           response.data.panel.config
         ) {
           const panelData = response.data.panel;
-
-          // Check if 'themes' exists and filter them
-          const filteredThemes =
-            panelData.config.themes?.filter(
-              (theme) =>
-                theme.name === "admin-light" || theme.name === "admin-dark"
-            ) || []; // Default to an empty array if no themes found
-
-          // Replace full themes array with filtered ones
-          const filteredSettings = {
-            ...panelData,
-            config: {
-              ...panelData.config,
-              themes: filteredThemes,
-            },
-          };
-
           // Store in localStorage
-          localStorage.setItem("panel", JSON.stringify(filteredSettings));
-          setSettings(filteredSettings);
+          localStorage.setItem("panel", JSON.stringify(panelData));
+          setSettings(panelData);
         } else {
           // If response structure is incorrect or missing expected data
           throw new Error("Invalid API response structure.");
@@ -76,15 +59,7 @@ export const useGeneralSettings = () => {
     try {
       // Extract the themes from the response data
       const themes = responseData.panel.config.themes;
-
-      // Filter only the 'admin-light' and 'admin-dark' themes
-      const filteredThemes = themes.filter(
-        (theme) => theme.name === "admin-light" || theme.name === "admin-dark"
-      );
-
-      // Update the panel object with the filtered themes
-      responseData.panel.config.themes = filteredThemes;
-
+      
       // Update localStorage with the filtered panel data
       if (typeof window !== "undefined") {
         localStorage.setItem("panel", JSON.stringify(responseData.panel));
