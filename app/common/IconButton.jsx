@@ -34,7 +34,7 @@ const IconButton = ({
       aria-label={aria_label}
       title={tooltip}
       disabled={disabled}
-      className={`flex items-center justify-center ${needBg ? "icon-bg" : ""}  rounded-full p-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+      className={`flex items-center justify-center ${needBg ? "my-icon" : ""}  rounded-full p-2 disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
     >
       <Icon className={`${sizeClasses[size]} ${variantClasses[variant]}`} />
     </button>

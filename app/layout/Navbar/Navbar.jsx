@@ -30,7 +30,7 @@ const Navbar = ({ onBurgerClick }) => {
   return (
     <>
       <div className="relative">
-        <div className="card py-2">
+        <div className="nav py-2">
           <div className="flex justify-between p-5 my-rounded">
             <div className="flex items-center gap-2">
               <IconButton

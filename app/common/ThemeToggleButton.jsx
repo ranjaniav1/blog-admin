@@ -6,7 +6,6 @@ import IconButton from "./IconButton";
 export default function ThemeToggleButton() {
   const [theme, setTheme] = useState("admin-light");
 
-  // Function to apply a theme to the document root
   const applyTheme = (themeName) => {
     const panelData = localStorage.getItem("panel");
     if (!panelData) return;
@@ -14,67 +13,55 @@ export default function ThemeToggleButton() {
     try {
       const panel = JSON.parse(panelData);
       const selectedTheme = panel?.config?.themes?.find(
-        (t) => t.name === themeName // Match the theme name properly
+        (t) => t.name === themeName
       );
-
       if (!selectedTheme) return;
 
       const root = document.documentElement;
 
-      // Apply background colors
-      root.style.setProperty(
-        "--background",
-        selectedTheme.background.body || "#ffffff"
-      );
-      
-      root.style.setProperty(
-        "--card",
-        selectedTheme.background.card || "#f2f2f2"
-      );
+      // Set background colors
+      root.style.setProperty("--body", selectedTheme.background?.body || "#ffffff");
+      root.style.setProperty("--buttonbg", selectedTheme.background?.button || "#ffffff");
+      root.style.setProperty("--cardbg", selectedTheme.background?.card || "#f9f9f9");
+      root.style.setProperty("--headerbg", selectedTheme.background?.header || "#f0f0f0");
+      root.style.setProperty("--navbg", selectedTheme.background?.navigation || "#f0f0f0");
 
-      root.style.setProperty(
-        "--primary",
-        selectedTheme.background.button || "#2563eb"
-      );
-      root.style.setProperty(
-        "--foreground",
-        selectedTheme.text.card || "#333333"
-      );
+      // Set border
+      root.style.setProperty("--border", selectedTheme.border?.color || "#ccc");
+      root.style.setProperty("--radiuse", selectedTheme.border?.radius || "5px");
+      root.style.setProperty("--border-style", selectedTheme.border?.style || "solid");
 
-      // Apply border and radius
-      root.style.setProperty(
-        "--border",
-        selectedTheme.border.color || "#d1d5db"
-      );
-      root.style.setProperty("--rounded", selectedTheme.border.radius || "5px");
+      // Set icons
+      root.style.setProperty("--default-icon", selectedTheme.icon?.default || "#000");
+      root.style.setProperty("--main-icon", selectedTheme.icon?.main || "#000");
 
-      // Apply text colors
-      root.style.setProperty(
-        "--text-primary",
-        selectedTheme.text.primary || "#1f2937"
-      );
-      root.style.setProperty(
-        "--text-secondary",
-        selectedTheme.text.secondary || "#6b7280"
-      );
+      // Set effects
+      root.style.setProperty("--hover", selectedTheme.effects?.hover || "#e0e0e0");
+      root.style.setProperty("--shadow", selectedTheme.effects?.shadow || "rgba(0,0,0,0.1)");
 
-      // Apply font and size
-      root.style.setProperty(
-        "--font-size-base",
-        selectedTheme.typography?.fontSizeBase || "16px"
-      );
+      // Set text
+      root.style.setProperty("--button-text", selectedTheme.text?.button || "#000");
+      root.style.setProperty("--header-text", selectedTheme.text?.heading || "#000");
+      root.style.setProperty("--card-text", selectedTheme.text?.card || "#000");
+      root.style.setProperty("--primary-text", selectedTheme.text?.primary || "#000");
+      root.style.setProperty("--secondary-text", selectedTheme.text?.secondary || "#666");
+
+      // Set typography
+      root.style.setProperty("--font-sans", selectedTheme.typography?.fontFamily || "Inter, sans-serif");
+      root.style.setProperty("--font-size", selectedTheme.typography?.fontSizeBase || "16px");
+      root.style.setProperty("--heading-font-size", selectedTheme.typography?.headingFontSize || "24px");
+
     } catch (error) {
       console.error("Failed to apply theme:", error);
     }
   };
 
-  // Load theme from localStorage on mount
   useEffect(() => {
     const panelData = localStorage.getItem("panel");
     if (panelData) {
       try {
         const panel = JSON.parse(panelData);
-        const savedTheme = panel?.themeName || "admin-light"; // Default to "admin-light"
+        const savedTheme = panel?.themeName || "admin-light";
         setTheme(savedTheme);
         applyTheme(savedTheme);
       } catch (error) {
@@ -83,19 +70,12 @@ export default function ThemeToggleButton() {
     }
   }, []);
 
-  // Toggle between themes and update localStorage
   const toggleTheme = () => {
     const newTheme = theme === "admin-dark" ? "admin-light" : "admin-dark";
     setTheme(newTheme);
-
-    // Get the current panel from localStorage and update themeName
     const panelData = JSON.parse(localStorage.getItem("panel") || "{}");
-
-    // Update localStorage with the new theme
     const updatedPanel = { ...panelData, themeName: newTheme };
     localStorage.setItem("panel", JSON.stringify(updatedPanel));
-
-    // Apply the new theme to the page
     applyTheme(newTheme);
   };
 
