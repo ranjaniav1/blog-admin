@@ -2,15 +2,39 @@
 
 /* Global CSS */
 :root {
-  --background: #ffffff; /* Light theme background */
-  --card: #f9f9f9; /* Light theme card color */
-  --primary: #000000; /* Light theme primary color */
-  --foreground: #333333; /* Light theme text color */
+  /* ------ Backgrounds -------- */
+  --body: #ffffff; /* Light theme body color */
+  --buttonbg: #f0f0f0; /* Light theme button background color */
+  --cardbg: #f9f9f9; /* Light theme card background color */
+  --headerbg: #f0f0f0; /* Light theme header background color */
+  --navbg: #f0f0f0; /* Light theme navigation background color */
+
+  /* ---------- Border ----------- */
   --border: #ccc; /* Light theme border color */
-  --rounded: 5px;
-  --text-primary: #000000;
-  --text-secondary: #666666;
-  --font-size-base: 16px;
+  --radiuse: 5px; /* Light theme border radius */
+  --border-style: "solid"
+
+  /* ---------- Icons ----------- */
+  --default-icon: #000000; /* Light theme default icon color */
+  --main-icon: #000000; /* Light theme main icon color */
+
+  /* --------- Effects ---------- */
+  --hover: #e0e0e0; /* Light theme hover effect color */
+  --shadow: rgba(0, 0, 0, 0.1); /* Light theme shadow color */
+
+  /* --------- Text ------------ */
+  --button-text: #000000; /* Light theme button text color */
+  --header-text: #000000; /* Light theme header text color */
+  --card-text: #000000; /* Light theme card text color */
+  --primary-text: #000000; /* Light theme primary text color */
+  --secondary-text: #666666; /* Light theme secondary text color */
+
+  /* --------- Typo ------------ */
+  --font-sans: "Inter", sans-serif; /* Light theme font family */
+  --font-serif: "Merriweather", serif; /* Light theme serif font family */
+  --font-size: 16px; /* Light theme font size */
+  --heading-font-size: 24px; /* Light theme heading font size */
+
 }
 
 html,
@@ -19,14 +43,29 @@ body {
 }
 
 body {
-  color: var(--foreground);
+  color: var(--card-text);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  font-size: var(--font-size-base);
-  background-color: var(--background);
+  font-size: var(--font-size);
+  background-color: var(--body);
+  border-color: var(--border);
+}
+
+.heading{
+  font-family: var(--font-serif), serif;
+  font-size: var(--heading-font-size);
+  color: var(--header-text);
+}
+
+.active-text {
+  color: var(--primary-text);
+}
+
+.buttonbg{
+  background-color: var(--buttonbg);
 }
 
 main {
-  border-radius: var(--rounded);
+  border-radius: var(--radiuse);
 }
 
 h1,
@@ -35,7 +74,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: var(--text-primary);
+  color: var(--card-text);
   font-family: var(--font-sans), sans-serif;
 }
 
@@ -46,8 +85,12 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
+.nav{
+  background-color: var(--navbg);
+}
+
 .card, option{
-  background-color: var(--card);
+  background-color: var(--cardbg);
 }
 
 .primary {
@@ -75,7 +118,7 @@ li {
 }
 
 .my-rounded {
-  border-radius: var(--rounded);
+  border-radius: var(--radiuse);
 }
 
 /* Hide scrollbar by default */
@@ -110,4 +153,8 @@ li {
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(107, 114, 128, 0.5); /* Tailwind's gray-500 */
   border-radius: 4px;
+}
+
+.my-icon{
+  color: var(--default-icon);
 }
