@@ -8,7 +8,7 @@ export default function ThemeToggleButton() {
   const [theme, setTheme] = useState("admin-light");
 
   const applyTheme = (themeName) => {
-    const panelData = localStorage.getItem("panel");
+    const panelData = sessionStorage.getItem("panel");
     if (!panelData) return;
 
     try {
@@ -31,8 +31,9 @@ export default function ThemeToggleButton() {
     }
   };
 
-  useEffect(() => {
-    const panelData = localStorage.getItem("panel");
+useEffect(() => {
+  const loadAndApplyTheme = () => {
+    const panelData = sessionStorage.getItem("panel");
     if (panelData) {
       try {
         const panel = JSON.parse(panelData);
@@ -40,19 +41,33 @@ export default function ThemeToggleButton() {
         setTheme(savedTheme);
         applyTheme(savedTheme);
       } catch (error) {
-        console.error("Failed to load theme from localStorage:", error);
+        console.error("Failed to load theme from sessionStorage:", error);
       }
     }
-  }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "admin-dark" ? "admin-default" : "admin-dark";
-    setTheme(newTheme);
-    const panelData = JSON.parse(localStorage.getItem("panel") || "{}");
-    const updatedPanel = { ...panelData, themeName: newTheme };
-    localStorage.setItem("panel", JSON.stringify(updatedPanel));
-    applyTheme(newTheme);
   };
+
+  // Initial theme load
+  loadAndApplyTheme();
+
+  // Listen for theme updates
+  window.addEventListener("panel-updated", loadAndApplyTheme);
+
+  return () => {
+    window.removeEventListener("panel-updated", loadAndApplyTheme);
+  };
+}, []);
+
+
+const toggleTheme = () => {
+  const panelData = JSON.parse(sessionStorage.getItem("panel") || "{}"); // ✅ Fixed
+  const newTheme = theme === "admin-dark" ? "admin-default" : "admin-dark";
+  const updatedPanel = { ...panelData, themeName: newTheme };
+
+  sessionStorage.setItem("panel", JSON.stringify(updatedPanel)); // ✅ Fixed
+  setTheme(newTheme);
+  applyTheme(newTheme);
+};
+
 
   return (
     <IconButton
