@@ -5,8 +5,18 @@ import { SlOptionsVertical } from "react-icons/sl";
 import EditFormModal from "./EditFormModal";
 import React, { useState, useRef, useEffect } from "react";
 import IconButton from "./IconButton";
+import { useRouter } from "next/navigation";
 
-const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFields, addFunction, buttonTitle, showAddButton = true }) => {
+const TableDropdown = ({
+  columns,
+  visibleColumns,
+  setVisibleColumns,
+  dynamicFields,
+  addFunction,
+  buttonTitle,
+  showAddButton = true,
+  addLink = false,
+}) => {
   const [open, setOpen] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const dropdownRef = useRef();
@@ -30,6 +40,8 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const router = useRouter();
+
   return (
     <div
       className="flex justify-end text-left right-0 w-full items-center gap-2"
@@ -37,13 +49,19 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
     >
       {/* -------------------------------------- Add button ------------------------------------ */}
 
-      {showAddButton && <Button
-        onClick={() => setShowAddCategory(!showAddCategory)}
-        className="p-2 my-rounded h-max flex items-center gap-2 my-border"
-      >
-        <GoPlus />
-        {buttonTitle || "Add "}
-      </Button>}
+      {showAddButton && (
+        <Button
+          onClick={() =>
+            addLink
+              ? router.push(addLink)
+              : setShowAddCategory(!showAddCategory)
+          }
+          className="p-2 my-rounded h-max flex items-center gap-2 my-border"
+        >
+          <GoPlus />
+          {buttonTitle || "Add "}
+        </Button>
+      )}
 
       {showAddCategory && (
         <EditFormModal

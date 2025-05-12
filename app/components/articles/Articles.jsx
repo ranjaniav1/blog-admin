@@ -122,11 +122,8 @@ const Articles = () => {
           currentPage: data.page,
           onPageChange: (newPage) => setPage(newPage),
         }}
-        addFunction={(e) => {
-          e.stopPropagation();
-          router.push("/add");
-        }}
         renderActions={renderActions}
+        addLink="/admin/articles/add"
       />
 
       {/* Delete Article modal */}
