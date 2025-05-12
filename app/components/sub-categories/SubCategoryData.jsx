@@ -90,7 +90,7 @@ const SubCategoryData = ({ categorySlug, requiredAllCategory }) => {
   );
 
   return (
-    <div>
+    <div className="card my-rounded">
       <Table
         columns={columns}
         data={subcategories?.subcategories || []}

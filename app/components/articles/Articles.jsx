@@ -15,8 +15,14 @@ const Articles = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const router = useRouter();
 
-  const { data, loading, addArticle, editArticle, removeArticle } =
-    useCreateArticle(page);
+  const {
+    data,
+    loading,
+    addArticle,
+    editArticle,
+    removeArticle,
+    editArticleStatus,
+  } = useCreateArticle(page);
 
   const articleTableColumns = [
     { label: "Title", accessor: "title" },
@@ -44,7 +50,27 @@ const Articles = () => {
       render: (createdBy) => createdBy?.fullname || "N/A",
       // filterable: true,
     },
-    { label: "Status", accessor: "status", filterable: true },
+    {
+      label: "Status",
+      accessor: "status",
+      render: (status, row) => (
+        <select
+          value={status}
+          onChange={(e) => editArticleStatus(row._id, e.target.value)}
+          className="border border-gray-300 rounded px-2 py-1 text-sm"
+        >
+          {["draft", "published", "archived", "scheduled", "pending"].map(
+            (option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            )
+          )}
+        </select>
+      ),
+      filterable: true,
+    },
+
     { label: "Total Comments", accessor: "total_comments" },
     { label: "Slug", accessor: "slug" },
     { label: "Excerpt", accessor: "excerpt" },
@@ -122,11 +148,8 @@ const Articles = () => {
           currentPage: data.page,
           onPageChange: (newPage) => setPage(newPage),
         }}
-        addFunction={(e) => {
-          e.stopPropagation();
-          router.push("/add");
-        }}
         renderActions={renderActions}
+        addLink="/admin/articles/add"
       />
 
       {/* Delete Article modal */}

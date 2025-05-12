@@ -20,6 +20,7 @@ const Table = ({
   buttonTitle,
   addFunction = () => {},
   isDashboard = false,
+  addLink = false,
 }) => {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
@@ -140,6 +141,7 @@ const Table = ({
             addFunction={addFunction}
             buttonTitle={buttonTitle}
             showAddButton={showAddButton}
+            addLink={addLink}
           />
         </div>
       )}

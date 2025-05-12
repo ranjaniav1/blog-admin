@@ -59,3 +59,16 @@ export async function fetchArticleById(articleId) {
     return;
   }
 }
+
+export async function updateArticleStatus(article_id, status) {
+  try {
+    const response = await httpAxios.put(`/articles/update-status`, {
+      status,
+      article_id,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error updating article status:", error);
+    return;
+  }
+}

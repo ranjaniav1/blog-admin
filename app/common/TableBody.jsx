@@ -1,5 +1,5 @@
 const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
-  <tbody className="text-wrap">
+  <tbody className="text-wrap truncate ">
     {data?.map((item, index) => (
       <tr
         key={item._id || item.slug || index}
@@ -13,7 +13,7 @@ const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
         {columns.map((col) => (
           <td
             key={col.accessor}
-            className="px-6 py-4 whitespace-nowrap align-middle"
+            className="px-6 py-4 max-w-xs whitespace-pre-wrap break-words align-top"
           >
             {col.render
               ? col.render(item[col.accessor], item)
