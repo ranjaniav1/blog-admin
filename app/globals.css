@@ -3,37 +3,34 @@
 /* Global CSS */
 :root {
   /* ------ Backgrounds -------- */
-  --body: #ffffff; /* Light theme body color */
-  --buttonbg: #f0f0f0; /* Light theme button background color */
-  --cardbg: #f9f9f9; /* Light theme card background color */
-  --headerbg: #f0f0f0; /* Light theme header background color */
-  --navbg: #f0f0f0; /* Light theme navigation background color */
-
-  /* ---------- Border ----------- */
-  --border: #ccc; /* Light theme border color */
-  --radiuse: 5px; /* Light theme border radius */
-  --border-style: "solid"
+  --body: #ffffff; 
+  --buttonbg: #f0f0f0; 
+  --cardbg: #f9f9f9; 
+  --headerbg: #f0f0f0; 
+  --navbg: #f0f0f0;
 
   /* ---------- Icons ----------- */
-  --default-icon: #000000; /* Light theme default icon color */
-  --main-icon: #000000; /* Light theme main icon color */
+  --default-icon: #000000; 
+  --main-icon: #000000; 
+  --delete: #ff0000;
+  --delete-hover: #b60606;
 
   /* --------- Effects ---------- */
-  --hover: #e0e0e0; /* Light theme hover effect color */
-  --shadow: rgba(0, 0, 0, 0.1); /* Light theme shadow color */
+  --hover: #e0e0e0; 
+  --shadow: rgba(0, 0, 0, 0.1);
 
   /* --------- Text ------------ */
-  --button-text: #000000; /* Light theme button text color */
-  --header-text: #000000; /* Light theme header text color */
-  --card-text: #000000; /* Light theme card text color */
-  --primary-text: #000000; /* Light theme primary text color */
-  --secondary-text: #666666; /* Light theme secondary text color */
+  --button-text: #000000; 
+  --header-text: #000000; 
+  --card-text: #000000; 
+  --primary-text: #000000; 
+  --secondary-text: #666666; 
 
   /* --------- Typo ------------ */
-  --font-sans: "Inter", sans-serif; /* Light theme font family */
-  --font-serif: "Merriweather", serif; /* Light theme serif font family */
-  --font-size: 16px; /* Light theme font size */
-  --heading-font-size: 24px; /* Light theme heading font size */
+  --font-sans: "Inter", sans-serif; 
+  --font-serif: "Merriweather", serif; 
+  --font-size: 16px; 
+  --heading-font-size: 24px; 
 
 }
 
@@ -50,6 +47,11 @@ body {
   border-color: var(--border);
 }
 
+.my-font{
+  font-family: var(--font-sans), sans-serif;
+  font-size: var(--font-size);
+}
+
 .heading{
   font-family: var(--font-serif), serif;
   font-size: var(--heading-font-size);
@@ -61,7 +63,7 @@ body {
 }
 
 .buttonbg{
-  background-color: var(--buttonbg);
+  background-color: var(--primary-text);
 }
 
 main {
@@ -99,22 +101,19 @@ li {
 
 .secondary {
   background-color: var(--foreground);
+  color: var(--secondary-text);
 }
 
 .icon-bg {
   background-color: var(--background);
 }
 
-.active {
-  background-color: var(--active);
-}
-
-.active-link {
-  color: var(--active);
-}
-
 .background {
   background-color: var(--background);
+}
+
+.my-border {
+  border: 1px var(--border-style) var(--border);
 }
 
 .my-rounded {
@@ -142,7 +141,7 @@ li {
 }
 
 .link-active {
-  background-color: var(--background);
+  background-color: var(--body);
 }
 
 /* styles/globals.css or global.css */
@@ -157,4 +156,50 @@ li {
 
 .my-icon{
   color: var(--default-icon);
+}
+
+.secondary-text{
+  color: var(--secondary-text);
+}
+
+.link:hover {
+  color: var(--primary-text);
+}
+
+.settings-group {
+  position: relative;
+  display: inline-block; /* make sure it's hoverable */
+}
+
+.animated-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-text); 
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+  z-index: 0; /* optional, depends on layout */
+}
+
+.settings-group:hover .animated-bar {
+  transform: scaleX(1);
+}
+
+.icon-default{
+  color: var(--default-icon);
+}
+
+.icon-main{
+  color: var(--main-icon);
+}
+
+.delete{
+  background-color: var(--delete);
+}
+
+.delete:hover{
+  background-color: var(--delete-hover);
 }

@@ -1,5 +1,5 @@
 const TableHeader = ({ columns, hasActions }) => (
-  <thead className="background text-blue-700 uppercase text-sm font-semibold tracking-wider">
+  <thead className="background active-text uppercase font-semibold tracking-wider">
     <tr>
       {columns.map((col) => (
         <th

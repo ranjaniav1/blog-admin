@@ -131,9 +131,7 @@ const GeneralSettingsForm = () => {
         {/* Basic Settings */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label className="block font-medium text-gray-700">
-              Panel Name
-            </label>
+            <label className="block font-semibold ">Panel Name</label>
             <InputField
               type="text"
               name="panelName"
@@ -147,9 +145,17 @@ const GeneralSettingsForm = () => {
           </div>
 
           <div>
-            <label className="block font-medium text-gray-700">
-              Expire News
-            </label>
+            <label className="block font-semibold ">Logo</label>
+            <InputField
+              type="file"
+              name="headerLogo"
+              onChange={handleChange}
+              className="mt-2"
+            />
+          </div>
+
+          <div>
+            <label className="block font-semibold ">Expire News</label>
             <input
               type="checkbox"
               name="expireNews"
@@ -158,28 +164,12 @@ const GeneralSettingsForm = () => {
               className="mt-2"
             />
           </div>
-
-          <div>
-            <label className="block font-medium text-gray-700">Logo</label>
-            <InputField
-              type="text"
-              name="headerLogo"
-              value={form.headerLogo}
-              onChange={handleChange}
-              className="mt-2"
-              placeholder="Enter Logo URL"
-              variant="primary"
-              size="md"
-            />
-          </div>
         </div>
 
         {/* Typography Settings */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div>
-            <label className="block font-medium text-gray-700">
-              Font Family
-            </label>
+            <label className="block font-semibold ">Font Family</label>
             <InputField
               type="text"
               name="fontFamily"
@@ -192,9 +182,7 @@ const GeneralSettingsForm = () => {
             />
           </div>
           <div>
-            <label className="block font-medium text-gray-700">
-              Base Font Size
-            </label>
+            <label className="block font-semibold ">Base Font Size</label>
             <InputField
               type="text"
               name="fontSizeBase"
@@ -207,9 +195,7 @@ const GeneralSettingsForm = () => {
             />
           </div>
           <div>
-            <label className="block font-medium text-gray-700">
-              Heading Font Size
-            </label>
+            <label className="block font-semibold ">Heading Font Size</label>
             <InputField
               type="text"
               name="headingFontSize"
@@ -222,9 +208,7 @@ const GeneralSettingsForm = () => {
             />
           </div>
           <div>
-            <label className="block font-medium text-gray-700">
-              Border Radius
-            </label>
+            <label className="block font-semibold ">Border Radius</label>
             <InputField
               type="text"
               name="borderRadius"
@@ -238,15 +222,16 @@ const GeneralSettingsForm = () => {
           </div>
         </div>
 
+        {/* divider */}
+        <hr className="border-dashed" />
+
         {/* Theme Selector */}
         <div>
-          <label className="block font-medium text-gray-700">
-            Select Theme
-          </label>
+          <label className="block font-semibold">Select Theme</label>
           <select
             value={form.themeName}
             onChange={handleThemeChange}
-            className="mt-2 p-2 border rounded-md w-full"
+            className="mt-2 p-2 my-rounded my-border w-full link-active"
           >
             {allThemes.map((theme) => (
               <option key={theme.name} value={theme.name}>
@@ -258,7 +243,6 @@ const GeneralSettingsForm = () => {
 
         {/* Theme Color Pickers */}
         <div>
-          <h3 className="mt-4 font-medium text-gray-800">Theme Colors</h3>
           {Object.entries(form.themePalette).map(([category, group]) => {
             if (
               typeof group === "object" &&
@@ -275,7 +259,7 @@ const GeneralSettingsForm = () => {
             ) {
               return (
                 <div key={category} className="mt-4">
-                  <h4 className="font-semibold text-gray-700 capitalize">
+                  <h4 className="font-semibold active-text capitalize">
                     {category}
                   </h4>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
@@ -290,7 +274,7 @@ const GeneralSettingsForm = () => {
                           checked={typeof val === "boolean" ? val : undefined}
                           value={typeof val === "boolean" ? undefined : val}
                           onChange={handleChange}
-                          className="w-full h-10 border rounded-md mt-1"
+                          className="w-full h-10 my-border my-rounded mt-1"
                         />
                       </div>
                     ))}
@@ -306,10 +290,8 @@ const GeneralSettingsForm = () => {
         <div className="flex justify-end pt-4">
           <Button
             type="submit"
-            variant="primary"
-            bgColorRequired
             disabled={loading}
-            className="px-6 py-3 font-semibold rounded-md"
+            className="px-6 py-3 font-semibold rounded-md buttonbg"
           >
             {loading ? "Saving..." : "Update Settings"}
           </Button>

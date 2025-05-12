@@ -38,10 +38,8 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
       {/* -------------------------------------- Add button ------------------------------------ */}
 
       {showAddButton && <Button
-        variant="outline"
-        bgColorRequired
         onClick={() => setShowAddCategory(!showAddCategory)}
-        className="p-2 my-rounded h-max flex items-center gap-2"
+        className="p-2 my-rounded h-max flex items-center gap-2 my-border"
       >
         <GoPlus />
         {buttonTitle || "Add "}
@@ -66,15 +64,14 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
 
       <IconButton
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 p-3 text-sm font-medium my-rounded hover:bg-base-200 focus:outline-none my-2 background"
+        className="flex items-center gap-2 p-3 font-medium my-rounded my-border hover:bg-base-200 focus:outline-none my-2 background"
         tooltip="Show/Hide Columns"
         Icon={SlOptionsVertical}
         needBg
-
       />
 
       {open && (
-        <div className="absolute card z-10 w-60 origin-top-right my-rounded shadow-lg bg-base-100 border border-base-content/20 max-h-60 overflow-y-auto">
+        <div className="absolute card z-10 w-60 origin-top-right my-rounded shadow-lg my-border border-base-content/20 max-h-60 overflow-y-auto">
           <div className="p-2">
             {columns.map((col) => (
               <label
@@ -87,7 +84,7 @@ const TableDropdown = ({ columns, visibleColumns, setVisibleColumns, dynamicFiel
                   checked={visibleColumns.includes(col.accessor)}
                   onChange={() => toggleColumn(col.accessor)}
                 />
-                <span className="text-sm">{col.label}</span>
+                <span>{col.label}</span>
               </label>
             ))}
           </div>

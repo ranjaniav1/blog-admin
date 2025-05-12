@@ -7,6 +7,7 @@ import { useCategories } from "@/app/hooks/useCategories";
 import { useSubcategories } from "@/app/hooks/useSubCategories";
 import { useTags } from "@/app/hooks/useTags";
 import { useCreateArticle } from "@/app/hooks/useArticles"; // Import the custom hook
+import InputField from "@/app/common/InputField";
 
 const ArticleForm = ({ formData, setFormData, isUpdate }) => {
   console.log("ArticleForm data:", formData);
@@ -96,12 +97,12 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
       {/* Title */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Title</label>
-        <input
+        <InputField
           type="text"
           name="title"
           value={formData.title}
           onChange={(e) => handleChange(e, "title")}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
       </div>
@@ -109,12 +110,12 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
       {/* Slug */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Slug</label>
-        <input
+        <InputField
           type="text"
           name="slug"
           value={formData.slug}
           onChange={(e) => handleChange(e, "slug")}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           required
         />
       </div>
@@ -135,12 +136,12 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="category"
           value={formData?.category || ""}
           onChange={(e) => handleCategoryChange(e.target.value)}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2 link-active"
           required
         >
           <option value="">Select Category</option>
           {categories?.categories?.map((category) => (
-            <option key={category?._id} value={category._id}>
+            <option key={category?._id} value={category._id} className="link-active">
               {category.name}
             </option>
           ))}
@@ -154,12 +155,12 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           name="subCategory"
           value={formData?.subcategory || ""}
           onChange={(e) => handleSubCategoryChange(e.target.value)}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2 link-active"
           required
         >
           <option value="">Select Sub Category</option>
           {subcategories?.subcategories?.map((subcategory) => (
-            <option key={subcategory?._id} value={subcategory._id}>
+            <option key={subcategory?._id} value={subcategory._id} className="link-active">
               {subcategory.name}
             </option>
           ))}
@@ -173,11 +174,11 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
           multiple
           value={formData?.tag_id }
           onChange={handleTagChange}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2 link-active"
           required
         >
           {tags?.tags?.map((tag) => (
-            <option key={tag?._id} value={tag._id}>
+            <option key={tag?._id} value={tag._id} className="link-active">
               {tag.name}
             </option>
           ))}
@@ -190,35 +191,35 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
         {isUpdate && (
           <img src={formData.image} alt="" className="h-[200px] w-full" />
         )}
-        <input
+        <InputField
           type="file"
           accept="image/*"
           onChange={(e) => handleFileChange(e, "image")}
-          className="border-dashed border-2 my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border-dashed my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2"
         />
       </div>
 
       {/* Expiry Date Picker */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Publiser Date</label>
-        <input
+        <InputField
           type="date"
           name="expiry_date"
           value={formData.published_at}
           onChange={(e) => handleChange(e, "published_at")}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2"
           required
         />
       </div>
      
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Expiry Date</label>
-        <input
+        <InputField
           type="date"
           name="expiry_date"
           value={formData.expiry_date}
           onChange={(e) => handleChange(e, "expiry_date")}
-          className="border my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2"
           required
         />
       </div>
@@ -226,11 +227,11 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
       {/* Video File Input */}
       <div className="flex flex-col">
         <label className="mb-1 font-semibold text-gray-700">Video</label>
-        <input
+        <InputField
           type="file"
           accept="video/*"
           onChange={(e) => handleFileChange(e, "video")}
-          className="border-dashed border-2 my-rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="border-dashed my-border my-rounded px-3 py-2 focus:outline-none focus:ring-2"
         />
       </div>
 
@@ -238,9 +239,7 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
       <div className="mt-6 col-span-full flex justify-end">
         <Button
           type="submit"
-          variant="success"
-          bgColorRequired
-          className="text-white px-6 py-2 my-rounded transition"
+          className="text-white px-6 py-2 my-rounded transition buttonbg"
         >
           {isUpdate
             ? loading
@@ -254,11 +253,6 @@ const ArticleForm = ({ formData, setFormData, isUpdate }) => {
 
       {/* Error Message */}
       {error && <p className="text-red-500 mt-4">{error}</p>}
-
-      {/* Success Message */}
-      {success && (
-        <p className="text-green-500 mt-4">Article created successfully!</p>
-      )}
     </form>
   );
 };

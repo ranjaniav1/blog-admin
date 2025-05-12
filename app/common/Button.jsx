@@ -18,31 +18,13 @@ const Button = ({
   className = "",
   children,
   disabled = false,
-  bgColorRequired = false,
-  variant = "primary", // default variant
 }) => {
-  // Define variant-based styles
-  const variantStyles = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700",
-    outline: "border border-gray-400 bg-transparent",
-    danger: "bg-red-600 text-white hover:bg-red-700",
-    success: "bg-green-600 text-white hover:bg-green-700",
-    secondary: "bg-gray-600 text-white hover:bg-gray-700",
-  };
-
-  // Disabled styles override everything
-  const baseStyle = disabled
-    ? "bg-gray-300 cursor-not-allowed text-white"
-    : bgColorRequired
-    ? variantStyles[variant] || variantStyles.primary
-    : "";
-
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`text-sm my-rounded focus:outline-none transition-colors ${baseStyle} ${className}`}
+      className={`my-rounded focus:outline-none transition-colors flex gap-1 items-center ${className}`}
     >
       {children}
     </button>

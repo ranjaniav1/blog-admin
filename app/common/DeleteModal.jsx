@@ -10,20 +10,16 @@ const DeleteModal = ({ itemName = 'item', onCancel, onDelete }) => {
       </p>
       <div className="flex justify-end gap-2 mt-4">
         <Button
-          variant="outline"
           type="button"
-          bgColorRequired
           onClick={onCancel}
-          className="px-4 py-2 icon-bg my-rounded"
+          className="px-4 py-2 icon-bg"
         >
           Cancel
         </Button>
         <Button
           onClick={onDelete}
-          variant="danger"
           type="button"
-          bgColorRequired
-          className="px-4 py-2 my-rounded"
+          className="px-4 py-2 delete"
         >
           Confirm Delete
         </Button>

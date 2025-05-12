@@ -4,23 +4,23 @@ import { MdOutlineModeEditOutline, MdOutlineDelete } from "react-icons/md";
 
 const ActionButtons = ({ onEdit, onDelete, tooltip = true }) => {
   return (
-    <div className="inline-flex rounded-md shadow-sm overflow-hidden border border-gray-300">
+    <div className="inline-flex my-rounded overflow-hidden my-border">
       {onEdit && (
         <button
           onClick={(e) => onEdit(e)}
-          className="inline-flex items-center gap-1 p-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
+          className="inline-flex items-center gap-1 p-3 font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
           title={tooltip ? "Edit" : ""}
         >
-          <MdOutlineModeEditOutline className="text-lg" />
+          <MdOutlineModeEditOutline className="" />
         </button>
       )}
       {onDelete && (
         <button
           onClick={(e) => onDelete(e)}
-          className="inline-flex items-center gap-1 p-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 transition"
+          className="inline-flex items-center gap-1 p-3 font-medium text-white delete transition"
           title={tooltip ? "Delete" : ""}
         >
-          <MdOutlineDelete className="text-lg" />
+          <MdOutlineDelete className="" />
         </button>
       )}
     </div>

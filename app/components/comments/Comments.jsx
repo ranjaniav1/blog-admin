@@ -62,7 +62,7 @@ const Comments = () => {
       label: "Article Title",
       accessor: "article.title",
       render: (_, row) => (
-        <span className="font-semibold">{row.article.title}</span>
+        <span className="font-semibold">{row?.article?.title}</span>
       ),
     },
     {
