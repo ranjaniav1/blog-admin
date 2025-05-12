@@ -9,14 +9,11 @@
   --headerbg: #f0f0f0; 
   --navbg: #f0f0f0;
 
-  /* ---------- Border ----------- */
-  --border: #ccc; 
-  --radiuse: 5px;
-  --border-style: "solid"
-
   /* ---------- Icons ----------- */
   --default-icon: #000000; 
   --main-icon: #000000; 
+  --delete: #ff0000;
+  --delete-hover: #b60606;
 
   /* --------- Effects ---------- */
   --hover: #e0e0e0; 
@@ -66,7 +63,7 @@ body {
 }
 
 .buttonbg{
-  background-color: var(--buttonbg);
+  background-color: var(--primary-text);
 }
 
 main {
@@ -104,18 +101,11 @@ li {
 
 .secondary {
   background-color: var(--foreground);
+  color: var(--secondary-text);
 }
 
 .icon-bg {
   background-color: var(--background);
-}
-
-.active {
-  background-color: var(--active);
-}
-
-.active-link {
-  color: var(--active);
 }
 
 .background {
@@ -151,7 +141,7 @@ li {
 }
 
 .link-active {
-  background-color: var(--background);
+  background-color: var(--body);
 }
 
 /* styles/globals.css or global.css */
@@ -170,4 +160,46 @@ li {
 
 .secondary-text{
   color: var(--secondary-text);
+}
+
+.link:hover {
+  color: var(--primary-text);
+}
+
+.settings-group {
+  position: relative;
+  display: inline-block; /* make sure it's hoverable */
+}
+
+.animated-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-text); 
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+  z-index: 0; /* optional, depends on layout */
+}
+
+.settings-group:hover .animated-bar {
+  transform: scaleX(1);
+}
+
+.icon-default{
+  color: var(--default-icon);
+}
+
+.icon-main{
+  color: var(--main-icon);
+}
+
+.delete{
+  background-color: var(--delete);
+}
+
+.delete:hover{
+  background-color: var(--delete-hover);
 }
