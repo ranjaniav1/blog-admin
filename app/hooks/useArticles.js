@@ -5,6 +5,7 @@ import {
   updateArticle,
   deleteArticle,
   fetchArticleById,
+  updateArticleStatus,
 } from "../service/article.service";
 import { useToast } from "../context/ToastContext";
 
@@ -125,6 +126,29 @@ export const useCreateArticle = (page = 1, id) => {
     }
   };
 
+  // update article status
+  const editArticleStatus = async (article_id, status) => {
+    setLoading(true);
+    setError(null);
+    const toastId = showToast("loading", "Updating article status...");
+    try {
+      const response = await updateArticleStatus(article_id, status);
+      if (response) {
+        setSuccess(true);
+        showToast(
+          "success",
+          response.message || "Article status updated successfully!"
+        );
+        await getArticles(); // Refresh after update
+      }
+    } catch (err) {
+      setError("Failed to update article status.");
+    } finally {
+      setLoading(false);
+      dismissToast(toastId);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       console.log("Fetching article by ID:", id);
@@ -144,6 +168,7 @@ export const useCreateArticle = (page = 1, id) => {
     editArticle,
     removeArticle,
     getArticleById,
+    editArticleStatus,
     setData
   };
 };
