@@ -90,14 +90,14 @@ const Table = ({
           <div className="flex flex-wrap md:flex-nowrap items-center gap-4 w-full">
             {/* Search Bar */}
             <div className="relative w-64">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 focus:ring-2">
                 🔍
               </span>
               <InputField
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 rounded-md w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                className="pl-10 pr-4 py-2 my-rounded w-full border focus:outline-none focus:ring-2 transition duration-200"
                 variant="primary"
                 size="md"
               />
@@ -107,7 +107,7 @@ const Table = ({
             {filterableColumns.map((col) => (
               <div key={col.accessor} className="relative w-48">
                 <select
-                  className="w-full appearance-none border border-gray-300 py-2 pl-4 pr-10 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-gray-700"
+                  className="w-full appearance-none border my-border py-2 pl-4 pr-10 my-rounded focus:outline-none focus:ring-2 transition secondary-text"
                   value={filters[col.accessor] || "all"}
                   onChange={(e) =>
                     setFilters((prev) => ({

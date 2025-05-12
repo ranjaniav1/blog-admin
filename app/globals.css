@@ -122,6 +122,10 @@ li {
   background-color: var(--background);
 }
 
+.my-border {
+  border: 1px var(--border-style) var(--border);
+}
+
 .my-rounded {
   border-radius: var(--radiuse);
 }
@@ -162,4 +166,8 @@ li {
 
 .my-icon{
   color: var(--default-icon);
+}
+
+.secondary-text{
+  color: var(--secondary-text);
 }
