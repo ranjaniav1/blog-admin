@@ -3,19 +3,30 @@
 import React, { useState } from "react";
 import { useAuthHook } from "@/app/hooks/useAuthHook";
 import Button from "@/app/common/Button";
+import { useGeneralSettings } from "@/app/hooks/useGeneralSettings";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("admin@gmail.com");
   const [password, setPassword] = useState("admin@123");
   const { login, loading } = useAuthHook();
+  const { settings } = useGeneralSettings();
 
-  // submit form 
+  // submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await login(email, password);
+
     if (!result.success) {
       alert(result.error || "Login failed");
+      return;
     }
+
+    // Save themeName if not present
+    const panelData = sessionStorage.getItem("panel");
+    const parsedPanel = panelData ? JSON.parse(panelData) : {};
+
+    // Notify theme component
+    window.dispatchEvent(new Event("panel-updated"));
   };
 
   return (

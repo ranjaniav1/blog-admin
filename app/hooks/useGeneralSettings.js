@@ -17,7 +17,7 @@ export const useGeneralSettings = () => {
       // Ensure this only runs on the client
       if (typeof window === "undefined") return;
 
-      const storedSettings = localStorage.getItem("panel");
+      const storedSettings = sessionStorage.getItem("panel");
       if (storedSettings) {
         setSettings(JSON.parse(storedSettings));
         setLoading(false);
@@ -37,7 +37,7 @@ export const useGeneralSettings = () => {
         ) {
           const panelData = response.data.panel;
           // Store in localStorage
-          localStorage.setItem("panel", JSON.stringify(panelData));
+          sessionStorage.setItem("panel", JSON.stringify(panelData));
           setSettings(panelData);
         } else {
           // If response structure is incorrect or missing expected data
@@ -62,7 +62,7 @@ export const useGeneralSettings = () => {
       
       // Update localStorage with the filtered panel data
       if (typeof window !== "undefined") {
-        localStorage.setItem("panel", JSON.stringify(responseData.panel));
+        sessionStorage.setItem("panel", JSON.stringify(responseData.panel));
       }
 
       console.log(
@@ -99,9 +99,9 @@ export const useGeneralSettings = () => {
       // Update settings on the server with the new data
       const response = await updateAdminSettings(updatedPanelData);
 
-      // Update localStorage with the updated settings
+      // Update sessionStorage with the updated settings
       if (typeof window !== "undefined") {
-        localStorage.setItem("panel", JSON.stringify(response.data));
+        sessionStorage.setItem("panel", JSON.stringify(response.data));
       }
 
       console.log("response.data", response.data);

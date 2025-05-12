@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
 import IconButton from "@/app/common/IconButton";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { IoIosNotificationsOutline, IoMdSearch } from "react-icons/io";
-import ThemeToggleButton from "@/app/common/ThemeToggleButton";
 import InputField from "@/app/common/InputField";
 import { useAuth } from "@/app/context/AuthContext";
-import { useToast } from "@/app/context/ToastContext";
+import React, { useState, useEffect, useRef } from "react";
+import ThemeToggleButton from "@/app/common/ThemeToggleButton";
+import { useGeneralSettings } from "@/app/hooks/useGeneralSettings";
 
 const Navbar = ({ onBurgerClick }) => {
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef();
+  const { settings } = useGeneralSettings();
 
   // Close the dropdown on outside click
   useEffect(() => {
@@ -25,7 +25,6 @@ const Navbar = ({ onBurgerClick }) => {
   }, []);
 
   const { user } = useAuth();
-  
 
   return (
     <>
