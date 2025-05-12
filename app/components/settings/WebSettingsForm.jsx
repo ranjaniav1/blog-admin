@@ -37,31 +37,41 @@ export default function WebSettingsForm() {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const path = name.split(".");
+
     if (path[0] === "themePalette") {
       const updatedPalette = { ...form.themePalette };
-      const [_, category, key] = path;
-      updatedPalette[category][key] = type === "checkbox" ? checked : value;
+      const [, category, key] = path;
+
+      if (!updatedPalette[category]) {
+        updatedPalette[category] = {};
+      }
+
+      updatedPalette[category][key] =
+        type === "checkbox" ? checked : value;
 
       setForm((prev) => ({
         ...prev,
         themePalette: updatedPalette,
       }));
-      setThemeChanged(true); // Mark theme as changed
+      setThemeChanged(true);
     } else {
-      setForm((prev) => ({ ...prev, [name]: value }));
+      setForm((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
     }
   };
 
   const handleThemeChange = (e) => {
     const newThemeName = e.target.value;
-    const theme = allThemes.find((t) => t.name === newThemeName);
-    if (theme) {
+    const newTheme = allThemes.find((t) => t.name === newThemeName);
+    if (newTheme) {
       setSelectedTheme(newThemeName);
       setForm((prev) => ({
         ...prev,
-        themePalette: theme,
+        themePalette: newTheme,
       }));
-      setThemeChanged(true); // Mark theme as changed
+      setThemeChanged(true);
     }
   };
 
@@ -143,6 +153,8 @@ export default function WebSettingsForm() {
         </div>
       </div>
 
+
+
       {/* THEME SELECTOR */}
       <div>
         <label className="block font-medium text-gray-700">Select Theme</label>
@@ -162,48 +174,110 @@ export default function WebSettingsForm() {
       {/* NESTED COLOR PICKERS */}
       <div>
         <h3 className="mt-4 font-medium text-gray-800">Theme Colors</h3>
-        {form.themePalette &&
-          Object.entries(form.themePalette).map(([category, group]) => {
-            if (
-              typeof group === "object" &&
-              ![
-                "_id",
-                "name",
-                "createdBy",
-                "createdAt",
-                "updatedAt",
-                "__v",
-              ].includes(category)
-            ) {
-              return (
-                <div key={category} className="mt-4">
-                  <h4 className="font-semibold text-gray-700 capitalize">
-                    {category}
-                  </h4>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
-                    {Object.entries(group).map(([key, val]) => (
-                      <div key={key}>
-                        <label className="block text-sm text-gray-700 capitalize">
-                          {key}
-                        </label>
+        {Object.entries(form.themePalette).map(([category, group]) => {
+          if (
+            typeof group === "object" &&
+            !["_id", "name", "createdBy", "createdAt", "updatedAt", "__v"].includes(category)
+          ) {
+            return (
+              <div key={category} className="mt-4">
+                <h4 className="font-semibold text-gray-700 capitalize">
+                  {category}
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
+                  {Object.entries(group).map(([key, val]) => (
+                    <div key={key}>
+                      <label className="block text-sm text-gray-700 capitalize">
+                        {key}
+                      </label>
+                      {typeof val === "boolean" ? (
                         <input
-                          type={typeof val === "boolean" ? "checkbox" : "color"}
+                          type="checkbox"
                           name={`themePalette.${category}.${key}`}
-                          checked={typeof val === "boolean" ? val : undefined}
-                          value={typeof val === "boolean" ? undefined : val}
+                          checked={val}
+                          onChange={handleChange}
+                          className="h-5 w-5 mt-1"
+                        />
+                      ) : (
+                        <input
+                          type="color"
+                          name={`themePalette.${category}.${key}`}
+                          value={val}
                           onChange={handleChange}
                           className="w-full h-10 border rounded-md mt-1"
                         />
-                      </div>
-                    ))}
-                  </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              );
-            }
-            return null;
-          })}
+              </div>
+            );
+          }
+          return null;
+        })}
       </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label className="block font-medium text-gray-700">
+            Font Family
+          </label>
+          <InputField
+            type="text"
+            name="fontFamily"
+            value={form.fontFamily}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., Inter, sans-serif"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-medium text-gray-700">
+            Base Font Size
+          </label>
+          <InputField
+            type="text"
+            name="fontSizeBase"
+            value={form.fontSizeBase}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 16px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-medium text-gray-700">
+            Heading Font Size
+          </label>
+          <InputField
+            type="text"
+            name="headingFontSize"
+            value={form.headingFontSize}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 24px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-medium text-gray-700">
+            Border Radius
+          </label>
+          <InputField
+            type="text"
+            name="borderRadius"
+            value={form.borderRadius}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 24px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+      </div>
       <div className="flex justify-end w-full">
         <Button
           type="submit"
