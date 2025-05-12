@@ -8,8 +8,6 @@ const InputField = ({
   className = "",
   style = {},
   disabled = false,
-  variant = "default",
-  size = "md",
   aria_label = "",
   name = "",
   required = false,
@@ -25,7 +23,7 @@ const InputField = ({
       name={name}
       aria-label={aria_label}
       required={required}
-      className={`block w-full my-rounded my-border  ${className} disabled:opacity-50 disabled:cursor-not-allowed`}
+      className={`block w-full my-rounded my-border ${className} disabled:opacity-50 disabled:cursor-not-allowed link-active p-2`}
     />
   );
 };

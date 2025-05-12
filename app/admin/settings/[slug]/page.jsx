@@ -9,7 +9,7 @@ import GeneralSettingsForm from "@/app/components/settings/GeneralSettingsForm";
 const page = () => {
   const { slug } = useParams();
 
-  if (slug === "general") {
+  if (slug === "panel") {
     return <GeneralSettingsForm />;
   }
 

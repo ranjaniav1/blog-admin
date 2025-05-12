@@ -14,7 +14,7 @@ const Page = () => {
       <SettingsCard
         icon={<IoSettings />}
         title="Panel Settings"
-        link="/admin/settings/general"
+        link="/admin/settings/panel"
       />
       <SettingsCard
         icon={<IoLinkSharp  />}

@@ -45,9 +45,9 @@ const BreadCrumb = () => {
     <div className="px-4 py-3 my-rounded border-gray-200 w-full">
       <nav className="Breadcrumb flex justify-start flex-col">
         <div className="heading">
-          <h1 className="text-2xl font-semibold active active-text heading">{headingTitle}</h1>
+          <h1 className="font-semibold active active-text heading">{headingTitle}</h1>
         </div>
-        <ol className="flex items-center flex-wrap gap-1 text-sm mt-2">
+        <ol className="flex items-center flex-wrap gap-1 mt-2">
           <li className="flex items-center">
             <Link
               href="/"

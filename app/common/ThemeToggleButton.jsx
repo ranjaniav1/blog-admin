@@ -36,7 +36,7 @@ export default function ThemeToggleButton() {
     if (panelData) {
       try {
         const panel = JSON.parse(panelData);
-        const savedTheme = panel?.themeName || "admin-light";
+        const savedTheme = panel?.themeName || "admin-default";
         setTheme(savedTheme);
         applyTheme(savedTheme);
       } catch (error) {
@@ -46,7 +46,7 @@ export default function ThemeToggleButton() {
   }, []);
 
   const toggleTheme = () => {
-    const newTheme = theme === "admin-dark" ? "admin-light" : "admin-dark";
+    const newTheme = theme === "admin-dark" ? "admin-default" : "admin-dark";
     setTheme(newTheme);
     const panelData = JSON.parse(localStorage.getItem("panel") || "{}");
     const updatedPanel = { ...panelData, themeName: newTheme };

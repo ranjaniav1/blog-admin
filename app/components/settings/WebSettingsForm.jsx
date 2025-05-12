@@ -46,8 +46,7 @@ export default function WebSettingsForm() {
         updatedPalette[category] = {};
       }
 
-      updatedPalette[category][key] =
-        type === "checkbox" ? checked : value;
+      updatedPalette[category][key] = type === "checkbox" ? checked : value;
 
       setForm((prev) => ({
         ...prev,
@@ -100,14 +99,11 @@ export default function WebSettingsForm() {
   if (loading || !form.themePalette) return <p>Loading...</p>;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-6 p-6 rounded-lg card m-4"
-    >
+    <form onSubmit={handleSubmit} className="space-y-6 p-6 rounded-lg card m-4">
       {/* BASIC SETTINGS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label className="block font-medium text-gray-700">
+          <label className="block font-semibold">
             Website Name
           </label>
           <InputField
@@ -123,7 +119,7 @@ export default function WebSettingsForm() {
         </div>
 
         <div>
-          <label className="block font-medium text-gray-700">Footer Text</label>
+          <label className="block font-semibold">Footer Text</label>
           <InputField
             type="text"
             name="footerText"
@@ -137,7 +133,7 @@ export default function WebSettingsForm() {
         </div>
 
         <div>
-          <label className="block font-medium text-gray-700">
+          <label className="block font-semibold">
             Google Adsense Code
           </label>
           <InputField
@@ -153,15 +149,71 @@ export default function WebSettingsForm() {
         </div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div>
+          <label className="block font-semibold">Font Family</label>
+          <InputField
+            type="text"
+            name="fontFamily"
+            value={form.fontFamily}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., Inter, sans-serif"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-semibold">Base Font Size</label>
+          <InputField
+            type="text"
+            name="fontSizeBase"
+            value={form.fontSizeBase}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 16px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-semibold">Heading Font Size</label>
+          <InputField
+            type="text"
+            name="headingFontSize"
+            value={form.headingFontSize}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 24px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+        <div>
+          <label className="block font-semibold">Border Radius</label>
+          <InputField
+            type="text"
+            name="borderRadius"
+            value={form.borderRadius}
+            onChange={handleChange}
+            className="mt-2"
+            placeholder="e.g., 24px"
+            variant="primary"
+            size="md"
+          />
+        </div>
+      </div>
 
+      {/* divider */}
+      <hr className="border-dashed" />
 
       {/* THEME SELECTOR */}
       <div>
-        <label className="block font-medium text-gray-700">Select Theme</label>
+        <label className="block font-semibold">Select Theme</label>
         <select
           value={selectedTheme}
           onChange={handleThemeChange}
-          className="mt-2 p-2 border rounded-md w-full"
+          className="mt-2 p-2 my-border my-rounded w-full link-active "
         >
           {allThemes.map((theme) => (
             <option key={theme._id} value={theme.name}>
@@ -173,21 +225,27 @@ export default function WebSettingsForm() {
 
       {/* NESTED COLOR PICKERS */}
       <div>
-        <h3 className="mt-4 font-medium text-gray-800">Theme Colors</h3>
         {Object.entries(form.themePalette).map(([category, group]) => {
           if (
             typeof group === "object" &&
-            !["_id", "name", "createdBy", "createdAt", "updatedAt", "__v"].includes(category)
+            ![
+              "_id",
+              "name",
+              "createdBy",
+              "createdAt",
+              "updatedAt",
+              "__v",
+            ].includes(category)
           ) {
             return (
               <div key={category} className="mt-4">
-                <h4 className="font-semibold text-gray-700 capitalize">
+                <h4 className="font-semibold capitalize active-text">
                   {category}
                 </h4>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-2">
                   {Object.entries(group).map(([key, val]) => (
                     <div key={key}>
-                      <label className="block text-sm text-gray-700 capitalize">
+                      <label className="block text-sm font-semibold capitalize">
                         {key}
                       </label>
                       {typeof val === "boolean" ? (
@@ -204,7 +262,7 @@ export default function WebSettingsForm() {
                           name={`themePalette.${category}.${key}`}
                           value={val}
                           onChange={handleChange}
-                          className="w-full h-10 border rounded-md mt-1"
+                          className="w-full h-10 my-border my-rounded mt-1"
                         />
                       )}
                     </div>
@@ -216,75 +274,12 @@ export default function WebSettingsForm() {
           return null;
         })}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div>
-          <label className="block font-medium text-gray-700">
-            Font Family
-          </label>
-          <InputField
-            type="text"
-            name="fontFamily"
-            value={form.fontFamily}
-            onChange={handleChange}
-            className="mt-2"
-            placeholder="e.g., Inter, sans-serif"
-            variant="primary"
-            size="md"
-          />
-        </div>
-        <div>
-          <label className="block font-medium text-gray-700">
-            Base Font Size
-          </label>
-          <InputField
-            type="text"
-            name="fontSizeBase"
-            value={form.fontSizeBase}
-            onChange={handleChange}
-            className="mt-2"
-            placeholder="e.g., 16px"
-            variant="primary"
-            size="md"
-          />
-        </div>
-        <div>
-          <label className="block font-medium text-gray-700">
-            Heading Font Size
-          </label>
-          <InputField
-            type="text"
-            name="headingFontSize"
-            value={form.headingFontSize}
-            onChange={handleChange}
-            className="mt-2"
-            placeholder="e.g., 24px"
-            variant="primary"
-            size="md"
-          />
-        </div>
-        <div>
-          <label className="block font-medium text-gray-700">
-            Border Radius
-          </label>
-          <InputField
-            type="text"
-            name="borderRadius"
-            value={form.borderRadius}
-            onChange={handleChange}
-            className="mt-2"
-            placeholder="e.g., 24px"
-            variant="primary"
-            size="md"
-          />
-        </div>
-      </div>
+
       <div className="flex justify-end w-full">
         <Button
           type="submit"
-          variant="primary"
-          bgColorRequired
           disabled={settingsloading}
-          className="btn px-3 mt-6 py-3 font-semibold rounded-md"
+          className="btn px-3 mt-6 py-3 font-semibold rounded-md buttonbg"
         >
           {settingsloading ? "Saving..." : "Save Settings"}
         </Button>

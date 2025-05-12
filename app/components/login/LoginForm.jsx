@@ -53,7 +53,7 @@ const LoginForm = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold my-rounded hover:bg-indigo-700 transition duration-300 disabled:opacity-50"
+              className="w-full py-2 px-4 buttonbg text-white font-semibold my-rounded transition duration-300 disabled:opacity-50 opacity-85 hover:opacity-100 flex items-center justify-center"
               disabled={loading}
             >
               {loading ? "Signing In..." : "Sign In"}
@@ -62,7 +62,7 @@ const LoginForm = () => {
               Don’t have an account?{" "}
               <a
                 href="/register"
-                className="text-indigo-500 font-medium hover:underline"
+                className="active-text font-medium hover:underline"
               >
                 Register
               </a>

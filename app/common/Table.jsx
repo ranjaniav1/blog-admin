@@ -97,7 +97,7 @@ const Table = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="pl-10 pr-4 py-2 my-rounded w-full border focus:outline-none focus:ring-2 transition duration-200"
+                className="pl-10 pr-4 py-2 my-rounded w-full focus:outline-none focus:ring-2 transition duration-200"
                 variant="primary"
                 size="md"
               />
@@ -107,7 +107,7 @@ const Table = ({
             {filterableColumns.map((col) => (
               <div key={col.accessor} className="relative w-48">
                 <select
-                  className="w-full appearance-none border my-border py-2 pl-4 pr-10 my-rounded focus:outline-none focus:ring-2 transition secondary-text"
+                  className="w-full appearance-none my-border py-2 pl-4 pr-10 my-rounded focus:outline-none focus:ring-2 transition secondary-text"
                   value={filters[col.accessor] || "all"}
                   onChange={(e) =>
                     setFilters((prev) => ({
@@ -123,7 +123,7 @@ const Table = ({
                     </option>
                   ))}
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                   ▼
                 </div>
               </div>
@@ -144,7 +144,7 @@ const Table = ({
         </div>
       )}
 
-      <table className="min-w-full min-h-full table-auto text-sm text-left">
+      <table className="min-w-full min-h-full table-auto text-left">
         <TableHeader columns={filteredColumns} hasActions={!!renderActions} />
         <TableBody
           data={Array.isArray(filteredData) ? filteredData : [filteredData]}
