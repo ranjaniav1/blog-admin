@@ -19,7 +19,7 @@ const GeneralSettingsForm = () => {
 
   // Fetching the panel settings and themes when the component is mounted
   useEffect(() => {
-    const storedSettings = JSON.parse(localStorage.getItem("panel"));
+    const storedSettings = JSON.parse(sessionStorage.getItem("panel"));
     if (storedSettings) {
       const initialTheme = storedSettings?.config?.themes?.[0];
 
@@ -107,7 +107,7 @@ const GeneralSettingsForm = () => {
       }
 
       await updateGeneralSettings(updatedForm);
-      const panelData = JSON.parse(localStorage.getItem("panel"));
+      const panelData = JSON.parse(sessionStorage.getItem("panel"));
       // ✅ FIX: Extract theme by matching the updated theme name
       const appliedTheme = panelData?.config?.themes?.find(
         (t) => t.name === panelData?.themeName
@@ -123,7 +123,7 @@ const GeneralSettingsForm = () => {
     }
   };
 
-  if (loading || !form.themePalette) return <p>Loading...</p>;
+  if (loading) return <p>Loading...</p>;
 
   return (
     <div className="p-4">
