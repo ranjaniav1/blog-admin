@@ -17,13 +17,10 @@ const GeneralSettingsForm = () => {
   const [allThemes, setAllThemes] = useState([]);
   const [themeChange, setThemeChange] = useState(false);
 
-  // Fetching the panel settings and themes when the component is mounted
   useEffect(() => {
     const storedSettings = JSON.parse(sessionStorage.getItem("panel"));
     if (storedSettings) {
       const initialTheme = storedSettings?.config?.themes?.[0];
-
-      console.log("Initial theme:", initialTheme?.name);
 
       setForm({
         panelName: storedSettings?.panelName || "",
@@ -41,10 +38,18 @@ const GeneralSettingsForm = () => {
     }
   }, []);
 
-  // Handling form field changes
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
     const path = name.split(".");
+
+    // Handle file input
+    if (type === "file") {
+      setForm((prev) => ({
+        ...prev,
+        [name]: files[0],
+      }));
+      return;
+    }
 
     if (path[0] === "themePalette") {
       const updatedPalette = { ...form.themePalette };
@@ -64,10 +69,8 @@ const GeneralSettingsForm = () => {
     }
   };
 
-  // Handling theme change
   const handleThemeChange = (e) => {
     const newThemeName = e.target.value;
-    console.log("Selected theme:", newThemeName);
     const theme = allThemes.find((t) => t.name === newThemeName);
     if (theme) {
       setForm((prev) => ({
@@ -79,25 +82,27 @@ const GeneralSettingsForm = () => {
     setThemeChange(true);
   };
 
-  // Submitting the form
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
+      const formData = new FormData();
+      formData.append("panelName", form.panelName);
+      formData.append("expireNews", form.expireNews);
+      formData.append("themeName", form?.themePalette?.name);
+
       const config = {
         fontFamily: form.fontFamily,
         fontSizeBase: form.fontSizeBase,
         headingFontSize: form.headingFontSize,
         borderRadius: form.borderRadius,
       };
+      formData.append("config", JSON.stringify(config));
 
-      const updatedForm = {
-        panelName: form.panelName,
-        expireNews: form.expireNews,
-        headerLogo: form.headerLogo,
-        themeName: form?.themePalette?.name,
-        config,
-      };
-      console.log("Updated form data:", form);
+      if (form.headerLogo instanceof File) {
+        formData.append("logo", form.headerLogo);
+      }
+
       if (themeChange && form.themePalette?._id) {
         const updatedTheme = {
           ...form.themePalette,
@@ -106,9 +111,9 @@ const GeneralSettingsForm = () => {
         await updateTheme(updatedTheme._id, updatedTheme);
       }
 
-      await updateGeneralSettings(updatedForm);
+      await updateGeneralSettings(formData);
+
       const panelData = JSON.parse(sessionStorage.getItem("panel"));
-      // ✅ FIX: Extract theme by matching the updated theme name
       const appliedTheme = panelData?.config?.themes?.find(
         (t) => t.name === panelData?.themeName
       );
@@ -116,6 +121,7 @@ const GeneralSettingsForm = () => {
       if (appliedTheme) {
         updateDocElement(appliedTheme, config, true);
       }
+
       showToast("success", "Settings updated successfully.");
     } catch (error) {
       console.error(error);
@@ -131,7 +137,7 @@ const GeneralSettingsForm = () => {
         {/* Basic Settings */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <label className="block font-semibold ">Panel Name</label>
+            <label className="block font-semibold">Panel Name</label>
             <InputField
               type="text"
               name="panelName"
@@ -143,9 +149,17 @@ const GeneralSettingsForm = () => {
               size="md"
             />
           </div>
-
           <div>
-            <label className="block font-semibold ">Logo</label>
+            <label className="block font-semibold">Logo</label>
+            {form.headerLogo && typeof form.headerLogo === "string" && (
+              <div className="mt-2 mb-2">
+                <img
+                  src={form.headerLogo}
+                  alt="Current Logo"
+                  className="w-32 h-auto rounded border"
+                />
+              </div>
+            )}
             <InputField
               type="file"
               name="headerLogo"
@@ -153,9 +167,8 @@ const GeneralSettingsForm = () => {
               className="mt-2"
             />
           </div>
-
           <div>
-            <label className="block font-semibold ">Expire News</label>
+            <label className="block font-semibold">Expire News</label>
             <input
               type="checkbox"
               name="expireNews"
@@ -168,61 +181,44 @@ const GeneralSettingsForm = () => {
 
         {/* Typography Settings */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div>
-            <label className="block font-semibold ">Font Family</label>
-            <InputField
-              type="text"
-              name="fontFamily"
-              value={form.fontFamily}
-              onChange={handleChange}
-              className="mt-2"
-              placeholder="e.g., Inter, sans-serif"
-              variant="primary"
-              size="md"
-            />
-          </div>
-          <div>
-            <label className="block font-semibold ">Base Font Size</label>
-            <InputField
-              type="text"
-              name="fontSizeBase"
-              value={form.fontSizeBase}
-              onChange={handleChange}
-              className="mt-2"
-              placeholder="e.g., 16px"
-              variant="primary"
-              size="md"
-            />
-          </div>
-          <div>
-            <label className="block font-semibold ">Heading Font Size</label>
-            <InputField
-              type="text"
-              name="headingFontSize"
-              value={form.headingFontSize}
-              onChange={handleChange}
-              className="mt-2"
-              placeholder="e.g., 24px"
-              variant="primary"
-              size="md"
-            />
-          </div>
-          <div>
-            <label className="block font-semibold ">Border Radius</label>
-            <InputField
-              type="text"
-              name="borderRadius"
-              value={form.borderRadius}
-              onChange={handleChange}
-              className="mt-2"
-              placeholder="e.g., 24px"
-              variant="primary"
-              size="md"
-            />
-          </div>
+          <InputField
+            label="Font Family"
+            type="text"
+            name="fontFamily"
+            value={form.fontFamily}
+            onChange={handleChange}
+            placeholder="e.g., Inter, sans-serif"
+            className="mt-2"
+          />
+          <InputField
+            label="Base Font Size"
+            type="text"
+            name="fontSizeBase"
+            value={form.fontSizeBase}
+            onChange={handleChange}
+            placeholder="e.g., 16px"
+            className="mt-2"
+          />
+          <InputField
+            label="Heading Font Size"
+            type="text"
+            name="headingFontSize"
+            value={form.headingFontSize}
+            onChange={handleChange}
+            placeholder="e.g., 24px"
+            className="mt-2"
+          />
+          <InputField
+            label="Border Radius"
+            type="text"
+            name="borderRadius"
+            value={form.borderRadius}
+            onChange={handleChange}
+            placeholder="e.g., 24px"
+            className="mt-2"
+          />
         </div>
 
-        {/* divider */}
         <hr className="border-dashed" />
 
         {/* Theme Selector */}
@@ -241,7 +237,7 @@ const GeneralSettingsForm = () => {
           </select>
         </div>
 
-        {/* Theme Color Pickers */}
+        {/* Theme Palette Editor */}
         <div>
           {Object.entries(form.themePalette).map(([category, group]) => {
             if (
@@ -286,7 +282,7 @@ const GeneralSettingsForm = () => {
           })}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <div className="flex justify-end pt-4">
           <Button
             type="submit"

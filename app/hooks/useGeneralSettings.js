@@ -59,7 +59,7 @@ export const useGeneralSettings = () => {
     try {
       // Extract the themes from the response data
       const themes = responseData.panel.config.themes;
-      
+
       // Update localStorage with the filtered panel data
       if (typeof window !== "undefined") {
         sessionStorage.setItem("panel", JSON.stringify(responseData.panel));
@@ -79,40 +79,46 @@ export const useGeneralSettings = () => {
     const toastId = showToast("loading", "Updating settings...");
 
     try {
-      // Assuming the updated data contains the themes and other settings
-      const updatedPanelData = { ...data };
-      console.log("updatedPanelData", updatedPanelData);
+      let payloadToSend = data;
 
-      // Check if config and themes exist, and then filter the themes
-      const themes = updatedPanelData?.config?.themes || [];
-      const filteredThemes = themes.filter(
-        (theme) => theme.name === "admin-light" || theme.name === "admin-dark"
-      );
+      // If data is NOT FormData, we can filter themes before sending
+      if (!(data instanceof FormData)) {
+        // Clone data object to avoid mutation
+        const updatedPanelData = { ...data };
 
-      console.log("filteredThemes", filteredThemes);
+        const themes = updatedPanelData?.config?.themes || [];
+        const filteredThemes = themes.filter(
+          (theme) => theme.name === "admin-light" || theme.name === "admin-dark"
+        );
 
-      // If the config and themes exist, replace the themes array
-      if (updatedPanelData?.config) {
-        updatedPanelData.config.themes = filteredThemes;
+        if (updatedPanelData?.config) {
+          updatedPanelData.config.themes = filteredThemes;
+        }
+
+        payloadToSend = updatedPanelData;
+        console.log("Payload with filtered themes:", payloadToSend);
+      } else {
+        // For FormData, just send as is
+        console.log("Sending FormData payload");
       }
 
-      // Update settings on the server with the new data
-      const response = await updateAdminSettings(updatedPanelData);
+      // Call updateAdminSettings with the correct payload
+      const response = await updateAdminSettings(payloadToSend);
 
-      // Update sessionStorage with the updated settings
-      if (typeof window !== "undefined") {
+      // After update, update sessionStorage and settings state consistently
+      if (response?.data?.panel) {
+        sessionStorage.setItem("panel", JSON.stringify(response.data.panel));
+        setSettings(response.data.panel);
+        updateLocalStorageWithFilteredThemes(response.data);
+      } else {
+        // fallback if response shape is different
         sessionStorage.setItem("panel", JSON.stringify(response.data));
+        setSettings(response.data);
       }
 
-      console.log("response.data", response.data);
-      setSettings(response.data);
-
-      // Example usage with the response.data you've provided
-      updateLocalStorageWithFilteredThemes(response.data);
-      
       showToast("success", "Settings updated successfully.");
     } catch (error) {
-      console.error("Error updating settings:", error); // Log the error for debugging
+      console.error("Error updating settings:", error);
       showToast("error", "Failed to update settings.");
     } finally {
       setLoading(false);
