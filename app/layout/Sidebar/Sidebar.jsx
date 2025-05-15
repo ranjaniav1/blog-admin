@@ -10,9 +10,12 @@ import SidebarLink from "@/app/common/SidebarLink";
 import Link from "next/link";
 import Poligon from "@/app/common/Poligon";
 import { usePathname } from "next/navigation";
+import { useGeneralSettings } from "@/app/hooks/useGeneralSettings";
 
 const Sidebar = () => {
   const pathname = usePathname(); // ✅
+  const {settings} = useGeneralSettings();
+  console.log("settings", settings);
 
   // Filter routes based on role
   const filteredRoutes = adminRoutes.filter((route) =>
@@ -26,7 +29,7 @@ const Sidebar = () => {
     <div className="card h-full p-4 overflow-y-auto scrollbar-hide scrollbar-hover">
       <Link href={"/"} className="flex justify-center"> 
         <img
-          src="/logo.png"
+          src={settings?.logo || "/logo.png"}
           alt="Logo"
           className="object-contain h-16"
         />
