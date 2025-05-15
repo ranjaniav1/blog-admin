@@ -14,7 +14,11 @@ export async function getSettings() {
 
 export async function updateSetting(id, data) {
   try {
-    const resposne = await httpAxios.put(`/web-setting/${id}`, data);
+    const resposne = await httpAxios.put(`/web-setting/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return resposne.data;
   } catch (error) {
     console.error("Error updating settings:", error);
@@ -81,7 +85,11 @@ export async function getAdminSettings() {
 
 export async function updateAdminSettings(data) {
   try {
-    const resposne = await httpAxios.put("/panel/update", data);
+    const resposne = await httpAxios.put("/panel/update", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return resposne.data;
   } catch (error) {
     console.error("Error updating admin settings:", error);

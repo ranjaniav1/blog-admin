@@ -77,20 +77,32 @@ export default function WebSettingsForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSettingLoading(true);
+
+    const formData = new FormData();
+    formData.append("name", form.name || "");
+    formData.append("footerText", form.footerText || "");
+    formData.append("googleAdsenseCode", form.googleAdsenseCode || "");
+
+    // Add uploaded files if any
+    if (form.headerLogoFile) formData.append("headerLogo", form.headerLogoFile);
+    if (form.footerLogoFile) formData.append("footerLogo", form.footerLogoFile);
+
+    // if theme changed, update the theme
+    if (themeChanged) {
+      await updateTheme(form.themePalette._id, form.themePalette);
+    }
+
     try {
-      // 1. Update theme only if changed
-      if (themeChanged) {
-        await updateTheme(form.themePalette._id, form.themePalette);
+      console.log("Form Data:", formData, "settings._id", settings);
+      const res = await updateWebSettings(settings?.webSettings?._id, formData); // ensure this sends multipart/form-data
+      if (res.success) {
+        showToast("Settings updated successfully", "success");
+      } else {
+        showToast(res.message || "Update failed", "error");
       }
-
-      // 2. Always update web settings
-      await updateWebSettings(settings?._id, form);
-
-      showToast("success", "Settings updated successfully!");
-      setThemeChanged(false); // reset change flag
-    } catch (error) {
-      console.error(error);
-      showToast("error", "Something went wrong.");
+    } catch (err) {
+      console.error(err);
+      showToast("Something went wrong!", "error");
     } finally {
       setSettingLoading(false);
     }
@@ -103,9 +115,7 @@ export default function WebSettingsForm() {
       {/* BASIC SETTINGS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label className="block font-semibold">
-            Website Name
-          </label>
+          <label className="block font-semibold">Website Name</label>
           <InputField
             type="text"
             name="name"
@@ -133,9 +143,7 @@ export default function WebSettingsForm() {
         </div>
 
         <div>
-          <label className="block font-semibold">
-            Google Adsense Code
-          </label>
+          <label className="block font-semibold">Google Adsense Code</label>
           <InputField
             type="text"
             name="googleAdsenseCode"
@@ -147,6 +155,60 @@ export default function WebSettingsForm() {
             size="md"
           />
         </div>
+
+        {/* Inside your JSX return, probably below InputField components */}
+        <div className="mb-4">
+          <label className="block font-medium mb-1">Header Logo</label>
+          <input
+            type="file"
+            name="headerLogoFile"
+            accept="image/*"
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                headerLogoFile: e.target.files?.[0],
+              }))
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        <div className="mb-4">
+          <label className="block font-medium mb-1">Footer Logo</label>
+          <input
+            type="file"
+            name="footerLogoFile"
+            accept="image/*"
+            onChange={(e) =>
+              setForm((prev) => ({
+                ...prev,
+                footerLogoFile: e.target.files?.[0],
+              }))
+            }
+            className="border rounded px-3 py-2 w-full"
+          />
+        </div>
+
+        {form.headerLogo && (
+          <div>
+            <h1>Navigation Logo: </h1>
+            <img
+              src={form.headerLogo}
+              alt="Current Header Logo"
+              className="w-32 mb-2"
+            />
+          </div>
+        )}
+        {form.footerLogo && (
+          <div>
+            <h1>Footer Logo:</h1>
+            <img
+              src={form.footerLogo}
+              alt="Current Footer Logo"
+              className="w-32 mb-2"
+            />
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
