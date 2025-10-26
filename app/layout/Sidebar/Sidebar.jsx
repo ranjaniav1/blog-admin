@@ -15,7 +15,6 @@ import { useGeneralSettings } from "@/app/hooks/useGeneralSettings";
 const Sidebar = () => {
   const pathname = usePathname(); // ✅
   const {settings} = useGeneralSettings();
-  console.log("settings", settings);
 
   // Filter routes based on role
   const filteredRoutes = adminRoutes.filter((route) =>

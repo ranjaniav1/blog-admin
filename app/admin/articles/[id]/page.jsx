@@ -2,7 +2,6 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import BreadCrumb from "@/app/common/BreadCrumb";
 import { useCreateArticle } from "@/app/hooks/useArticles";
 import ArticleForm from "@/app/components/articles/ArticleForm";
 

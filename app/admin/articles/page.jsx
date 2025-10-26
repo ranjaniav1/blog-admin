@@ -1,4 +1,3 @@
-import BreadCrumb from "@/app/common/BreadCrumb";
 import Articles from "@/app/components/articles/Articles";
 import React from "react";
 

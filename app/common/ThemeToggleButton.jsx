@@ -23,7 +23,6 @@ export default function ThemeToggleButton() {
       const selectedTheme = panel?.config?.themes?.find(
         (t) => t.name === themeName
       );
-      console.log("Selected Theme:", selectedTheme);
       if (!selectedTheme) return;
       updateDocElement(selectedTheme, config, true);
     } catch (error) {

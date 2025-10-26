@@ -5,6 +5,7 @@ export async function fetchArticles(page = 1, limit = 10) {
     const response = await httpAxios.get(
       `/articles?page=${page}&limit=${limit}`
     );
+    console.log(response)
     return response.data;
   } catch (error) {
     console.error("Error fetching articles:", error);
