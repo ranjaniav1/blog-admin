@@ -28,7 +28,6 @@ export const useGeneralSettings = () => {
         const response = await getAdminSettings();
 
         // Log response for debugging
-        console.log("API Response:", response);
 
         if (
           response?.data &&

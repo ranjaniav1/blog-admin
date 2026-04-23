@@ -17,7 +17,6 @@ const Users = () => {
   const { showToast } = useToast();
 
   const { loading, users, updateUserRole } = useAuthHook(true, currentPage);
-  console.log("all users: ", users);
 
   const columns = [
     { label: "Name", accessor: "fullname" },
@@ -94,7 +93,6 @@ const Users = () => {
           title="Edit User Role"
           fields={userRoleFeild}
           onSave={(updatedRole) => {
-            console.log("Updated Role: ", updatedRole);
             updateUserRole(userId, updatedRole.role);
             setOpen(false);
           }}

@@ -116,7 +116,6 @@ const Tags = ({ showUpdatedAt = false, bgPrimary = false }) => {
             data={selectedTag}
             fields={tagFields}
             onSave={(updatedTag) => {
-              console.log("Updated Tag:", updatedTag);
               updateNewsTag(updatedTag._id, updatedTag);
               closeModal();
             }}

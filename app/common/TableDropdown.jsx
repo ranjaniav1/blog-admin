@@ -71,7 +71,6 @@ const TableDropdown = ({
           data={{}}
           fields={dynamicFields}
           onSave={(newCategory) => {
-            console.log("New Category Data:", newCategory);
             addFunction(newCategory);
             setShowAddCategory(false);
           }}

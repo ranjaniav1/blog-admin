@@ -10,7 +10,6 @@ import { useCreateArticle } from "@/app/hooks/useArticles"; // Import the custom
 import InputField from "@/app/common/InputField";
 
 const ArticleForm = ({ formData, setFormData, isUpdate, aiForm, setAiForm, mode, setMode }) => {
-  console.log("ArticleForm data:", formData);
 
   const { data: categories } = useCategories();
   const { subcategories } = useSubcategories(true, 1);

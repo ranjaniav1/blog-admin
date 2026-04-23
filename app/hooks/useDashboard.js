@@ -21,7 +21,6 @@ export function useDashboard() {
   }
 
   useEffect(() => {
-    console.log("Fetching dashboard data...");
     fetchDashboardData();
   }, []);
 

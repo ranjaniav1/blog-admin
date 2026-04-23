@@ -93,7 +93,6 @@ export default function WebSettingsForm() {
     }
 
     try {
-      console.log("Form Data:", formData, "settings._id", settings);
       const res = await updateWebSettings(settings?.webSettings?._id, formData); // ensure this sends multipart/form-data
       if (res.success) {
         showToast("Settings updated successfully", "success");

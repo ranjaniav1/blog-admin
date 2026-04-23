@@ -7,7 +7,6 @@ import SubCategoryData from "@/app/components/sub-categories/SubCategoryData";
 
 const page = () => {
   const { category_id, category_slug } = useParams();
-  console.log(category_slug);
   return (
     <div className="flex flex-col gap-4 p-4">
       <SubCategoryData

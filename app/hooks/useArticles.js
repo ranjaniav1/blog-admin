@@ -51,7 +51,6 @@ export const useCreateArticle = (page = 1, id) => {
         setData({
           articles: response.data.article,
         });
-        console.log("Fetched article data:", response.data);
         setSuccess(true);
       }
     } catch (err) {
@@ -173,10 +172,8 @@ export const useCreateArticle = (page = 1, id) => {
 
   useEffect(() => {
     if (id) {
-      console.log("Fetching article by ID:", id);
       getArticleById();
     } else {
-      console.log("Fetching articles for page:", page);
       getArticles();
     }
   }, [page]);

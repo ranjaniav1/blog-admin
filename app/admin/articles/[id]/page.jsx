@@ -10,7 +10,6 @@ const page = () => {
 
   const [page, setPage] = React.useState(1);
   const { data, getArticleById } = useCreateArticle(page, id);
-  console.log("Fetched article data:", data.articles);
 
   const [formData, setFormData] = React.useState({
     title: "",

@@ -34,7 +34,6 @@ export default function Home() {
       data: data || []  // Ensure data is an array, even if empty
     })
   );
-  console.log("stack chart", stackedSeries);
 
   return (
     <div className="grid grid-cols-12 gap-3 p-4">

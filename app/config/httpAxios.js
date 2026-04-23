@@ -22,7 +22,6 @@ httpAxios.interceptors.response.use(
         await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
           withCredentials: true,
         });
-        console.log("Token refreshed successfully");
 
         // Retry the original request
         return httpAxios(originalRequest);
