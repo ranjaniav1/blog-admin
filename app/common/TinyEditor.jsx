@@ -24,7 +24,7 @@ const TinyEditor = ({ handleEditorChange, formData }) => {
 
   return (
     <Editor
-      apiKey="cuo0heb4h29r9ana3m1nklyrbh63qkvmsbmd7a6hg2asg7eq"
+      apiKey="o8yy749r2wwznu6aukmspfe0qotb0hv8irb1sfc8to4fdwfb"
       init={{
         height: 300,
         menubar: false,
