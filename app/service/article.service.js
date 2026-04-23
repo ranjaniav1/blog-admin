@@ -26,6 +26,19 @@ export async function createArticle(articleData) {
     return;
   }
 }
+export async function createArticleWithAI(articleData) {
+  try {
+    const response = await httpAxios.post("/articles/generate-ai", articleData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Important for file uploads
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating article:", error);
+    return;
+  }
+}
 
 export async function updateArticle(articleData) {
   try {

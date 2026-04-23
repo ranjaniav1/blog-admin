@@ -6,6 +6,7 @@ import {
   deleteArticle,
   fetchArticleById,
   updateArticleStatus,
+  createArticleWithAI,
 } from "../service/article.service";
 import { useToast } from "../context/ToastContext";
 
@@ -66,6 +67,27 @@ export const useCreateArticle = (page = 1, id) => {
     const toastId = showToast("loading", "Creating article...");
     try {
       const response = await createArticle(formData);
+      if (response) {
+        setSuccess(true);
+        showToast(
+          "success",
+          response.message || "Article created successfully!"
+        );
+        await getArticles(); // Refresh after creation
+      }
+    } catch (err) {
+      setError("Failed to create article.");
+    } finally {
+      setLoading(false);
+      dismissToast(toastId);
+    }
+  };
+  const addArticleWithAI = async (formData) => {
+    setLoading(true);
+    setError(null);
+    const toastId = showToast("loading", "Generating article...");
+    try {
+      const response = await createArticleWithAI(formData);
       if (response) {
         setSuccess(true);
         showToast(
@@ -169,6 +191,7 @@ export const useCreateArticle = (page = 1, id) => {
     removeArticle,
     getArticleById,
     editArticleStatus,
-    setData
+    setData,
+    addArticleWithAI
   };
 };
