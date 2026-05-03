@@ -3,7 +3,7 @@
 import { useDashboard } from "../hooks/useDashboard";
 import BaseChart from "../components/dashboard/BaseChart";
 import StateCards from "../components/dashboard/StateCards";
-import TopCategories from "../components/dashboard/TopCategories";
+// import TopCategories from "../components/dashboard/TopCategories";
 
 export default function Home() {
   const { data, loading, error } = useDashboard();
@@ -99,7 +99,7 @@ export default function Home() {
       {/* Top Categories */}
       <div className="col-span-12 my-rounded p-6 md:col-span-6 card mt-4">
         <h1 className="font-semibold mb-2 pl-4 my-font">Top Categories</h1>
-        <TopCategories isDashboard />
+        {/* <TopCategories isDashboard /> */}
       </div>
     </div >
   );

@@ -1,41 +1,17 @@
+// service/subcategory.service.js
 import { httpAxios } from "../config/httpAxios";
+import { createCrudService } from "./base.service";
 
-export async function getSubcategories(page) {
-  try {
-    const response = await httpAxios.get(`/subcategories?offset=10&page=${page}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching subcategories:", error);
-    return;
-  }
-}
+// Create base service for subcategories (no custom update needed for getAll/create/delete)
+const baseSubcategoryService = createCrudService("/subcategories");
 
-export async function addSubcategory(subcategory) {
-  try {
-    const response = await httpAxios.post("/subcategories/", {
-      name: subcategory.name,
-      description: subcategory.description,
-      slug: subcategory.slug,
-      category_id: subcategory.category_id,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error adding subcategory:", error);
-    return;
-  }
-}
+// Use base service for standard operations
+export const getSubcategories = (page) => baseSubcategoryService.getAll(page);
+export const addSubcategory = (data) => baseSubcategoryService.create(data);
+export const deleteSubcategory = (id) => baseSubcategoryService.delete(id);
 
-export async function deleteSubcategory(id) {
-  try {
-    const response = await httpAxios.delete(`/subcategories/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting subcategory:", error);
-    return;
-  }
-}
-
-export async function editSubcategory(id, subcategory) {
+// Override update because subcategory has special API format
+export const editSubcategory = async (id, subcategory) => {
   try {
     const response = await httpAxios.put(`/subcategories`, {
       subcategory_id: id,
@@ -46,18 +22,7 @@ export async function editSubcategory(id, subcategory) {
     });
     return response.data;
   } catch (error) {
-    console.error("Error updating subcategory:", error);
-    return;
+    console.error("Error editing subcategory:", error);
+    throw error;
   }
-}
-
-
-export async function getSubcategoriesByCatSlug(slug) {
-  try {
-    const response = await httpAxios.get(`/subcategories/${slug}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return;
-  }
-}
+};

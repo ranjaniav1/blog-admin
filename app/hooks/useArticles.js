@@ -1,194 +1,119 @@
-import { useEffect, useState } from "react";
+// hooks/useArticles.js
+import { useCallback } from "react";
+import { useGenericCrud } from "./useGenericCrud";
+import { useToast } from "../context/ToastContext";
 import {
-  createArticle,
   fetchArticles,
+  createArticle,
   updateArticle,
   deleteArticle,
   fetchArticleById,
   updateArticleStatus,
   createArticleWithAI,
 } from "../service/article.service";
-import { useToast } from "../context/ToastContext";
 
-export const useCreateArticle = (page = 1, id) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [success, setSuccess] = useState(false);
-  const [data, setData] = useState({
-    articles: [],
-    page: 1,
-    totalPages: 1,
-  });
+// Transform API response to match generic CRUD expected format
+const transformResponse = (response) => {
+  if (!response || !response.data) {
+    return { items: [], totalPages: 1, currentPage: 1 };
+  }
+  
+  return {
+    items: response.data.articles || [],
+    totalPages: response.data.totalPages || 1,
+    currentPage: response.data.page || 1,
+    total: response.data.total || 0,
+  };
+};
 
+export const useArticles = (page = 1) => {
   const { showToast, dismissToast } = useToast();
 
-  const getArticles = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetchArticles(page);
-      if (response?.data?.articles) {
-        setData({
-          articles: response.data.articles,
-          page: response.data.page || 1,
-          totalPages: response.data.totalPages || 1,
-        });
-        setSuccess(true);
-      }
-    } catch (err) {
-      setError("An error occurred while fetching articles.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Fetch function with transformation
+  const fetchFn = useCallback(async (p) => {
+    const response = await fetchArticles(p);
+    return transformResponse(response);
+  }, []);
+  
+  // Standard CRUD functions
+  const addFn = useCallback((data) => createArticle(data), []);
+  const updateFn = useCallback((id, data) => updateArticle(data), []);
+  const deleteFn = useCallback((id) => deleteArticle(id), []);
 
-  const getArticleById = async () => {
-    setLoading(true);
-    setError(null);
+  // Use generic CRUD for standard operations
+  const genericCrud = useGenericCrud({
+    fetchFn,
+    addFn,
+    updateFn,
+    deleteFn,
+    initialPage: page,
+    itemName: "Article",
+  });
+
+  // Extra feature: Get article by ID
+  const getArticleById = useCallback(async (id) => {
     try {
       const response = await fetchArticleById(id);
-      if (response?.data) {
-        setData({
-          articles: response.data.article,
-        });
-        setSuccess(true);
-      }
-    } catch (err) {
-      setError("An error occurred while fetching the article.");
-    } finally {
-      setLoading(false);
+      return response;
+    } catch (error) {
+      console.error("Error fetching article:", error);
+      throw error;
     }
-  };
+  }, []);
 
-  const addArticle = async (formData) => {
-    setLoading(true);
-    setError(null);
-    const toastId = showToast("loading", "Creating article...");
-    try {
-      const response = await createArticle(formData);
-      if (response) {
-        setSuccess(true);
-        showToast(
-          "success",
-          response.message || "Article created successfully!"
-        );
-        await getArticles(); // Refresh after creation
-      }
-    } catch (err) {
-      setError("Failed to create article.");
-    } finally {
-      setLoading(false);
-      dismissToast(toastId);
-    }
-  };
-  const addArticleWithAI = async (formData) => {
-    setLoading(true);
-    setError(null);
-    const toastId = showToast("loading", "Generating article...");
-    try {
-      const response = await createArticleWithAI(formData);
-      if (response) {
-        setSuccess(true);
-        showToast(
-          "success",
-          response.message || "Article created successfully!"
-        );
-        await getArticles(); // Refresh after creation
-      }
-    } catch (err) {
-      setError("Failed to create article.");
-    } finally {
-      setLoading(false);
-      dismissToast(toastId);
-    }
-  };
-
-  const editArticle = async (updatedData) => {
-    setLoading(true);
-    setError(null);
-    const toastId = showToast("loading", "Updating article...");
-    try {
-      const response = await updateArticle(updatedData);
-      if (response) {
-        setSuccess(true);
-        showToast(
-          "success",
-          response.message || "Article updated successfully!"
-        );
-        await getArticles(); // Refresh after update
-      }
-    } catch (err) {
-      setError("Failed to update article.");
-    } finally {
-      setLoading(false);
-      dismissToast(toastId);
-    }
-  };
-
-  const removeArticle = async (id) => {
-    setLoading(true);
-    setError(null);
-    const toastId = showToast("loading", "Deleting article...");
-    try {
-      const response = await deleteArticle(id);
-      if (response) {
-        setSuccess(true);
-        showToast(
-          "success",
-          response.message || "Article Removed successfully!"
-        );
-        await getArticles(); // Refresh after delete
-      }
-    } catch (err) {
-      setError("Failed to delete article.");
-    } finally {
-      setLoading(false);
-      dismissToast(toastId);
-    }
-  };
-
-  // update article status
-  const editArticleStatus = async (article_id, status) => {
-    setLoading(true);
-    setError(null);
+  // Extra feature: Update article status
+  const updateStatus = useCallback(async (article_id, status) => {
     const toastId = showToast("loading", "Updating article status...");
     try {
       const response = await updateArticleStatus(article_id, status);
-      if (response) {
-        setSuccess(true);
-        showToast(
-          "success",
-          response.message || "Article status updated successfully!"
-        );
-        await getArticles(); // Refresh after update
+      if (response?.success !== false) {
+        showToast("success", response?.message || "Status updated successfully");
+        await genericCrud.refetch();
+        return response;
       }
-    } catch (err) {
-      setError("Failed to update article status.");
+      throw new Error(response?.message || "Failed to update status");
+    } catch (error) {
+      showToast("error", error.message);
+      throw error;
     } finally {
-      setLoading(false);
       dismissToast(toastId);
     }
-  };
+  }, [genericCrud, showToast, dismissToast]);
 
-  useEffect(() => {
-    if (id) {
-      getArticleById();
-    } else {
-      getArticles();
+  // Extra feature: Create article with AI
+  const generateWithAI = useCallback(async (articleData) => {
+    const toastId = showToast("loading", "Generating article with AI...");
+    try {
+      const response = await createArticleWithAI(articleData);
+      if (response?.success !== false) {
+        showToast("success", response?.message || "Article generated successfully");
+        await genericCrud.refetch();
+        return response;
+      }
+      throw new Error(response?.message || "Failed to generate article");
+    } catch (error) {
+      showToast("error", error.message);
+      throw error;
+    } finally {
+      dismissToast(toastId);
     }
-  }, [page]);
+  }, [genericCrud, showToast, dismissToast]);
 
   return {
-    loading,
-    error,
-    success,
-    data,
-    addArticle,
-    editArticle,
-    removeArticle,
+    // Standard CRUD from generic
+    data: genericCrud.data,
+    loading: genericCrud.loading,
+    error: genericCrud.error,
+    currentPage: genericCrud.currentPage,
+    setCurrentPage: genericCrud.setCurrentPage,
+    addItem: genericCrud.addItem,
+    updateItem: genericCrud.updateItem,
+    deleteItem: genericCrud.deleteItem,
+    refetch: genericCrud.refetch,
+    
+    // Extra features for articles
     getArticleById,
-    editArticleStatus,
-    setData,
-    addArticleWithAI
+    updateStatus,
+    generateWithAI,
   };
 };
