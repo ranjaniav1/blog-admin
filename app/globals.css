@@ -3,35 +3,41 @@
 /* Global CSS */
 :root {
   /* ------ Backgrounds -------- */
-  --body: #ffffff; 
-  --buttonbg: #f0f0f0; 
-  --cardbg: #f9f9f9; 
-  --headerbg: #f0f0f0; 
+  --body: #ffffff;
+  --buttonbg: #f0f0f0;
+  --cardbg: #f9f9f9;
+  --headerbg: #f0f0f0;
   --navbg: #f0f0f0;
 
   /* ---------- Icons ----------- */
-  --default-icon: #000000; 
-  --main-icon: #000000; 
+  --default-icon: #000000;
+  --main-icon: #000000;
   --delete: #ff0000;
   --delete-hover: #b60606;
 
   /* --------- Effects ---------- */
-  --hover: #e0e0e0; 
+  --hover: #e0e0e0;
   --shadow: rgba(0, 0, 0, 0.1);
 
   /* --------- Text ------------ */
-  --button-text: #000000; 
-  --header-text: #000000; 
-  --card-text: #000000; 
-  --primary-text: #000000; 
-  --secondary-text: #666666; 
+  --button-text: #000000;
+  --header-text: #000000;
+  --card-text: #000000;
+  --primary-text: #000000;
+  --secondary-text: #666666;
 
   /* --------- Typo ------------ */
-  --font-sans: "Inter", sans-serif; 
-  --font-serif: "Merriweather", serif; 
-  --font-size: 16px; 
-  --heading-font-size: 24px; 
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Merriweather", serif;
+  --font-size: 16px;
+  --heading-font-size: 24px;
 
+  /* table specific var */
+  --table-header-bg: var(--headerbg);
+  --table-row-hover: var(--hover);
+  --table-border-color: var(--border);
+  --table-text: var(--card-text);
+  --table-header-text: var(--header-text);
 }
 
 html,
@@ -46,13 +52,21 @@ body {
   background-color: var(--body);
   border-color: var(--border);
 }
-
-.my-font{
+table,
+th,
+td,
+tr {
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+.my-font {
   font-family: var(--font-sans), sans-serif;
   font-size: var(--font-size);
 }
 
-.heading{
+.heading {
   font-family: var(--font-serif), serif;
   font-size: var(--heading-font-size);
   color: var(--header-text);
@@ -62,7 +76,7 @@ body {
   color: var(--primary-text);
 }
 
-.buttonbg{
+.buttonbg {
   background-color: var(--primary-text);
 }
 
@@ -87,11 +101,12 @@ li {
   font-family: var(--font-sans), sans-serif;
 }
 
-.nav{
+.nav {
   background-color: var(--navbg);
 }
 
-.card, option{
+.card,
+option {
   background-color: var(--cardbg);
 }
 
@@ -100,7 +115,7 @@ li {
 }
 
 .secondary {
-  background-color: var(--foreground);
+  background-color: var(--body);
   color: var(--secondary-text);
 }
 
@@ -154,11 +169,11 @@ li {
   border-radius: 4px;
 }
 
-.my-icon{
+.my-icon {
   color: var(--default-icon);
 }
 
-.secondary-text{
+.secondary-text {
   color: var(--secondary-text);
 }
 
@@ -177,7 +192,7 @@ li {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: var(--primary-text); 
+  background-color: var(--primary-text);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.5s ease-out;
@@ -188,18 +203,156 @@ li {
   transform: scaleX(1);
 }
 
-.icon-default{
+.icon-default {
   color: var(--default-icon);
 }
 
-.icon-main{
+.icon-main {
   color: var(--main-icon);
 }
 
-.delete{
+.delete {
   background-color: var(--delete);
 }
 
-.delete:hover{
+.delete:hover {
   background-color: var(--delete-hover);
+}
+/* Add these animation classes at the end of your globals.css */
+@keyframes slideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+
+
+.sidebar-enter {
+  animation: slideIn 0.3s ease-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Active link indicator */
+.link-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 60%;
+  background-color: var(--primary-text);
+  border-radius: 0 3px 3px 0;
+}
+
+/* Hover scale effect for icons */
+.icon-hover {
+  transition: transform 0.2s ease;
+}
+
+.icon-hover:hover {
+  transform: scale(1.1);
+}
+
+/* Add these table-specific styles to your globals.css */
+
+/* Table row striping - subtle effect */
+tbody tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+/* Better table cell spacing */
+td,
+th {
+  white-space: nowrap;
+}
+
+/* Allow first column to wrap if needed */
+td:first-child {
+  white-space: normal;
+  min-width: 150px;
+}
+
+/* Responsive table container */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Improve select dropdown rendering */
+select.card option {
+  background-color: var(--cardbg);
+  padding: 8px;
+}
+
+/* Better search input focus */
+input:focus {
+  border-color: var(--primary-text);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Add a subtle shadow separator between rows instead of borders */
+tbody tr {
+  border-bottom: none;
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.05);
+}
+
+tbody tr:last-child {
+  box-shadow: none;
+}
+
+/* Or use a subtle background for rows on hover */
+tbody tr:hover {
+  background-color: var(--hover);
+  box-shadow: none;
+}
+
+/* Optional: Add a subtle divider between header and body */
+thead tr {
+  box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.08);
+}
+
+/* Dropdown animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Custom checkbox styling */
+input[type="checkbox"] {
+  accent-color: var(--primary-text);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Better select styling */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23666' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+  background-position: right 8px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  appearance: none;
+}
+
+/* Hide default select arrow in IE/Edge */
+select::-ms-expand {
+  display: none;
 }

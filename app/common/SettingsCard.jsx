@@ -22,10 +22,6 @@ export default function SettingsCard({ icon, title, link, isActive = false }) {
           <h3 className="text-lg font-semibold transition-colors duration-300">
             {title}
           </h3>
-          <p className="text-sm mt-1 underline-offset-4 secondary transition-colors duration-300 flex items-center gap-1">
-            Go to Settings{" "}
-            <TbArrowNarrowRightDashed className="text-2xl mt-[2px]" />
-          </p>
         </div>
       </div>
     </Link>

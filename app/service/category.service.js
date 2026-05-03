@@ -1,41 +1,9 @@
 import { httpAxios } from "../config/httpAxios";
+import { createCrudService } from "./base.service";
 
-export async function getCategories(page) {
-  try {
-    const response = await httpAxios.get(`/categories?page=${page}&offset=10`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    return;
-  }
-}
-
-export async function addCategory(category) {
-  try {
-    const response = await httpAxios.post("/categories", {
-      name: category.name,
-      description: category.description,
-      slug: category.slug,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error adding category:", error);
-    return;
-  }
-}
-
-export async function deleteCategory(id) {
-  try {
-    const response = await httpAxios.delete(`/categories/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error editing category:", error);
-    return;
-  }
-}
-
-export async function editCategory(id, category) {
-  try {
+// Create base service with custom update for category
+export const categoryService = createCrudService("/categories", {
+  customUpdate: async (id, category) => {
     const response = await httpAxios.put(`/categories`, {
       category_id: id,
       name: category.name,
@@ -43,8 +11,10 @@ export async function editCategory(id, category) {
       slug: category.slug,
     });
     return response.data;
-  } catch (error) {
-    console.error("Error editing category:", error);
-    return;
   }
-}
+});
+
+export const getCategories = (page) => categoryService.getAll(page);
+export const addCategory = (data) => categoryService.create(data);
+export const editCategory = (id, data) => categoryService.update(id, data);
+export const deleteCategory = (id) => categoryService.delete(id);
