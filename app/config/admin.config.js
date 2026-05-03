@@ -287,7 +287,7 @@ export const lessonFields = [
     type: "text",
     required: true,
     placeholder: "Enter lesson title",
-    rows:1
+    rows: 1
   },
   {
     name: "slug",
@@ -295,7 +295,7 @@ export const lessonFields = [
     type: "text",
     required: true,
     placeholder: "lesson-slug",
-    rows:1
+    rows: 1
   },
   {
     name: "seriesId",
@@ -565,3 +565,41 @@ export const configs = {
     linkUrl: null,
   }
 };
+
+export const socialFields = [
+  {
+    name: 'socialmediaimage',
+    label: "Icon",
+    accessor: "socialmediaimage",
+    type: "file", // For image URL input
+  },
+  {
+    name: "link",
+    label: "Link",
+    accessor: "link",
+    type: "text", // For text input
+  },
+  {
+    name: "platform",
+    label: "Platform",
+    accessor: "platform",
+    type: "text", // For text input
+  },
+];
+
+export const userRoleFeild = [
+
+  {
+    name: "role",
+    label: "Role",
+    type: "checkbox",
+    required: true,
+    message:
+      "Are you sure you want to give access to this user for manage articles?",
+
+
+
+
+
+  },
+];

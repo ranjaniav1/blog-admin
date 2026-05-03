@@ -4,10 +4,11 @@ import { useState } from "react";
 import { format } from "date-fns";
 import Table from "@/app/common/Table";
 import Modal from "@/app/common/Modal";
-import EditFormModal from "@/app/common/EditFormModal";
+
 import ActionButtons from "@/app/common/ActionButtons";
 import { useSocialSettings } from "@/app/hooks/useSocialSettings"; // Custom hook for social settings
 import DeleteModal from "@/app/common/DeleteModal"; // Modal to delete settings
+import { SimpleForm } from "@/app/common/EditFormModal";
 import { socialFields } from "@/app/config/admin.config";
 
 const SocialSettings = ({ bgPrimary = false }) => {
@@ -99,7 +100,7 @@ const SocialSettings = ({ bgPrimary = false }) => {
 
       {/* -------------------------- add social setting modal -------------------------- */}
       {showAddSetting && (
-        <EditFormModal
+        <SimpleForm
           isOpen={showAddSetting}
           onClose={() => setShowAddSetting(false)}
           title="Add New Social Setting"
@@ -117,7 +118,7 @@ const SocialSettings = ({ bgPrimary = false }) => {
         }
       >
         {modalType === "edit" ? (
-          <EditFormModal
+          <SimpleForm
             isOpen
             onClose={closeModal}
             title="Edit Social Setting"
