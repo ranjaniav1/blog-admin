@@ -13,6 +13,7 @@ const Modal = ({
 
   // Close on outside click
   const handleOutsideClick = (e) => {
+    if (e.target.closest(".tox")) return;
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       onClose();
     }
