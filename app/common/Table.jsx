@@ -18,7 +18,7 @@ const Table = ({
   pagination,
   dynamicFields = [],
   buttonTitle,
-  addFunction = () => {},
+  addFunction = () => { },
   isDashboard = false,
   addLink = false,
 }) => {
@@ -42,29 +42,46 @@ const Table = ({
       data.forEach((item) => {
         const value = item[col.accessor];
         if (Array.isArray(value)) {
-          value.forEach((v) => set.add(v?.name));
-        } else if (typeof value === "object") {
-          set.add(value?.name);
-        } else {
-          set.add(value);
+          value.forEach((v) => {
+            // Handle nested objects
+            const displayValue = v?.name || v?.slug || String(v);
+            set.add(displayValue);
+          });
+        } else if (typeof value === "object" && value !== null) {
+          // For category object: use slug since name doesn't exist
+          const displayValue = value?.name || value?.slug || "Unknown";
+          set.add(displayValue);
+        } else if (value !== undefined && value !== null) {
+          set.add(String(value));
         }
       });
-      options[col.accessor] = Array.from(set);
+      options[col.accessor] = Array.from(set).filter(v => v && v !== "undefined" && v !== "null");
     });
     return options;
   }, [data, filterableColumns]);
 
   // ✅ Filtered data based on dynamic filters
   const filteredData = useMemo(() => {
+    if (!Array.isArray(data)) return [];
+
     return data.filter((item) => {
       const matchesFilters = Object.entries(filters).every(
-        ([accessor, value]) => {
-          if (value === "all") return true;
+        ([accessor, filterValue]) => {
+          if (filterValue === "all" || !filterValue) return true;
           const itemValue = item[accessor];
-          if (Array.isArray(itemValue))
-            return itemValue.some((v) => v?.name === value);
-          if (typeof itemValue === "object") return itemValue?.name === value;
-          return itemValue === value;
+
+          if (Array.isArray(itemValue)) {
+            return itemValue.some((v) => {
+              const compareValue = v?.name || v?.slug || String(v);
+              return compareValue === filterValue;
+            });
+          }
+          if (typeof itemValue === "object" && itemValue !== null) {
+            // For category object: compare slug
+            const compareValue = itemValue?.name || itemValue?.slug || String(itemValue);
+            return compareValue === filterValue;
+          }
+          return String(itemValue) === String(filterValue);
         }
       );
 
@@ -74,8 +91,12 @@ const Table = ({
           if (typeof val === "string") {
             return val.toLowerCase().includes(searchQuery.toLowerCase());
           }
-          if (typeof val === "object" && val?.name) {
-            return val.name.toLowerCase().includes(searchQuery.toLowerCase());
+          if (typeof val === "number") {
+            return String(val).includes(searchQuery);
+          }
+          if (typeof val === "object" && val !== null) {
+            const searchable = val?.name || val?.slug || String(val);
+            return searchable.toLowerCase().includes(searchQuery.toLowerCase());
           }
           return false;
         });
@@ -83,7 +104,6 @@ const Table = ({
       return matchesFilters && matchesSearch;
     });
   }, [data, filters, searchQuery]);
-
   return (
     <div className={`overflow-x-auto my-rounded p-4 ${className}`}>
       {!isDashboard && (

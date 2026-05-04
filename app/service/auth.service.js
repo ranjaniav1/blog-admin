@@ -20,7 +20,7 @@ async function login(email, password) {
 async function getAllUsers(page) {
   try {
     const response = await httpAxios.get(`/auth/users?page=${page}`);
-    return response.data;
+    return response.data.data;
   } catch (error) {
     console.log(error.response.data);
   }

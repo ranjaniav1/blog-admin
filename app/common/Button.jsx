@@ -1,30 +1,41 @@
+// common/Button.jsx
 import React from "react";
 
-/**
- * Reusable Button Component
- *
- * Props:
- * - type: "button" | "submit" | "reset"
- * - onClick: function to call on click
- * - className: additional Tailwind classes
- * - children: content inside the button
- * - disabled: boolean to disable the button
- * - bgColorRequired: if true, apply base background styling
- * - variant: "primary" | "outline" | "danger" | "success" | "secondary"
- */
 const Button = ({
   type = "button",
   onClick,
   className = "",
   children,
   disabled = false,
+  variant = "primary",
+  size = "md",
+  fullWidth = false,
 }) => {
+  const baseStyles = "my-rounded focus:outline-none transition-all duration-200 flex gap-2 items-center justify-center font-medium";
+  
+  const sizeStyles = {
+    sm: "px-3 py-1.5 text-xs",
+    md: "px-4 py-2 text-sm",
+    lg: "px-6 py-3 text-base",
+  };
+  
+  const variantStyles = {
+    primary: "buttonbg text-white hover:opacity-90",
+    outline: "my-border bg-transparent hover:bg-hover secondary-text",
+    danger: "delete text-white hover:opacity-90",
+    success: "bg-green-600 text-white hover:bg-green-700",
+    secondary: "bg-gray-500 text-white hover:bg-gray-600",
+  };
+  
+  const widthStyle = fullWidth ? "w-full" : "";
+  const disabledStyles = disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer";
+  
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`my-rounded focus:outline-none transition-colors flex gap-1 items-center ${className}`}
+      className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${widthStyle} ${disabledStyles} ${className}`}
     >
       {children}
     </button>

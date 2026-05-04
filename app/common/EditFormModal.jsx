@@ -1,130 +1,142 @@
-import React, { useEffect, useState } from "react";
-import Modal from "./Modal";
+"use client";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import InputField from "./InputField";
 import Button from "./Button";
 
-const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
+// Dynamically import TinyEditor
+const TinyEditor = dynamic(() => import("./TinyEditor"), {
+  ssr: false,
+  loading: () => <div className="h-[300px] border rounded animate-pulse bg-gray-100" />,
+});
+
+export const SimpleForm = ({
+  fields,
+  data,
+  onSubmit,
+  onClose,
+  isSubmitting,
+}) => {
   const [formData, setFormData] = useState({});
-  const [isJsonMode, setIsJsonMode] = useState(false);
-  const [jsonText, setJsonText] = useState("");
 
   useEffect(() => {
-    if (data) {
-      const initial = {};
-      fields.forEach((field) => {
-        initial[field.name] = data[field.name] ?? "";
-      });
-      setFormData(initial);
-      setJsonText(JSON.stringify(initial, null, 2));
-    }
+    const initial = {};
+    fields.forEach((f) => {
+      initial[f.name] = data?.[f.name] ?? "";
+    });
+    setFormData(initial);
   }, [data, fields]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
-  const handleJsonChange = (e) => {
-    setJsonText(e.target.value);
+  const handleEditorChange = (content, editor) => {
+    setFormData((prev) => ({
+      ...prev,
+      content: content,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const dataToValidate = isJsonMode ? JSON.parse(jsonText || "{}") : formData;
-
-    const requiredFieldsValid = fields
+    const valid = fields
       .filter((f) => f.required)
-      .every((f) => dataToValidate[f.name]?.toString().trim?.());
+      .every((f) => {
+        const value = formData[f.name];
+        if (f.type === "editor") {
+          return value?.toString().trim() && value !== "<p></p>" && value !== "";
+        }
+        return value?.toString().trim();
+      });
 
-    if (!requiredFieldsValid) {
-      alert("All required fields must be filled.");
+    if (!valid) {
+      alert("Fill all required fields");
       return;
     }
 
-    try {
-      const finalData = isJsonMode ? JSON.parse(jsonText) : formData;
-      onSave({ ...data, ...finalData });
-      onClose();
-    } catch {
-      alert("Invalid JSON format.");
-    }
+    onSubmit(formData);
   };
 
   const renderField = (field) => {
     switch (field.type) {
+      case "editor":
+        return (
+          <div className="border rounded my-rounded overflow-hidden">
+            <TinyEditor
+              handleEditorChange={handleEditorChange}
+              formData={formData}
+            />
+          </div>
+        );
+
       case "textarea":
         return (
           <textarea
             name={field.name}
-            rows={field.rows || 3}
             value={formData[field.name] || ""}
             onChange={handleChange}
-            className="mt-1 block w-full my-rounded my-border sm:text-sm"
+            rows={field.rows || 5}
             placeholder={field.placeholder}
-            required={field.required}
+            className="w-full my-border my-rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary-text/20"
           />
-        );
-
-      case "file":
-        return (
-          <input
-            type="file"
-            name={field.accessor}
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                // Handle the file upload
-                setFormData((prev) => ({
-                  ...prev,
-                  [field.accessor]: file, // Store the file object in the formData
-                }));
-              }
-            }}
-            className="mt-1 block w-full my-border border-dashed p-1.5 my-rounded"
-            required={field.required}
-          />
-        );
-
-      case "checkbox":
-        return (
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              // name={field.name}
-              checked={!!formData[field.name]}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  [field.name]: e.target.checked,
-                }))
-              }
-              className="h-4 w-4 text-blue-600 border-gray-300 rounded"
-              required={field.required}
-            />
-            <span className="ml-2 text-sm text-gray-700">
-              {field.message || field.label}
-            </span>
-          </label>
         );
 
       case "select":
         return (
           <select
             name={field.name}
-            value={formData[field.name]}
+            value={formData[field.name] || ""}
             onChange={handleChange}
-            required={field.required}
-            className="mt-1 block w-full my-rounded my-border sm:text-sm p-3"
+            className="w-full my-border my-rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary-text/20"
           >
             <option value="">Select {field.label}</option>
-            {field.options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            {field.options?.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
               </option>
             ))}
           </select>
         );
+
+      case "checkbox":
+        return (
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name={field.name}
+              checked={!!formData[field.name]}
+              onChange={handleChange}
+              className="w-4 h-4"
+            />
+            <span className="text-sm text-gray-600">{field.label}</span>
+          </div>
+        );
+
+      case "file":
+        return (
+          <input
+            type="file"
+            name={field.name}
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                setFormData((prev) => ({
+                  ...prev,
+                  [field.name]: file,
+                }));
+              }
+            }}
+            accept={field.accept || "image/*"}
+            className="w-full my-border my-rounded p-2"
+          />
+        );
+
       default:
         return (
           <InputField
@@ -140,60 +152,38 @@ const EditFormModal = ({ isOpen, onClose, title, data, fields, onSave }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={title}>
-      <div className="flex justify-end mb-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
+      {fields.map((field) => (
+        <div key={field.name}>
+          {field.type !== "checkbox" && (
+            <label className="block mb-1 text-sm font-medium">
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
+          )}
+          {renderField(field)}
+        </div>
+      ))}
+
+      <div className="flex justify-end gap-3 pt-4 border-t">
         <Button
           type="button"
-          onClick={() => setIsJsonMode(!isJsonMode)}
-          className="active-text hover:underline border-none"
+          onClick={onClose}
+          variant="outline"
+          className="px-4 py-2"
+          disabled={isSubmitting}
         >
-          {isJsonMode ? "Switch to Form Mode" : "Switch to JSON Mode"}
+          Cancel
+        </Button>
+        <Button
+          type="submit"
+          variant="primary"
+          className="px-4 py-2 buttonbg text-white"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Saving..." : "Save"}
         </Button>
       </div>
-
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {!isJsonMode ? (
-          fields.map((field) => (
-            <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label}
-              </label>
-              {renderField(field)}
-            </div>
-          ))
-        ) : (
-          <>
-            <label className="block text-sm font-medium text-gray-700">
-              Edit JSON
-            </label>
-            <textarea
-              rows={10}
-              value={jsonText}
-              onChange={handleJsonChange}
-              className="w-full font-mono my-rounded  my-border"
-              placeholder='{"name": "Example", "slug": "example", "description": "..." }'
-            />
-          </>
-        )}
-
-        <div className="flex justify-end gap-2 pt-2">
-          <Button
-            type="button"
-            onClick={onClose}
-            className="px-4 py-2 my-rounded"
-          >
-            Cancel
-          </Button>
-          <Button
-            type="submit"
-            className="px-4 py-2 buttonbg"
-          >
-            Save
-          </Button>
-        </div>
-      </form>
-    </Modal>
+    </form>
   );
 };
-
-export default EditFormModal;

@@ -1,62 +1,22 @@
+// service/tag.service.js
 import { httpAxios } from "../config/httpAxios";
+import { createCrudService } from "./base.service";
 
-// GET all tags
-export async function getTags(page = 1) {
-  try {
-    const response = await httpAxios.get(`/tags?page=${page}&offset=10`);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching tags:", error);
-    return;
-  }
-}
+// Tags use standard REST API (no custom update needed)
+export const tagService = createCrudService("/tags");
 
-// POST a new tag
-export async function addTag(tag) {
-  try {
-    const response = await httpAxios.post("/tags", {
-      name: tag.name,
-      slug: tag.slug,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error adding tag:", error);
-    return;
-  }
-}
+export const getTags = (page) => tagService.getAll(page);
+export const addTag = (data) => tagService.create(data);
+export const editTag = (id, data) => tagService.update(id, data);
+export const deleteTag = (id) => tagService.delete(id);
 
-// GET tag by ID
-export async function getTagById(id) {
+// Optional: Get tag by ID if needed
+export const getTagById = async (id) => {
   try {
     const response = await httpAxios.get(`/tags/${id}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching tag by ID:", error);
-    return;
+    throw error;
   }
-}
-
-// DELETE tag by ID
-export async function deleteTag(id) {
-  try {
-    const response = await httpAxios.delete(`/tags/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting tag:", error);
-    return;
-  }
-}
-
-// UPDATE tag by ID
-export async function editTag(id, tag) {
-  try {
-    const response = await httpAxios.put(`/tags/${id}`, {
-      name: tag.name,
-      slug: tag.slug,
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error editing tag:", error);
-    return;
-  }
-}
+};

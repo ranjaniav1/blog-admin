@@ -1,9 +1,10 @@
+// common/TableBody.jsx
 const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
-  <tbody className="text-wrap truncate ">
+  <tbody className="text-wrap truncate">
     {data?.map((item, index) => (
       <tr
         key={item._id || item.slug || index}
-        className={`border-b transition-colors duration-150  ${
+        className={`border-b transition-colors duration-150 hover:bg-hover ${
           linkUrl ? "link cursor-pointer" : ""
         }`}
         onClick={() => {
@@ -13,7 +14,7 @@ const TableBody = ({ data, columns, renderActions, linkUrl, router }) => (
         {columns.map((col) => (
           <td
             key={col.accessor}
-            className="px-6 py-4 max-w-xs whitespace-pre-wrap break-words align-top"
+            className="px-6 py-4 min-w-[10px]  whitespace-normal break-words align-top"
           >
             {col.render
               ? col.render(item[col.accessor], item)
