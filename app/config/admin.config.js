@@ -55,14 +55,6 @@ export const adminRoutes = [
     allowedRoles: ["superadmin", "admin"],
   },
   {
-    title: "Subcategories",
-    slug: "/admin/sub-categories",
-    icon: MdSubtitles,
-    section: "News Management",
-    description: "Organize news under subcategories.",
-    allowedRoles: ["superadmin", "admin"],
-  },
-  {
     title: "Tags",
     slug: "/admin/tags",
     icon: FaTags,
@@ -403,50 +395,149 @@ export const userColumns = [
 
 
 export const articleColumns = [
-  { label: "Title", accessor: "title", filterable: true },
-  { label: "Slug", accessor: "slug" },
+  {
+    label: "Title",
+    accessor: "title",
+    filterable: true,
+  },
+
+  {
+    label: "Slug",
+    accessor: "slug",
+  },
+
   {
     label: "Category",
     accessor: "category",
     render: (val) => val?.name || "—",
     filterable: true,
   },
+
+  {
+    label: "Author",
+    accessor: "createdBy",
+    render: (val) => val?.fullname || "—",
+    filterable: true,
+  },
+
   {
     label: "Status",
     accessor: "status",
     render: (val) => {
       const statusColors = {
         published: "bg-green-100 text-green-800",
+        pending: "bg-blue-100 text-blue-800",
         draft: "bg-yellow-100 text-yellow-800",
         archived: "bg-gray-100 text-gray-800",
       };
+
       return (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[val] || statusColors.draft}`}>
-          {val || "Draft"}
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[val] || statusColors.pending
+            }`}
+        >
+          {val || "pending"}
         </span>
       );
     },
     filterable: true,
   },
+
+
   {
-    label: "Views",
-    accessor: "views",
+    label: "Featured",
+    accessor: "is_featured",
+    render: (val) => (
+      <span>
+        {val ? "⭐ Yes" : "No"}
+      </span>
+    ),
+  },
+
+
+  {
+    label: "Breaking",
+    accessor: "is_breaking_news",
+    render: (val) => (
+      <span>
+        {val ? "🔥 Yes" : "No"}
+      </span>
+    ),
+  },
+
+  {
+    label: "Excerpt",
+    accessor: "excerpt",
+    render: (val) => {
+      if (!val) return "—";
+
+      return val.length > 80
+        ? val.substring(0, 80) + "..."
+        : val;
+    },
+  },
+
+  {
+    label: "Content",
+    accessor: "content",
+    render: (val) => {
+      if (!val) return "—";
+
+      // remove markdown headings/code symbols for table view
+      const plainText = val
+        .replace(/[#*`>-]/g, "")
+        .replace(/\n/g, " ")
+        .trim();
+
+      return plainText.length > 100
+        ? plainText.substring(0, 100) + "..."
+        : plainText;
+    },
+  },
+  {
+    label: "Reads",
+    accessor: "total_reads",
     render: (val) => val || 0,
   },
+
+
+  {
+    label: "Likes",
+    accessor: "total_likes",
+    render: (val) => val || 0,
+  },
+
+
+  {
+    label: "Tags",
+    accessor: "tags",
+    render: (val) =>
+      val?.length
+        ? val.map(tag => tag.name).join(", ")
+        : "—",
+  },
+
+
   {
     label: "Created At",
     accessor: "created_at",
     render: (val) => {
       const date = new Date(val);
-      return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      return isNaN(date)
+        ? "Invalid Date"
+        : format(date, "PPP");
     },
   },
+
+
   {
     label: "Updated At",
     accessor: "updated_at",
     render: (val) => {
       const date = new Date(val);
-      return isNaN(date) ? "Invalid Date" : format(date, "PPP");
+      return isNaN(date)
+        ? "Invalid Date"
+        : format(date, "PPP");
     },
   },
 ];
@@ -488,24 +579,11 @@ export const articleFields = [
     required: true,
   },
   {
-    name: "subcategory_id",
-    label: "Subcategory",
-    type: "select",
-    required: false,
-  },
-  {
     name: "tags",
     label: "Tags",
     type: "select",
     required: false,
     isMulti: true,
-  },
-  {
-    name: "image",
-    label: "Featured Image",
-    type: "file",
-    required: false,
-    accept: "image/*",
   },
   {
     name: "status",

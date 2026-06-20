@@ -17,7 +17,7 @@ const transformResponse = (response) => {
   if (!response || !response.data) {
     return { items: [], totalPages: 1, currentPage: 1 };
   }
-  
+
   return {
     items: response.data.articles || [],
     totalPages: response.data.totalPages || 1,
@@ -34,10 +34,10 @@ export const useArticles = (page = 1) => {
     const response = await fetchArticles(p);
     return transformResponse(response);
   }, []);
-  
+
   // Standard CRUD functions
   const addFn = useCallback((data) => createArticle(data), []);
-  const updateFn = useCallback((id, data) => updateArticle(data), []);
+  const updateFn = useCallback((id, data) => updateArticle(id, data), []);
   const deleteFn = useCallback((id) => deleteArticle(id), []);
 
   // Use generic CRUD for standard operations
@@ -110,7 +110,7 @@ export const useArticles = (page = 1) => {
     updateItem: genericCrud.updateItem,
     deleteItem: genericCrud.deleteItem,
     refetch: genericCrud.refetch,
-    
+
     // Extra features for articles
     getArticleById,
     updateStatus,

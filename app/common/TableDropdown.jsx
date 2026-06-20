@@ -1,6 +1,5 @@
 "use client";
 import Button from "./Button";
-import { GoPlus } from "react-icons/go";
 import { SlOptionsVertical } from "react-icons/sl";
 import React, { useState, useRef, useEffect } from "react";
 import IconButton from "./IconButton";
@@ -50,7 +49,6 @@ const TableDropdown = ({
           }
           className="p-2 my-rounded flex items-center gap-2 my-border"
         >
-          <GoPlus />
           {buttonTitle || "Add"}
         </Button>
       )}
