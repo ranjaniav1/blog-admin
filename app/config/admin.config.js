@@ -582,7 +582,6 @@ export const articleFields = [
     name: "tags",
     label: "Tags",
     type: "select",
-    required: false,
     isMulti: true,
   },
   {

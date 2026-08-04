@@ -21,9 +21,25 @@ export const SimpleForm = ({
 
   useEffect(() => {
     const initial = {};
-    fields.forEach((f) => {
-      initial[f.name] = data?.[f.name] ?? "";
+
+    fields.forEach((field) => {
+      let value = data?.[field.name];
+
+      // Category object -> category id
+      if (field.name === "category" && value) {
+        value = value._id;
+      }
+
+      // Tags array of objects -> array of ids
+      if (field.name === "tags") {
+        value = Array.isArray(value)
+          ? value.map(tag => tag._id)
+          : [];
+      }
+
+      initial[field.name] = value ?? "";
     });
+
     setFormData(initial);
   }, [data, fields]);
 
@@ -89,19 +105,41 @@ export const SimpleForm = ({
 
       case "select":
         return (
-          <select
-            name={field.name}
-            value={formData[field.name] || ""}
-            onChange={handleChange}
-            className="w-full my-border my-rounded p-2 focus:outline-none focus:ring-2 focus:ring-primary-text/20"
-          >
-            <option value="">Select {field.label}</option>
-            {field.options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+         <select
+  multiple={field.isMulti}
+  name={field.name}
+  value={
+    field.isMulti
+      ? (formData[field.name] || [])
+      : (formData[field.name] || "")
+  }
+  onChange={(e) => {
+    if (field.isMulti) {
+      const values = Array.from(
+        e.target.selectedOptions,
+        (option) => option.value
+      );
+
+      setFormData((prev) => ({
+        ...prev,
+        [field.name]: values,
+      }));
+    } else {
+      handleChange(e);
+    }
+  }}
+  className="w-full my-border my-rounded p-2"
+>
+  {!field.isMulti && (
+    <option value="">Select {field.label}</option>
+  )}
+
+  {field.options?.map((opt) => (
+    <option key={opt.value} value={opt.value}>
+      {opt.label}
+    </option>
+  ))}
+</select>
         );
 
       case "checkbox":

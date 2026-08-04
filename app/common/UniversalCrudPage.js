@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { SimpleForm } from "./EditFormModal";
 import { getCategories } from "../service/category.service";
 import { getSeries } from "../service/series.service";
+import { getTags } from "../service/tags.service";
 
 const UniversalCrudPage = ({
   title,
@@ -40,7 +41,7 @@ const UniversalCrudPage = ({
   useEffect(() => {
     const fetchDynamicOptions = async () => {
       const options = {};
-      
+
       // Check each field to see if it needs dynamic options
       for (const field of fields) {
         // For category_id field (used in subcategories and articles)
@@ -57,7 +58,20 @@ const UniversalCrudPage = ({
             options.category = [];
           }
         }
-        
+        if (field.name === "tags") {
+          try {
+            const response = await getTags(1);
+            const tags = response?.data?.tags || [];
+
+            options.tags = tags.map(tag => ({
+              value: tag._id,
+              label: tag.name,
+            }));
+          } catch (error) {
+            console.error("Error fetching tags:", error);
+            options.tags = [];
+          }
+        }
         // For seriesId field (used in lessons)
         if (field.name === "seriesId") {
           try {
@@ -73,10 +87,10 @@ const UniversalCrudPage = ({
           }
         }
       }
-      
+
       setDynamicOptions(options);
     };
-    
+
     fetchDynamicOptions();
   }, [fields]);
 
@@ -171,10 +185,10 @@ const UniversalCrudPage = ({
         pagination={
           data?.totalPages > 1
             ? {
-                totalPages: Number(data.totalPages),
-                currentPage: Number(currentPage),
-                onPageChange: setCurrentPage,
-              }
+              totalPages: Number(data.totalPages),
+              currentPage: Number(currentPage),
+              onPageChange: setCurrentPage,
+            }
             : undefined
         }
         addFunction={() => openModal("add")}

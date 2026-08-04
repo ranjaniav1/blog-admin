@@ -12,7 +12,7 @@ export const articleService = createCrudService("/articles", {
     formData.append("slug", article.slug);
     formData.append("content", article.content);
     formData.append("excerpt", article.excerpt || "");
-    formData.append("category", article.category);
+    formData.append("category", article.category?._id || article.category);
     formData.append("status", article.status);
     if (article.tags) {
       formData.append(
@@ -28,6 +28,9 @@ export const articleService = createCrudService("/articles", {
     const response = await httpAxios.put("/articles", formData, {
       headers: { "Content-type": "multipart/form-data" }
     })
+    console.log(article);
+    console.log("category =", article.category);
+    console.log("status =", article.status);
     return response.data
   }
 })
