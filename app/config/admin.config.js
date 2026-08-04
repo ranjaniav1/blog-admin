@@ -403,7 +403,7 @@ export const articleColumns = [
   {
     label:"image",
     accessor:"image",
-  },added image
+  },
 
   {
     label: "Slug",
