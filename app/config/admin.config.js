@@ -573,7 +573,7 @@ export const articleFields = [
     rows: 3,
   },
   {
-    name: "category_id",
+    name: "category",
     label: "Category",
     type: "select",
     required: true,

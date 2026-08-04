@@ -44,17 +44,17 @@ const UniversalCrudPage = ({
       // Check each field to see if it needs dynamic options
       for (const field of fields) {
         // For category_id field (used in subcategories and articles)
-        if (field.name === "category_id") {
+        if (field.name === "category") {
           try {
             const response = await getCategories(1);
             const categories = response?.data?.categories || [];
-            options.category_id = categories.map(c => ({
+            options.category = categories.map(c => ({
               value: c._id,
               label: c.name
             }));
           } catch (error) {
             console.error("Error fetching categories:", error);
-            options.category_id = [];
+            options.category = [];
           }
         }
         

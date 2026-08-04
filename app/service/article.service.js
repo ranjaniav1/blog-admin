@@ -12,7 +12,7 @@ export const articleService = createCrudService("/articles", {
     formData.append("slug", article.slug);
     formData.append("content", article.content);
     formData.append("excerpt", article.excerpt || "");
-    formData.append("category_id", article.category_id);
+    formData.append("category", article.category);
     formData.append("status", article.status);
     if (article.tags) {
       formData.append(
