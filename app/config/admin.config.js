@@ -400,6 +400,10 @@ export const articleColumns = [
     accessor: "title",
     filterable: true,
   },
+  {
+    label:"image",
+    accessor:"image",
+  },added image
 
   {
     label: "Slug",
@@ -548,6 +552,7 @@ export const articleFields = [
     type: "text",
     required: true,
     placeholder: "Enter article title",
+    colSpan: 1,
   },
   {
     name: "slug",
@@ -555,45 +560,55 @@ export const articleFields = [
     type: "text",
     required: true,
     placeholder: "enter-article-slug",
-  },
-  {
-    name: "content",
-    label: "Content",
-    type: "textarea",
-    required: true,
-    placeholder: "Write your article content here...",
-    rows: 10,
-  },
-  {
-    name: "excerpt",
-    label: "Excerpt",
-    type: "textarea",
-    required: false,
-    placeholder: "Short description of the article",
-    rows: 3,
+    colSpan: 1,
   },
   {
     name: "category",
     label: "Category",
     type: "select",
     required: true,
-  },
-  {
-    name: "tags",
-    label: "Tags",
-    type: "select",
-    isMulti: true,
+    colSpan: 1,
   },
   {
     name: "status",
     label: "Status",
     type: "select",
     required: true,
+    colSpan: 1,
     options: [
       { value: "draft", label: "Draft" },
       { value: "published", label: "Published" },
       { value: "archived", label: "Archived" },
     ],
+  },
+  {
+    name: "image",
+    label: "Featured Image",
+    type: "file",
+    accept: "image/*",
+    colSpan: 1,
+  },
+  {
+    name: "tags",
+    label: "Tags",
+    type: "select",
+    isMulti: true,
+    colSpan: 1,
+  },
+  {
+    name: "excerpt",
+    label: "Excerpt",
+    type: "textarea",
+    placeholder: "Short description of the article",
+    rows: 4,
+    colSpan: 2,
+  },
+  {
+    name: "content",
+    label: "Content",
+    type: "editor", // ← TinyEditor
+    required: true,
+    colSpan: 2,
   },
 ];
 

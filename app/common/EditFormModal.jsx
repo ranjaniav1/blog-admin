@@ -105,41 +105,41 @@ export const SimpleForm = ({
 
       case "select":
         return (
-         <select
-  multiple={field.isMulti}
-  name={field.name}
-  value={
-    field.isMulti
-      ? (formData[field.name] || [])
-      : (formData[field.name] || "")
-  }
-  onChange={(e) => {
-    if (field.isMulti) {
-      const values = Array.from(
-        e.target.selectedOptions,
-        (option) => option.value
-      );
+          <select
+            multiple={field.isMulti}
+            name={field.name}
+            value={
+              field.isMulti
+                ? (formData[field.name] || [])
+                : (formData[field.name] || "")
+            }
+            onChange={(e) => {
+              if (field.isMulti) {
+                const values = Array.from(
+                  e.target.selectedOptions,
+                  (option) => option.value
+                );
 
-      setFormData((prev) => ({
-        ...prev,
-        [field.name]: values,
-      }));
-    } else {
-      handleChange(e);
-    }
-  }}
-  className="w-full my-border my-rounded p-2"
->
-  {!field.isMulti && (
-    <option value="">Select {field.label}</option>
-  )}
+                setFormData((prev) => ({
+                  ...prev,
+                  [field.name]: values,
+                }));
+              } else {
+                handleChange(e);
+              }
+            }}
+            className="w-full my-border my-rounded p-2"
+          >
+            {!field.isMulti && (
+              <option value="">Select {field.label}</option>
+            )}
 
-  {field.options?.map((opt) => (
-    <option key={opt.value} value={opt.value}>
-      {opt.label}
-    </option>
-  ))}
-</select>
+            {field.options?.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
         );
 
       case "checkbox":
@@ -158,21 +158,39 @@ export const SimpleForm = ({
 
       case "file":
         return (
-          <input
-            type="file"
-            name={field.name}
-            onChange={(e) => {
-              const file = e.target.files[0];
-              if (file) {
-                setFormData((prev) => ({
-                  ...prev,
-                  [field.name]: file,
-                }));
-              }
-            }}
-            accept={field.accept || "image/*"}
-            className="w-full my-border my-rounded p-2"
-          />
+          <div className="space-y-3">
+            <input
+              type="file"
+              name={field.name}
+              accept={field.accept || "image/*"}
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+
+                if (file) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    [field.name]: file,
+                  }));
+                }
+              }}
+              className="w-full my-border my-rounded p-2"
+            />
+
+            {/* Preview */}
+            {formData[field.name] && (
+              <div className="border rounded-lg overflow-hidden w-48">
+                <img
+                  src={
+                    formData[field.name] instanceof File
+                      ? URL.createObjectURL(formData[field.name])
+                      : formData[field.name]
+                  }
+                  alt="Preview"
+                  className="w-full h-40 object-cover"
+                />
+              </div>
+            )}
+          </div>
         );
 
       default:
@@ -190,19 +208,23 @@ export const SimpleForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      {fields.map((field) => (
-        <div key={field.name}>
-          {field.type !== "checkbox" && (
-            <label className="block mb-1 text-sm font-medium">
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </label>
-          )}
-          {renderField(field)}
-        </div>
-      ))}
-
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {fields.map((field) => (
+          <div
+            key={field.name}
+            className={field.colSpan === 2 ? "lg:col-span-2" : ""}
+          >
+            {field.type !== "checkbox" && (
+              <label className="block mb-1 text-sm font-medium">
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+              </label>
+            )}
+            {renderField(field)}
+          </div>
+        ))}
+      </div>
       <div className="flex justify-end gap-3 pt-4 border-t">
         <Button
           type="button"
