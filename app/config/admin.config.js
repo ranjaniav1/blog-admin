@@ -453,7 +453,7 @@ export const articleColumns = [
     accessor: "is_featured",
     render: (val) => (
       <span>
-        {val ? "⭐ Yes" : "No"}
+        {val ? "Yes" : "No"}
       </span>
     ),
   },
@@ -464,7 +464,7 @@ export const articleColumns = [
     accessor: "is_breaking_news",
     render: (val) => (
       <span>
-        {val ? "🔥 Yes" : "No"}
+        {val ? "Yes" : "No"}
       </span>
     ),
   },

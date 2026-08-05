@@ -8,7 +8,6 @@ import {
   updateArticle,
   deleteArticle,
   fetchArticleById,
-  updateArticleStatus,
   createArticleWithAI,
 } from "../service/article.service";
 
@@ -61,24 +60,7 @@ export const useArticles = (page = 1) => {
     }
   }, []);
 
-  // Extra feature: Update article status
-  const updateStatus = useCallback(async (article_id, status) => {
-    const toastId = showToast("loading", "Updating article status...");
-    try {
-      const response = await updateArticleStatus(article_id, status);
-      if (response?.success !== false) {
-        showToast("success", response?.message || "Status updated successfully");
-        await genericCrud.refetch();
-        return response;
-      }
-      throw new Error(response?.message || "Failed to update status");
-    } catch (error) {
-      showToast("error", error.message);
-      throw error;
-    } finally {
-      dismissToast(toastId);
-    }
-  }, [genericCrud, showToast, dismissToast]);
+ 
 
   // Extra feature: Create article with AI
   const generateWithAI = useCallback(async (articleData) => {
@@ -113,7 +95,6 @@ export const useArticles = (page = 1) => {
 
     // Extra features for articles
     getArticleById,
-    updateStatus,
     generateWithAI,
   };
 };

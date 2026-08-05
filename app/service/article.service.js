@@ -13,6 +13,7 @@ export const articleService = createCrudService("/articles", {
     formData.append("content", article.content);
     formData.append("excerpt", article.excerpt || "");
     formData.append("category", article.category?._id || article.category);
+   
     formData.append("status", article.status);
     if (article.tags) {
       formData.append(
@@ -20,6 +21,15 @@ export const articleService = createCrudService("/articles", {
         JSON.stringify(article.tags)
       );
     }
+    formData.append(
+      "is_featured",
+      String(article.is_featured)
+    );
+
+    formData.append(
+      "is_breaking_news",
+      String(article.is_breaking_news)
+    );
 
     if (article.image) {
       formData.append("image", article.image);
