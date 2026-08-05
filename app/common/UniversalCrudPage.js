@@ -199,6 +199,7 @@ const UniversalCrudPage = ({
         isOpen={modalType === "add" || modalType === "edit"}
         onClose={closeModal}
         title={modalType === "add" ? `Add ${title}` : `Edit ${title}`}
+         width={title === "Article" ? "max-w-7xl" : "max-w-2xl"}
       >
         <SimpleForm
           fields={enhancedFields}

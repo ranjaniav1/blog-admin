@@ -13,7 +13,7 @@ async function login(email, password) {
 
     return response.data;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
   }
 }
 
@@ -22,7 +22,7 @@ async function getAllUsers(page) {
     const response = await httpAxios.get(`/auth/users?page=${page}`);
     return response.data.data;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
   }
 }
 
@@ -33,7 +33,7 @@ async function manageUserRole(userId, role) {
     });
     return response.data;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
   }
 }
 

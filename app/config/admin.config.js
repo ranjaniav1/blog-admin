@@ -401,8 +401,8 @@ export const articleColumns = [
     filterable: true,
   },
   {
-    label:"image",
-    accessor:"image",
+    label: "image",
+    accessor: "image",
   },
 
   {
@@ -546,6 +546,7 @@ export const articleColumns = [
   },
 ];
 export const articleFields = [
+  // ---------------- Row 1 ----------------
   {
     name: "title",
     label: "Title",
@@ -554,6 +555,8 @@ export const articleFields = [
     placeholder: "Enter article title",
     colSpan: 1,
   },
+
+  // ---------------- Row 2 ----------------
   {
     name: "slug",
     label: "Slug",
@@ -569,6 +572,8 @@ export const articleFields = [
     required: true,
     colSpan: 1,
   },
+
+  // ---------------- Row 3 ----------------
   {
     name: "status",
     label: "Status",
@@ -582,6 +587,15 @@ export const articleFields = [
     ],
   },
   {
+    name: "tags",
+    label: "Tags",
+    type: "select",
+    isMulti: true,
+    colSpan: 3,
+  },
+
+  // ---------------- Row 4 ----------------
+  {
     name: "image",
     label: "Featured Image",
     type: "file",
@@ -589,24 +603,33 @@ export const articleFields = [
     colSpan: 1,
   },
   {
-    name: "tags",
-    label: "Tags",
-    type: "select",
-    isMulti: true,
-    colSpan: 1,
-  },
-  {
     name: "excerpt",
     label: "Excerpt",
     type: "textarea",
+    rows: 5,
     placeholder: "Short description of the article",
-    rows: 4,
-    colSpan: 2,
+    colSpan: 1,
   },
+
+  // ---------------- Row 5 ----------------
+  {
+    name: "is_featured",
+    label: "Featured Article",
+    type: "checkbox",
+    colSpan: 1,
+  },
+  {
+    name: "is_breaking_news",
+    label: "Breaking News",
+    type: "checkbox",
+    colSpan: 1,
+  },
+
+  // ---------------- Row 6 ----------------
   {
     name: "content",
     label: "Content",
-    type: "editor", // ← TinyEditor
+    type: "editor",
     required: true,
     colSpan: 2,
   },
