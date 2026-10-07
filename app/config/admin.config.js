@@ -301,6 +301,7 @@ export const articleFields = [
     required: true,
     colSpan: 1,
   },
+ 
 
   {
     name: "status",
