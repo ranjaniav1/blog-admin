@@ -576,7 +576,6 @@ export const articleFields = [
     name: "lesson",
     label: "Lesson",
     type: "select",
-    required: true,
     colSpan: 1,
   },
 
