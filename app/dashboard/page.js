@@ -7,42 +7,51 @@ import StateCards from "../components/dashboard/StateCards";
 export default function Home() {
   const { data, loading, error } = useDashboard();
 
-  // ======================================================
-  // LOADING / ERROR
-  // ======================================================
-
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  if (error || !data?.chartData) {
+  if (error || !data) {
     return <p>Error loading dashboard.</p>;
   }
 
-  const {
-    categoryPie,
-    stackedArticlesByCategory,
-    areaChartData,
-    articlesByStatus,
-  } = data.chartData;
+  const stats = data.stats ?? {};
+  const chartData = data.chartData ?? {};
 
-  if (
-    !categoryPie ||
-    !stackedArticlesByCategory ||
-    !areaChartData ||
-    !articlesByStatus
-  ) {
-    return <p>Incomplete dashboard data.</p>;
-  }
+  const categoryPie = chartData.categoryPie ?? {
+    labels: [],
+    data: [],
+  };
+
+  const stackedArticlesByCategory =
+    chartData.stackedArticlesByCategory ?? {};
+
+  const areaChartData = chartData.areaChartData ?? [];
+
+  const articlesByStatus = chartData.articlesByStatus ?? {
+    published: 0,
+    draft: 0,
+    pending: 0,
+    archived: 0,
+    scheduled: 0,
+  };
 
   // ======================================================
-  // CATEGORY PIE CHART
+  // CATEGORY PIE
   // ======================================================
 
-  const filteredCategoryPie = categoryPie.data
+  const categoryLabels = Array.isArray(categoryPie.labels)
+    ? categoryPie.labels
+    : [];
+
+  const categoryValues = Array.isArray(categoryPie.data)
+    ? categoryPie.data
+    : [];
+
+  const filteredCategoryPie = categoryValues
     .map((value, index) => ({
-      value,
-      label: categoryPie.labels[index],
+      value: Number(value) || 0,
+      label: categoryLabels[index] ?? "Unknown",
     }))
     .filter((item) => item.value > 0);
 
@@ -58,42 +67,26 @@ export default function Home() {
   // STACKED ARTICLES BY CATEGORY
   // ======================================================
 
-  const months = Object.keys(
-    stackedArticlesByCategory
-  );
+  const months = Object.keys(stackedArticlesByCategory);
 
-  // Get every category appearing in the data
   const categories = [
     ...new Set(
       Object.values(stackedArticlesByCategory).flatMap(
-        (monthData) => Object.keys(monthData)
+        (monthData) =>
+          monthData && typeof monthData === "object"
+            ? Object.keys(monthData)
+            : []
       )
     ),
   ];
 
-  // Convert:
-  //
-  // {
-  //   "2026-09": {
-  //     JavaScript: 5,
-  //     React: 3
-  //   },
-  //   "2026-10": {
-  //     JavaScript: 4,
-  //     React: 6
-  //   }
-  // }
-  //
-  // into ApexCharts series
-
   const stackedSeries = categories.map((category) => ({
     name: category,
-
     data: months.map(
       (month) =>
-        stackedArticlesByCategory[month]?.[
-          category
-        ] || 0
+        Number(
+          stackedArticlesByCategory[month]?.[category]
+        ) || 0
     ),
   }));
 
@@ -110,12 +103,20 @@ export default function Home() {
   ];
 
   const statusData = [
-    articlesByStatus.published || 0,
-    articlesByStatus.draft || 0,
-    articlesByStatus.pending || 0,
-    articlesByStatus.archived || 0,
-    articlesByStatus.scheduled || 0,
+    Number(articlesByStatus.published) || 0,
+    Number(articlesByStatus.draft) || 0,
+    Number(articlesByStatus.pending) || 0,
+    Number(articlesByStatus.archived) || 0,
+    Number(articlesByStatus.scheduled) || 0,
   ];
+
+  // ======================================================
+  // AREA CHART
+  // ======================================================
+
+  const validAreaData = Array.isArray(areaChartData)
+    ? areaChartData
+    : [];
 
   // ======================================================
   // RENDER
@@ -124,18 +125,13 @@ export default function Home() {
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
 
-      {/* ==================================================
-          STAT CARDS
-      ================================================== */}
+      {/* STAT CARDS */}
 
       <div className="col-span-12">
-        <StateCards data={data.stats} />
+        <StateCards data={stats} />
       </div>
 
-
-      {/* ==================================================
-          CATEGORY PIE
-      ================================================== */}
+      {/* CATEGORY PIE */}
 
       <div className="col-span-12 md:col-span-4">
         <BaseChart
@@ -159,10 +155,7 @@ export default function Home() {
         />
       </div>
 
-
-      {/* ==================================================
-          ARTICLES + COMMENTS
-      ================================================== */}
+      {/* ARTICLES + COMMENTS */}
 
       <div className="col-span-12 md:col-span-8">
         <BaseChart
@@ -171,19 +164,19 @@ export default function Home() {
           series={[
             {
               name: "Articles",
-              data: areaChartData.map(
-                (item) => item.articles
+              data: validAreaData.map(
+                (item) => Number(item.articles) || 0
               ),
             },
             {
               name: "Comments",
-              data: areaChartData.map(
-                (item) => item.comments
+              data: validAreaData.map(
+                (item) => Number(item.comments) || 0
               ),
             },
           ]}
-          categories={areaChartData.map(
-            (item) => item.x
+          categories={validAreaData.map(
+            (item) => item.x ?? ""
           )}
           colors={[
             "#3B82F6",
@@ -192,33 +185,9 @@ export default function Home() {
         />
       </div>
 
+     
 
-      {/* ==================================================
-          ARTICLES BY CATEGORY
-      ================================================== */}
-
-      <div className="col-span-12 md:col-span-8 mt-4">
-        <BaseChart
-          title="Articles by Category"
-          chartType="bar"
-          series={stackedSeries}
-          categories={months}
-          colors={[
-            "#10B981",
-            "#8B5CF6",
-            "#F59E0B",
-            "#EF4444",
-            "#3B82F6",
-            "#F472B6",
-          ]}
-          stacked={true}
-        />
-      </div>
-
-
-      {/* ==================================================
-          ARTICLE STATUS
-      ================================================== */}
+      {/* ARTICLE STATUS */}
 
       <div className="col-span-12 md:col-span-4 mt-4">
         <BaseChart
@@ -235,7 +204,6 @@ export default function Home() {
           ]}
         />
       </div>
-
     </div>
   );
 }
