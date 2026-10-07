@@ -54,30 +54,8 @@ export const adminRoutes = [
     description: "Create and manage news categories.",
     allowedRoles: ["superadmin", "admin"],
   },
-  {
-    title: "Tags",
-    slug: "/admin/tags",
-    icon: FaTags,
-    section: "News Management",
-    description: "Add and manage article tags.",
-    allowedRoles: ["superadmin", "admin", "author"],
-  },
-  {
-    title: "Series",
-    slug: "/admin/series",
-    icon: FaBook,
-    section: "Learning Management",
-    description: "Manage learning series like Python, JS, etc.",
-    allowedRoles: ["superadmin", "admin", "editor"],
-  },
-  {
-    title: "Lessons",
-    slug: "/admin/lessons",
-    icon: FaLayerGroup,
-    section: "Learning Management",
-    description: "Create and manage lessons inside a series.",
-    allowedRoles: ["superadmin", "admin", "editor", "author"],
-  },
+  
+ 
   {
     title: "Settings",
     slug: "/admin/settings",
@@ -137,222 +115,12 @@ export const categoryColumns = [
   },
 ];
 
-// ------------------------ Subcategories Configuration ------------------------
-export const subcategoryFields = [
-  {
-    name: "name",
-    label: "Name",
-    type: "text",
-    required: true,
-    placeholder: "Enter subcategory name",
-  },
-  {
-    name: "slug",
-    label: "Slug",
-    type: "text",
-    required: true,
-    placeholder: "Enter slug",
-  },
-  {
-    name: "description",
-    label: "Description",
-    type: "textarea",
-    required: true,
-    placeholder: "Enter description",
-  },
-  {
-    name: "category_id",
-    label: "Category",
-    type: "select",
-    required: true,
-  },
-];
 
-export const subcategoryColumns = [
-  { label: "Name", accessor: "name", filterable: true },
-  { label: "Slug", accessor: "slug" },
-  {
-    label: "Category",
-    accessor: "category",
-    render: (val) => val?.slug || val, filterable: true
-  },
-  {
-    label: "Created At",
-    accessor: "created_at",
-    render: formatDate,
-  },
-  {
-    label: "Updated At",
-    accessor: "updated_at",
-    render: formatDate,
-  },
-];
-
-// ------------------------ Tags Configuration ------------------------
-export const tagFields = [
-  {
-    name: "name",
-    label: "Name",
-    type: "text",
-    required: true,
-    placeholder: "Enter tag name",
-  },
-  {
-    name: "slug",
-    label: "Slug",
-    type: "text",
-    required: true,
-    placeholder: "Enter slug",
-  },
-];
-
-export const tagColumns = [
-  { label: "Name", accessor: "name", filterable: true },
-  { label: "Slug", accessor: "slug" },
-  {
-    label: "Created At",
-    accessor: "created_at",
-    render: formatDate,
-  },
-  {
-    label: "Updated At",
-    accessor: "updated_at",
-    render: formatDate,
-  },
-];
-
-// ------------------------ Series Configuration ------------------------
-export const seriesFields = [
-  {
-    name: "name",
-    label: "Series Name",
-    type: "text",
-    required: true,
-    placeholder: "Enter series name (e.g. Python Basics)",
-  },
-  {
-    name: "slug",
-    label: "Slug",
-    type: "text",
-    required: true,
-    placeholder: "python-basics",
-  },
-  {
-    name: "description",
-    label: "Description",
-    type: "textarea",
-    required: false,
-    placeholder: "Short description",
-  },
-  {
-    name: "image",
-    label: "Thumbnail",
-    type: "file",
-  },
-];
-
-export const seriesColumns = [
-  { label: "Name", accessor: "name", filterable: true },
-  { label: "Slug", accessor: "slug" },
-  {
-    label: "Lessons",
-    accessor: "lessons",
-    render: (val) => val?.length || 0,
-  },
-  {
-    label: "Created At",
-    accessor: "created_at",
-    render: formatDate,
-  },
-  {
-    label: "Updated At",
-    accessor: "updated_at",
-    render: formatDate,
-  },
-];
-
-// ------------------------ Lessons Configuration ------------------------
-export const lessonFields = [
-  {
-    name: "title",
-    label: "Lesson Title",
-    type: "text",
-    required: true,
-    placeholder: "Enter lesson title",
-    rows: 1
-  },
-  {
-    name: "slug",
-    label: "Slug",
-    type: "text",
-    required: true,
-    placeholder: "lesson-slug",
-    rows: 1
-  },
-  {
-    name: "seriesId",
-    label: "Series",
-    type: "select",
-    required: true,
-  },
-  {
-    name: "content",
-    label: "Content",
-    type: "editor",
-    required: true,
-  },
-  {
-    name: "thumbnail",
-    label: "Thumbnail",
-    type: "file",
-  },
-];
-
-export const lessonColumns = [
-  { label: "Title", accessor: "title", filterable: true },
-  { label: "Slug", accessor: "slug" },
-  {
-    label: "Content",
-    accessor: "content",
-    render: (val) => {
-      // Strip HTML and truncate for table view
-      const plainText = val?.replace(/<[^>]*>/g, '') || '';
-      return plainText.length > 100 ? plainText.substring(0, 100) + '...' : plainText;
-    },
-  },
-  {
-    label: "Series",
-    accessor: "series",
-    render: (val) => val?.name || val, filterable: true
-  },
-  {
-    label: "Order",
-    accessor: "order",
-  },
-  {
-    label: "Excerpt",
-    accessor: "excerpt",
-  },
-  {
-    label: "Created At",
-    accessor: "created_at",
-    render: formatDate,
-  },
-  {
-    label: "Updated At",
-    accessor: "updated_at",
-    render: formatDate,
-  }, {
-    label: "Status",
-    accessor: "isPublished",
-    filterable: true
-  },
-];
 
 // ------------------------ Users Configuration ------------------------
 export const userFields = [
   {
-    name: "name",
+    name: "fullname",
     label: "Name",
     type: "text",
     required: true,
@@ -392,22 +160,11 @@ export const userColumns = [
   },
 ];
 
-
-
 export const articleColumns = [
   {
     label: "Title",
     accessor: "title",
     filterable: true,
-  },
-  {
-    label: "image",
-    accessor: "image",
-  },
-
-  {
-    label: "Slug",
-    accessor: "slug",
   },
 
   {
@@ -433,112 +190,94 @@ export const articleColumns = [
         pending: "bg-blue-100 text-blue-800",
         draft: "bg-yellow-100 text-yellow-800",
         archived: "bg-gray-100 text-gray-800",
+        scheduled: "bg-purple-100 text-purple-800",
       };
 
       return (
         <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[val] || statusColors.pending
-            }`}
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            statusColors[val] || "bg-gray-100 text-gray-800"
+          }`}
         >
-          {val || "pending"}
+          {val || "draft"}
         </span>
       );
     },
     filterable: true,
   },
 
-
   {
     label: "Featured",
     accessor: "is_featured",
-    render: (val) => (
-      <span>
-        {val ? "Yes" : "No"}
-      </span>
-    ),
+    render: (val) => (val ? "Yes" : "No"),
   },
-
 
   {
     label: "Breaking",
     accessor: "is_breaking_news",
-    render: (val) => (
-      <span>
-        {val ? "Yes" : "No"}
-      </span>
-    ),
+    render: (val) => (val ? "Yes" : "No"),
   },
 
-  {
-    label: "Excerpt",
-    accessor: "excerpt",
-    render: (val) => {
-      if (!val) return "—";
-
-      return val.length > 80
-        ? val.substring(0, 80) + "..."
-        : val;
-    },
-  },
-
-  {
-    label: "Content",
-    accessor: "content",
-    render: (val) => {
-      if (!val) return "—";
-
-      // remove markdown headings/code symbols for table view
-      const plainText = val
-        .replace(/[#*`>-]/g, "")
-        .replace(/\n/g, " ")
-        .trim();
-
-      return plainText.length > 100
-        ? plainText.substring(0, 100) + "..."
-        : plainText;
-    },
-  },
   {
     label: "Reads",
     accessor: "total_reads",
-    render: (val) => val || 0,
+    render: (val) => val ?? 0,
   },
-
 
   {
     label: "Likes",
     accessor: "total_likes",
-    render: (val) => val || 0,
+    render: (val) => val ?? 0,
   },
 
-
   {
-    label: "Tags",
-    accessor: "tags",
-    render: (val) =>
-      val?.length
-        ? val.map(tag => tag.name).join(", ")
-        : "—",
+    label: "Shares",
+    accessor: "total_shares",
+    render: (val) => val ?? 0,
   },
 
+  {
+    label: "Comments",
+    accessor: "total_comments",
+    render: (val) => val ?? 0,
+  },
 
   {
-    label: "Created At",
-    accessor: "created_at",
+    label: "Published At",
+    accessor: "published_at",
     render: (val) => {
+      if (!val) return "—";
+
       const date = new Date(val);
+
       return isNaN(date)
         ? "Invalid Date"
         : format(date, "PPP");
     },
   },
 
+  {
+    label: "Created At",
+    accessor: "created_at",
+    render: (val) => {
+      if (!val) return "—";
+
+      const date = new Date(val);
+
+      return isNaN(date)
+        ? "Invalid Date"
+        : format(date, "PPP");
+    },
+  },
 
   {
     label: "Updated At",
     accessor: "updated_at",
     render: (val) => {
+      if (!val) return "—";
+
       const date = new Date(val);
+
       return isNaN(date)
         ? "Invalid Date"
         : format(date, "PPP");
@@ -546,25 +285,15 @@ export const articleColumns = [
   },
 ];
 export const articleFields = [
-  // ---------------- Row 1 ----------------
   {
     name: "title",
     label: "Title",
     type: "text",
     required: true,
     placeholder: "Enter article title",
-    colSpan: 1,
+    colSpan: 2,
   },
 
-  // ---------------- Row 2 ----------------
-  {
-    name: "slug",
-    label: "Slug",
-    type: "text",
-    required: true,
-    placeholder: "enter-article-slug",
-    colSpan: 1,
-  },
   {
     name: "category",
     label: "Category",
@@ -572,15 +301,7 @@ export const articleFields = [
     required: true,
     colSpan: 1,
   },
-  {
-    name: "lesson",
-    label: "Lesson",
-    type: "select",
-    required: true,
-    colSpan: 1,
-  },
 
-  // ---------------- Row 3 ----------------
   {
     name: "status",
     label: "Status",
@@ -588,20 +309,29 @@ export const articleFields = [
     required: true,
     colSpan: 1,
     options: [
-      { value: "draft", label: "Draft" },
-      { value: "published", label: "Published" },
-      { value: "archived", label: "Archived" },
+      {
+        value: "draft",
+        label: "Draft",
+      },
+      {
+        value: "published",
+        label: "Published",
+      },
+      {
+        value: "archived",
+        label: "Archived",
+      },
+      {
+        value: "scheduled",
+        label: "Scheduled",
+      },
+      {
+        value: "pending",
+        label: "Pending",
+      },
     ],
   },
-  {
-    name: "tags",
-    label: "Tags",
-    type: "select",
-    isMulti: true,
-    colSpan: 3,
-  },
 
-  // ---------------- Row 4 ----------------
   {
     name: "image",
     label: "Featured Image",
@@ -609,22 +339,31 @@ export const articleFields = [
     accept: "image/*",
     colSpan: 1,
   },
+
+  {
+    name: "video",
+    label: "Article Video",
+    type: "file",
+    accept: "video/*",
+    colSpan: 1,
+  },
+
   {
     name: "excerpt",
     label: "Excerpt",
     type: "textarea",
-    rows: 5,
-    placeholder: "Short description of the article",
-    colSpan: 1,
+    rows: 4,
+    placeholder: "Leave empty to generate automatically",
+    colSpan: 2,
   },
 
-  // ---------------- Row 5 ----------------
   {
     name: "is_featured",
     label: "Featured Article",
     type: "checkbox",
     colSpan: 1,
   },
+
   {
     name: "is_breaking_news",
     label: "Breaking News",
@@ -632,7 +371,20 @@ export const articleFields = [
     colSpan: 1,
   },
 
-  // ---------------- Row 6 ----------------
+  {
+    name: "published_at",
+    label: "Published At",
+    type: "datetime-local",
+    colSpan: 1,
+  },
+
+  {
+    name: "expiry_date",
+    label: "Expiry Date",
+    type: "datetime-local",
+    colSpan: 1,
+  },
+
   {
     name: "content",
     label: "Content",
@@ -651,29 +403,7 @@ export const configs = {
     service: "/categories",
     linkUrl: "/admin/sub-categories",
   },
-  "sub-categories": {
-    fields: subcategoryFields,
-    columns: subcategoryColumns,
-    service: "/sub-categories",
-  },
-  tags: {
-    fields: tagFields,
-    columns: tagColumns,
-    service: "/tags",
-    linkUrl: "null"
-  },
-  series: {
-    fields: seriesFields,
-    columns: seriesColumns,
-    service: "/series",
-    linkUrl: "null"
-  },
-  lessons: {
-    fields: lessonFields,
-    columns: lessonColumns,
-    service: "/lessons",
-    linkUrl: "null"
-  },
+ 
   users: {
     fields: userFields,
     columns: userColumns,

@@ -26,16 +26,11 @@ export const SimpleForm = ({
       let value = data?.[field.name];
 
       // Object references in select fields -> ids
-      if (value && (field.name === "category" || field.name === "lesson" || field.name === "seriesId")) {
+      if (value && (field.name === "category")) {
         value = value._id || value.id || value;
       }
 
-      // Tags array of objects -> array of ids
-      if (field.name === "tags") {
-        value = Array.isArray(value)
-          ? value.map(tag => tag._id || tag.id || tag)
-          : [];
-      }
+     
 
       initial[field.name] = value ?? "";
     });

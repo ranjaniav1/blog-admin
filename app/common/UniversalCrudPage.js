@@ -7,9 +7,7 @@ import ActionButtons from "./ActionButtons";
 import React, { useState, useEffect } from "react";
 import { SimpleForm } from "./EditFormModal";
 import { getCategories } from "../service/category.service";
-import { getSeries } from "../service/series.service";
-import { getTags } from "../service/tags.service";
-import { getLessons } from "../service/lesson.service";
+
 
 const UniversalCrudPage = ({
   title,
@@ -59,49 +57,8 @@ const UniversalCrudPage = ({
             options.category = [];
           }
         }
-        if (field.name === "tags") {
-          try {
-            const response = await getTags(1);
-            const tags = response?.data?.tags || [];
-
-            options.tags = tags.map(tag => ({
-              value: tag._id,
-              label: tag.name,
-            }));
-          } catch (error) {
-            console.error("Error fetching tags:", error);
-            options.tags = [];
-          }
-        }
-        // For seriesId field (used in lessons)
-        if (field.name === "seriesId") {
-          try {
-            const response = await getSeries(1);
-            const seriesList = response?.data?.series || [];
-            options.seriesId = seriesList.map(s => ({
-              value: s._id,
-              label: s.name
-            }));
-          } catch (error) {
-            console.error("Error fetching series:", error);
-            options.seriesId = [];
-          }
-        }
-
-        // For lesson field (used in articles)
-        if (field.name === "lesson") {
-          try {
-            const response = await getLessons(1);
-            const lessons = response?.data?.lessons || [];
-            options.lesson = lessons.map((lesson) => ({
-              value: lesson._id,
-              label: lesson.title,
-            }));
-          } catch (error) {
-            console.error("Error fetching lessons:", error);
-            options.lesson = [];
-          }
-        }
+      
+       
       }
 
       setDynamicOptions(options);
