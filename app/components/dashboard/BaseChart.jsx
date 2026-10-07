@@ -1,84 +1,163 @@
 "use client";
 
-import React from "react";
 import dynamic from "next/dynamic";
 
-const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const Chart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 
-export default function BaseChart({
+const BaseChart = ({
   title,
-  chartType,
-  series,
-  categories,
-  color,
-  colors,
-  stacked=false
-}) {
-  const isSingleColor = !!color;
+  chartType = "line",
+  series = [],
+  categories = [],
+  colors = [],
+  stacked = false,
+}) => {
+  const safeCategories = Array.isArray(categories)
+    ? categories
+    : [];
+
+  const safeSeries = Array.isArray(series)
+    ? series
+    : [];
 
   const isPie = chartType === "pie";
-  const safeSeries = series || [];
-  const safeCategories = categories || [];
+  const isArea = chartType === "area";
+  const isBar = chartType === "bar";
 
-  // ✅ Validate pie chart: series is number[]
-  const isValidPie =
-    isPie &&
-    Array.isArray(safeSeries) &&
-    safeSeries.length > 0 &&
-    safeSeries.every((v) => typeof v === "number") &&
-    safeSeries.some((v) => v > 0); // 🔥 Must have at least one non-zero value
+  // ApexCharts expects pie series to be numbers
+  // and other charts to use [{ name, data }]
+  const normalizedSeries = isPie
+    ? safeSeries.map((value) => Number(value) || 0)
+    : safeSeries.map((item) => ({
+        name: item?.name ?? "",
+        data: Array.isArray(item?.data)
+          ? item.data.map((value) => Number(value) || 0)
+          : [],
+      }));
 
-  const isValidSeries =
-    !isPie &&
-    Array.isArray(safeSeries) &&
-    safeSeries.length > 0 &&
-    safeSeries.every(
-      (s) =>
-        typeof s === "object" &&
-        s.data &&
-        Array.isArray(s.data) &&
-        s.data.length > 0 &&
-        s.data.some((val) => val > 0) // 🔥 Ensure there's at least one non-zero data point
-    );
-
-  if (!isValidPie && !isValidSeries) {
-    return (
-      <div className="card p-4 my-rounded shadow h-full">
-        <h2 className="text-md font-semibold mb-2">{title}</h2>
-        <p className="text-sm text-gray-400">No chart data available.</p>
-      </div>
-    );
-  }
   const options = {
     chart: {
-      type: chartType,
-      toolbar: { show: false },
-      stacked: chartType === "bar" && stacked, // ✅ only apply if bar and stacked=true
+      type: isArea
+        ? "area"
+        : isBar
+        ? "bar"
+        : isPie
+        ? "pie"
+        : "line",
+      toolbar: {
+        show: false,
+      },
+      stacked,
     },
-    colors: isSingleColor ? [color] : colors,
+
+    // IMPORTANT:
+    // ApexCharts needs labels for pie charts.
     labels: isPie ? safeCategories : undefined,
-    xaxis: !isPie ? { categories: safeCategories } : undefined,
-    dataLabels: { enabled: false },
-    stroke: { curve: chartType === "area" ? "smooth" : "straight" },
-    legend: { show: chartType !== "bar" || stacked }, // ✅ show legend for stacked bars
+
+    xaxis: {
+      categories: isPie ? [] : safeCategories,
+    },
+
+    colors,
+
+    legend: {
+      show: true,
+      position: "bottom",
+    },
+
+    dataLabels: {
+      enabled: isPie,
+    },
+
+    stroke: {
+      curve: isArea ? "smooth" : "straight",
+      width: isPie ? 0 : 2,
+    },
+
+    fill: {
+      type: isArea ? "gradient" : "solid",
+      opacity: isArea ? 0.35 : 1,
+    },
+
     plotOptions: {
       bar: {
         horizontal: false,
-        columnWidth: "50%",
+        borderRadius: 4,
+      },
+
+      pie: {
+        expandOnClick: true,
       },
     },
+
+    tooltip: {
+      shared: !isPie,
+      intersect: false,
+    },
+
+    responsive: [
+      {
+        breakpoint: 768,
+        options: {
+          legend: {
+            position: "bottom",
+          },
+        },
+      },
+    ],
   };
 
+  // Don't render a chart until the data has valid structure
+  if (isPie && safeCategories.length !== normalizedSeries.length) {
+    return (
+      <div className="bg-white rounded-lg p-4">
+        <h3 className="text-lg font-semibold mb-4">
+          {title}
+        </h3>
+        <p className="text-sm text-gray-500">
+          No chart data available.
+        </p>
+      </div>
+    );
+  }
+
+  if (!isPie && normalizedSeries.length === 0) {
+    return (
+      <div className="bg-white rounded-lg p-4">
+        <h3 className="text-lg font-semibold mb-4">
+          {title}
+        </h3>
+        <p className="text-sm text-gray-500">
+          No chart data available.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className="card p-4 my-rounded shadow h-full">
-      <h2 className="my-font font-semibold mb-2">{title}</h2>
+    <div className="bg-white rounded-lg p-4">
+      <h3 className="text-lg font-semibold mb-4">
+        {title}
+      </h3>
+
       <Chart
         options={options}
-        series={safeSeries}
-        type={chartType}
-        height={300}
+        series={normalizedSeries}
+        type={
+          isArea
+            ? "area"
+            : isBar
+            ? "bar"
+            : isPie
+            ? "pie"
+            : "line"
+        }
+        height={350}
       />
     </div>
   );
-}
+};
+
+export default BaseChart;

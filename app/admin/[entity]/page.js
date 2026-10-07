@@ -6,30 +6,22 @@ import { configs } from "@/app/config/admin.config";
 
 // Import all hooks
 import { useCategories } from "@/app/hooks/useCategories";
-import { useTags } from "../../hooks/useTags";
 import { useArticles } from "@/app/hooks/useArticles";
-import { useSeries } from "@/app/hooks/useSeries";
 import { useUsers } from "@/app/hooks/useUsers";
-import { useLessons } from "@/app/hooks/useLessons";
+
 
 
 // Map entity to hook
 const hookMap = {
   categories: useCategories,
-  tags:useTags,
   articles:useArticles,
-  series:useSeries,
   users:useUsers,
-  lessons:useLessons,
 };
 
 // Map entity to title
 const titleMap = {
   categories: "Category",
-  series: "Series",
-  tags: "Tag",
   articles:"Articles",
-  lessons: "Lesson",
   users:"Users"
 };
 

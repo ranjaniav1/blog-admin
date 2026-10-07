@@ -3,48 +3,139 @@
 import { useDashboard } from "../hooks/useDashboard";
 import BaseChart from "../components/dashboard/BaseChart";
 import StateCards from "../components/dashboard/StateCards";
-// import TopCategories from "../components/dashboard/TopCategories";
 
 export default function Home() {
   const { data, loading, error } = useDashboard();
 
-  if (loading) return <p>Loading...</p>;
-  if (error || !data?.chartData) return <p>Error loading dashboard.</p>;
-
-  const { categoryPie, stackedArticlesByCategory, areaChartData } =
-    data.chartData;
-
-  if (!categoryPie || !stackedArticlesByCategory || !areaChartData) {
-    return <p>Incomplete chart data.</p>;
+  if (loading) {
+    return <p>Loading...</p>;
   }
 
-  // Validate Category Pie Data
-  // Filter out 0 values and their corresponding labels
-  const filteredCategoryPie = categoryPie.data
-    .map((value, index) => ({ value, label: categoryPie.labels[index] }))
+  if (error || !data) {
+    return <p>Error loading dashboard.</p>;
+  }
+
+  const stats = data.stats ?? {};
+  const chartData = data.chartData ?? {};
+
+  const categoryPie = chartData.categoryPie ?? {
+    labels: [],
+    data: [],
+  };
+
+  const stackedArticlesByCategory =
+    chartData.stackedArticlesByCategory ?? {};
+
+  const areaChartData = chartData.areaChartData ?? [];
+
+  const articlesByStatus = chartData.articlesByStatus ?? {
+    published: 0,
+    draft: 0,
+    pending: 0,
+    archived: 0,
+    scheduled: 0,
+  };
+
+  // ======================================================
+  // CATEGORY PIE
+  // ======================================================
+
+  const categoryLabels = Array.isArray(categoryPie.labels)
+    ? categoryPie.labels
+    : [];
+
+  const categoryValues = Array.isArray(categoryPie.data)
+    ? categoryPie.data
+    : [];
+
+  const filteredCategoryPie = categoryValues
+    .map((value, index) => ({
+      value: Number(value) || 0,
+      label: categoryLabels[index] ?? "Unknown",
+    }))
     .filter((item) => item.value > 0);
 
-  const validCategoryData = filteredCategoryPie.map((item) => item.value);
-  const validCategoryLabels = filteredCategoryPie.map((item) => item.label);
-
-  // Prepare Stacked Series
-  const stackedSeries = Object.entries(stackedArticlesByCategory.series).map(
-    ([name, data]) => ({
-      name,  // Name will be the category (e.g., Business)
-      data: data || []  // Ensure data is an array, even if empty
-    })
+  const validCategoryData = filteredCategoryPie.map(
+    (item) => item.value
   );
+
+  const validCategoryLabels = filteredCategoryPie.map(
+    (item) => item.label
+  );
+
+  // ======================================================
+  // STACKED ARTICLES BY CATEGORY
+  // ======================================================
+
+  const months = Object.keys(stackedArticlesByCategory);
+
+  const categories = [
+    ...new Set(
+      Object.values(stackedArticlesByCategory).flatMap(
+        (monthData) =>
+          monthData && typeof monthData === "object"
+            ? Object.keys(monthData)
+            : []
+      )
+    ),
+  ];
+
+  const stackedSeries = categories.map((category) => ({
+    name: category,
+    data: months.map(
+      (month) =>
+        Number(
+          stackedArticlesByCategory[month]?.[category]
+        ) || 0
+    ),
+  }));
+
+  // ======================================================
+  // ARTICLE STATUS
+  // ======================================================
+
+  const statusLabels = [
+    "Published",
+    "Draft",
+    "Pending",
+    "Archived",
+    "Scheduled",
+  ];
+
+  const statusData = [
+    Number(articlesByStatus.published) || 0,
+    Number(articlesByStatus.draft) || 0,
+    Number(articlesByStatus.pending) || 0,
+    Number(articlesByStatus.archived) || 0,
+    Number(articlesByStatus.scheduled) || 0,
+  ];
+
+  // ======================================================
+  // AREA CHART
+  // ======================================================
+
+  const validAreaData = Array.isArray(areaChartData)
+    ? areaChartData
+    : [];
+
+  // ======================================================
+  // RENDER
+  // ======================================================
 
   return (
     <div className="grid grid-cols-12 gap-3 p-4">
+
+      {/* STAT CARDS */}
+
       <div className="col-span-12">
-        <StateCards data={data.stats} />
+        <StateCards data={stats} />
       </div>
 
-      {/* Pie Chart for Categories */}
+      {/* CATEGORY PIE */}
+
       <div className="col-span-12 md:col-span-4">
         <BaseChart
-          title="Trending Categories"
+          title="Articles by Category"
           chartType="pie"
           series={validCategoryData}
           categories={validCategoryLabels}
@@ -64,7 +155,8 @@ export default function Home() {
         />
       </div>
 
-      {/* Area Chart for Articles & Comments over Time */}
+      {/* ARTICLES + COMMENTS */}
+
       <div className="col-span-12 md:col-span-8">
         <BaseChart
           title="Articles and Comments Over Time"
@@ -72,35 +164,46 @@ export default function Home() {
           series={[
             {
               name: "Articles",
-              data: areaChartData.map((item) => item.articles),
+              data: validAreaData.map(
+                (item) => Number(item.articles) || 0
+              ),
             },
             {
               name: "Comments",
-              data: areaChartData.map((item) => item.comments),
+              data: validAreaData.map(
+                (item) => Number(item.comments) || 0
+              ),
             },
           ]}
-          categories={areaChartData.map((item) => item.x)}
-          colors={["#3B82F6", "#F87171"]}
+          categories={validAreaData.map(
+            (item) => item.x ?? ""
+          )}
+          colors={[
+            "#3B82F6",
+            "#F87171",
+          ]}
         />
       </div>
 
-      {/* Stacked Bar Chart for Articles by Category */}
-      <div className="col-span-12 md:col-span-6 mt-4">
+     
+
+      {/* ARTICLE STATUS */}
+
+      <div className="col-span-12 md:col-span-4 mt-4">
         <BaseChart
-          title="Articles by Category (Stacked)"
-          chartType="bar"
-          series={stackedSeries}  
-          categories={Object.keys(stackedArticlesByCategory.series)}          // stacked={true}
-          colors={["#10B981", "#8B5CF6", "#F59E0B", "#EF4444"]}
-          stacked={true}
+          title="Article Status"
+          chartType="pie"
+          series={statusData}
+          categories={statusLabels}
+          colors={[
+            "#10B981",
+            "#94A3B8",
+            "#F59E0B",
+            "#EF4444",
+            "#3B82F6",
+          ]}
         />
       </div>
-
-      {/* Top Categories */}
-      <div className="col-span-12 my-rounded p-6 md:col-span-6 card mt-4">
-        <h1 className="font-semibold mb-2 pl-4 my-font">Top Categories</h1>
-        {/* <TopCategories isDashboard /> */}
-      </div>
-    </div >
+    </div>
   );
 }
