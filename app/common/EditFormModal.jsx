@@ -25,15 +25,15 @@ export const SimpleForm = ({
     fields.forEach((field) => {
       let value = data?.[field.name];
 
-      // Category object -> category id
-      if (field.name === "category" && value) {
-        value = value._id;
+      // Object references in select fields -> ids
+      if (value && (field.name === "category" || field.name === "lesson" || field.name === "seriesId")) {
+        value = value._id || value.id || value;
       }
 
       // Tags array of objects -> array of ids
       if (field.name === "tags") {
         value = Array.isArray(value)
-          ? value.map(tag => tag._id)
+          ? value.map(tag => tag._id || tag.id || tag)
           : [];
       }
 

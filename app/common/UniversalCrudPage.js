@@ -9,6 +9,7 @@ import { SimpleForm } from "./EditFormModal";
 import { getCategories } from "../service/category.service";
 import { getSeries } from "../service/series.service";
 import { getTags } from "../service/tags.service";
+import { getLessons } from "../service/lesson.service";
 
 const UniversalCrudPage = ({
   title,
@@ -84,6 +85,21 @@ const UniversalCrudPage = ({
           } catch (error) {
             console.error("Error fetching series:", error);
             options.seriesId = [];
+          }
+        }
+
+        // For lesson field (used in articles)
+        if (field.name === "lesson") {
+          try {
+            const response = await getLessons(1);
+            const lessons = response?.data?.lessons || [];
+            options.lesson = lessons.map((lesson) => ({
+              value: lesson._id,
+              label: lesson.title,
+            }));
+          } catch (error) {
+            console.error("Error fetching lessons:", error);
+            options.lesson = [];
           }
         }
       }

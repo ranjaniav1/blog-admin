@@ -88,7 +88,7 @@ export const adminRoutes = [
   },
 ];
 
-export const Webname = "ENews";
+export const Webname = "Blog";
 export const currentUserRole = "superadmin";
 
 // Helper function for date formatting
@@ -568,6 +568,13 @@ export const articleFields = [
   {
     name: "category",
     label: "Category",
+    type: "select",
+    required: true,
+    colSpan: 1,
+  },
+  {
+    name: "lesson",
+    label: "Lesson",
     type: "select",
     required: true,
     colSpan: 1,
